@@ -1,9 +1,6 @@
 package be.helha.api_recettapp.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,12 +20,16 @@ public class Role {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_role;
+    private int id;
 
     /**
      * Name of the role.
      * It uses Lombok annotation {@code @Setter} to automatically generate a setter methods.
      */
     @Setter
-    private String title_role;
+    private String title;
+
+    @ManyToOne
+    @JoinColumn(name="USER_ID")
+    private Users users;
 }

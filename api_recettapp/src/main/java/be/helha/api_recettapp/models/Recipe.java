@@ -56,13 +56,13 @@ public class Recipe {
      * Preparation time for the recipe, in minutes.
      */
     @Column(nullable = false)
-    private int preparationTime;
+    private int preparation_time;
 
     /**
      * Cooking time for the recipe, in minutes.
      */
     @Column(nullable = false)
-    private int cookingTime;
+    private int cooking_time;
 
     /**
      * Number of servings the recipe yields.
@@ -74,7 +74,7 @@ public class Recipe {
      * Difficulty level of the recipe (e.g., Easy, Medium, Hard).
      */
     @Column(nullable = false)
-    private String difficultyLevel;
+    private String difficulty_level;
 
     /**
      * Instructions for preparing the recipe.
@@ -87,7 +87,7 @@ public class Recipe {
     /**
      * URL pointing to the image of the recipe.
      */
-    private String photoUrl;
+    private String photo_url;
 
     /**
      * Indicates whether the recipe has been approved for publishing.
@@ -98,14 +98,15 @@ public class Recipe {
     /**
      * Identifier for the type of recipe.
      */
-    @Column(nullable = false)
-    private int recipeTypeId;
+    @ManyToOne
+    private RecipeType recipe_type;
 
     /**
      * Identifier indicating whether the recipe is part of a contest.
      */
-    @Column(nullable = false)
-    private int inContestId;
+    @ManyToOne
+    @JoinColumn(name = "contest_id", nullable = false)
+    private Contest contest;
 
     /**
      * List of components (ingredients) used in the recipe.
@@ -114,18 +115,7 @@ public class Recipe {
     @OneToMany(mappedBy = "recipe")
     private List<RecipeComponent> components;
 
-    /*
-    waiting for the other classes to be init
-    @ManyToOne
-    @JoinColumn(name = "recipe_type_id", nullable = false)
-    private RecipeType recipeType;
 
-
-
-    @ManyToOne
-    @JoinColumn(name = "contest_id", nullable = false)
-    private Contest contest;
-     */
 
 
 }

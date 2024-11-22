@@ -20,23 +20,23 @@ public class ContestCategory {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idCategoryContest;
+    private Long id;
 
     /**
      * Titre de la catégorie.
      */
-    private String titleCategoryContest;
+    private String title;
 
     /**
      * Description de la catégorie (facultatif).
      * Permet de fournir plus de détails sur la catégorie.
      */
-    private String descriptionCategory;
+    private String description;
 
     /**
      * Statut de la catégorie (actif ou inactif).
      */
-    private boolean statusCategory;
+    private boolean status;
 
     /**
      * Constructeur sans arguments.
@@ -50,16 +50,16 @@ public class ContestCategory {
      * Constructeur avec tous les arguments.
      * Permet d'initialiser tous les attributs de la classe.
      *
-     * @param idCategoryContest    Identifiant unique de la catégorie.
-     * @param titleCategoryContest Titre de la catégorie.
-     * @param descriptionCategory  Description de la catégorie.
-     * @param statusCategory       Statut de la catégorie.
+     * @param id    Identifiant unique de la catégorie.
+     * @param title Titre de la catégorie.
+     * @param description  Description de la catégorie.
+     * @param status  Statut de la catégorie.
      */
-    public ContestCategory(Long idCategoryContest, String titleCategoryContest,
-                           String descriptionCategory, boolean statusCategory) {
-        this.idCategoryContest = idCategoryContest;
-        this.titleCategoryContest = titleCategoryContest;
-        this.descriptionCategory = descriptionCategory;
-        this.statusCategory = statusCategory;
+    public ContestCategory(Long id, String title,
+                           String description, boolean status) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.status = status;
     }
 }

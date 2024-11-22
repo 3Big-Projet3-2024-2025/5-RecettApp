@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class User {
+public class Users {
 
     /**
      * Unique identifier for the user.
@@ -23,7 +23,7 @@ public class User {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_user;
+    private int id;
 
     /**
      * First name of the user.
@@ -37,7 +37,7 @@ public class User {
      * This field cannot be null.
      */
     @Column(nullable = false)
-    private String name;
+    private String last_name;
 
     /**
      * Email address of the user.
@@ -57,14 +57,14 @@ public class User {
     /**
      * Status of the user (e.g., active, inactive).
      */
-    private String statusUser;
+    private String status;
 
     /**
      * Date of registration for the user.
      * This field cannot be null.
      */
     @Column(nullable = false)
-    private LocalDate dateRegistration;
+    private LocalDate date_registration;
 
     /**
      * Phone number of the user.
@@ -75,14 +75,14 @@ public class User {
      * List of entries (inscriptions) associated with the user.
      * One user can have multiple entries.
      */
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "users")
     private List<Entry> registrations;
 
     /**
      * List of roles associated with the user.
      * One user can have multiple roles.
      */
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "users")
     private List<Role> roles;
 
 

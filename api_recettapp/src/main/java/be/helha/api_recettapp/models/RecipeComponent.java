@@ -20,6 +20,10 @@ public class RecipeComponent {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @ManyToOne
+    @JoinColumn(name="RECIPE_ID")
+    private Recipe recipe;
+
     /**
      * Quantity of the ingredient used in the recipe.
      */
@@ -33,4 +37,10 @@ public class RecipeComponent {
     @OneToOne
     @JoinColumn(name = "ingredient_id", nullable = false)
     private Ingredient ingredient;
+
+    /**
+     * Unit of the ingredient used in the recipe.
+     */
+    @Column(nullable = false)
+    private String unit;
 }

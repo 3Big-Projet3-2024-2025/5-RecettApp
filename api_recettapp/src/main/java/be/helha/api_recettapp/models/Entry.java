@@ -1,7 +1,6 @@
 package be.helha.api_recettapp.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -21,14 +20,12 @@ public class Entry {
      * User link to the entry
      */
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    private Users users;
 
     /**
      * Contest link to the entry
      */
     @ManyToOne
-    @JoinColumn(name = "contest_id")
     private Contest contest;
 
     private String status;

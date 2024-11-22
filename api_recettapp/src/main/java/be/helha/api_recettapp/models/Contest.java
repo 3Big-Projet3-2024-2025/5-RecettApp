@@ -22,42 +22,42 @@ public class Contest {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id_competition;
+    private int id;
 
     /**
      * Title of the competition.
      * It uses Lombok annotation {@code @Setter} to automatically generate a setter methods.
      */
     @Setter
-    private String title_competition;
+    private String title;
 
     /**
      * The maximum number of participants who can take part in the competition.
      * It uses Lombok annotation {@code @Setter} to automatically generate a setter methods.
      */
     @Setter
-    private int max_participants_competition;
+    private int max_participants;
 
     /**
      * The beginning date of the competition.
      * It uses Lombok annotation {@code @Setter} to automatically generate a setter methods.
      */
     @Setter
-    private Date start_date_competition;
+    private Date start_date;
 
     /**
      * The deadline of the competition.
      * It uses Lombok annotation {@code @Setter} to automatically generate a setter methods.
      */
     @Setter
-    private Date end_date_competition;
+    private Date end_date;
 
     /**
      * The status of the competition, like "ongoing", "over", "not yet begun"
      * It uses Lombok annotation {@code @Setter} to automatically generate a setter methods.
      */
     @Setter
-    private String status_competition;
+    private String status;
 
     /**
      * The category of the competition
@@ -68,5 +68,5 @@ public class Contest {
     @Setter
     @ManyToOne
     @JoinColumn(name = "id_category_competition")
-    private ContestCategory category_competition;
+    private ContestCategory category;
 }
