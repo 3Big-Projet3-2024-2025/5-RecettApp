@@ -35,4 +35,14 @@ public class UsersController {
     public ResponseEntity<Users> createUser(@RequestBody Users user) {
         return ResponseEntity.ok(userService.save(user));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Users> updateUser(@PathVariable Long id, @RequestBody Users user) {
+        Users existingUser = userService.findById(id);
+        if (existingUser == null) {
+            return ResponseEntity.notFound().build();
+        }
+        user.setId(id);
+        return ResponseEntity.ok(userService.save(user));
+    }
 }
