@@ -67,9 +67,22 @@ class UsersControllerTest {
 
         assertNotNull(response);
         assertEquals("Abdel", response.getBody().getFirstName());
-        
+
         verify(userService, times(1)).findById(1L);
     }
 
+    @Test
+    void testUpdateUser() {
+        when(userService.findById(1L)).thenReturn(user);
+        when(userService.save(user)).thenReturn(user);
+
+        ResponseEntity<Users> response = usersController.updateUser(1L, user);
+
+        assertNotNull(response);
+        assertEquals("Abdel", response.getBody().getFirstName());
+        
+        verify(userService, times(1)).findById(1L);
+        verify(userService, times(1)).save(user);
+    }
 
 }
