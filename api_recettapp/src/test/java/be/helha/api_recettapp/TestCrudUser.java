@@ -80,9 +80,20 @@ class UsersControllerTest {
 
         assertNotNull(response);
         assertEquals("Abdel", response.getBody().getFirstName());
-        
+
         verify(userService, times(1)).findById(1L);
         verify(userService, times(1)).save(user);
+    }
+
+    @Test
+    void testDeleteUser() {
+        doNothing().when(userService).delete(1L);
+
+        ResponseEntity<Void> response = usersController.deleteUser(1L);
+
+        assertEquals(204, response.getStatusCodeValue());
+        
+        verify(userService, times(1)).delete(1L);
     }
 
 }
