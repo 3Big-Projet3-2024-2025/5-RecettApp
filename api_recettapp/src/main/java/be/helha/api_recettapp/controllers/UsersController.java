@@ -3,10 +3,7 @@ package be.helha.api_recettapp.controllers;
 import be.helha.api_recettapp.models.Users;
 import be.helha.api_recettapp.services.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,5 +29,10 @@ public class UsersController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(user);
+    }
+
+    @PostMapping
+    public ResponseEntity<Users> createUser(@RequestBody Users user) {
+        return ResponseEntity.ok(userService.save(user));
     }
 }
