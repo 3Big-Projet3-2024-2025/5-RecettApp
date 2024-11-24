@@ -59,6 +59,17 @@ class UsersControllerTest {
         verify(userService, times(1)).findAll();
     }
 
+    @Test
+    void testGetUserById_UserExists() {
+        when(userService.findById(1L)).thenReturn(user);
+
+        ResponseEntity<Users> response = usersController.getUserById(1L);
+
+        assertNotNull(response);
+        assertEquals("Abdel", response.getBody().getFirstName());
+        
+        verify(userService, times(1)).findById(1L);
+    }
 
 
 }
