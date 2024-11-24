@@ -11,6 +11,9 @@ import org.springframework.http.ResponseEntity;
 import be.helha.api_recettapp.controllers.UsersController;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -42,6 +45,20 @@ class UsersControllerTest {
 
         verify(userService, times(1)).save(user);
     }
+
+    @Test
+    void testGetAllUsers() {
+        when(userService.findAll()).thenReturn(Arrays.asList(user));
+
+        ResponseEntity<List<Users>> response = usersController.getAllUsers();
+
+        assertNotNull(response);
+        assertEquals(1, response.getBody().size());
+        assertEquals("Abdel", response.getBody().get(0).getFirstName());
+
+        verify(userService, times(1)).findAll();
+    }
+
 
 
 }
