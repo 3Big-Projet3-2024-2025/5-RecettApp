@@ -23,7 +23,7 @@ public class Users {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long  id;
+    private Long id;
 
     /**
      * First name of the user.
@@ -69,12 +69,14 @@ public class Users {
     /**
      * Phone number of the user.
      */
-    private String phoneNumber;
+    private String phone_number;
 
+    /*
     /**
      * List of entries (inscriptions) associated with the user.
      * One user can have multiple entries.
      */
+    /*
     @OneToMany(mappedBy = "users")
     private List<Entry> registrations;
 
@@ -82,8 +84,9 @@ public class Users {
      * List of roles associated with the user.
      * One user can have multiple roles.
      */
+    /*
     @OneToMany(mappedBy = "users")
     private List<Role> roles;
 
-
+*/
 }

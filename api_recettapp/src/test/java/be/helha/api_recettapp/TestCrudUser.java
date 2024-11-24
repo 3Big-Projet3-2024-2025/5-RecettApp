@@ -17,6 +17,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Unit tests for UsersController.
+ * These tests validate the behavior of the controller for CRUD operations.
+ */
 class UsersControllerTest {
 
     @Mock
@@ -27,6 +31,10 @@ class UsersControllerTest {
 
     private Users user;
 
+    /**
+     * Sets up the test environment before each test.
+     * Initializes the mock objects and creates a sample user.
+     */
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -34,6 +42,10 @@ class UsersControllerTest {
     }
 
 
+    /**
+     * Test for the createUser method.
+     * Verifies that a user can be successfully created.
+     */
     @Test
     void testCreateUser() {
         when(userService.save(user)).thenReturn(user);
@@ -46,6 +58,10 @@ class UsersControllerTest {
         verify(userService, times(1)).save(user);
     }
 
+    /**
+     * Test for the getAllUsers method.
+     * Verifies that all users are retrieved correctly.
+     */
     @Test
     void testGetAllUsers() {
         when(userService.findAll()).thenReturn(Arrays.asList(user));
@@ -59,8 +75,12 @@ class UsersControllerTest {
         verify(userService, times(1)).findAll();
     }
 
+    /**
+     * Test for the getUserById method.
+     * Verifies that a user is retrieved correctly if they exist.
+     */
     @Test
-    void testGetUserById_UserExists() {
+    void testGetUserById() {
         when(userService.findById(1L)).thenReturn(user);
 
         ResponseEntity<Users> response = usersController.getUserById(1L);
@@ -71,6 +91,10 @@ class UsersControllerTest {
         verify(userService, times(1)).findById(1L);
     }
 
+    /**
+     * Test for the updateUser method.
+     * Verifies that a user is updated correctly if they exist.
+     */
     @Test
     void testUpdateUser() {
         when(userService.findById(1L)).thenReturn(user);
@@ -85,6 +109,10 @@ class UsersControllerTest {
         verify(userService, times(1)).save(user);
     }
 
+    /**
+     * Test for the deleteUser method.
+     * Verifies that a user is deleted correctly.
+     */
     @Test
     void testDeleteUser() {
         doNothing().when(userService).delete(1L);
@@ -92,7 +120,7 @@ class UsersControllerTest {
         ResponseEntity<Void> response = usersController.deleteUser(1L);
 
         assertEquals(204, response.getStatusCodeValue());
-        
+
         verify(userService, times(1)).delete(1L);
     }
 
