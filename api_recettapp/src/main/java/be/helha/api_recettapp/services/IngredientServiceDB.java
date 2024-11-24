@@ -12,6 +12,12 @@ import org.springframework.stereotype.*;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+/**
+ *
+ * Service class for managing {@link Ingredient} entities, providing CRUD operations and database interactions.
+ *  @author Demba Mohamed Samba
+ */
+
 @Service
 @Primary
 public class IngredientServiceDB implements IIngredientService{

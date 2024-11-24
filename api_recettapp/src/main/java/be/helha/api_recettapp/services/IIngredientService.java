@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * Interface for managing ingredients in the system.
- *
+ *@author Demba Mohamed Samba
  */
 public interface IIngredientService {
 

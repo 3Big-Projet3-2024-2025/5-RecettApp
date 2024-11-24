@@ -9,6 +9,7 @@ import lombok.*;
  * @description: Represents an ingredient with its nutritional information.
  */
 @Getter
+@Setter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor // Constructor with all arguments

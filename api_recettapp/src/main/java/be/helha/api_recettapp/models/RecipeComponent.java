@@ -10,6 +10,8 @@ import lombok.*;
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class RecipeComponent {
 
     /**

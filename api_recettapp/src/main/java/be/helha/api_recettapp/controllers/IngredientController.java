@@ -19,6 +19,7 @@ import java.util.NoSuchElementException;
  * The controller is mapped to the path "/ingredients".
  * It delegates operations to the {@link IIngredientService}.
  * </p>
+ * @author Demba Mohamed Samba
  */
 @RestController
 @RequestMapping(path = "/ingredients")
