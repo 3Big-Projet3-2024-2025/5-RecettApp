@@ -3,9 +3,10 @@ package be.helha.api_recettapp.services;
 
 import be.helha.api_recettapp.models.Users;
 import be.helha.api_recettapp.repositories.jpa.UserRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
 public class UserService {
 
     private final UserRepository userRepository;
@@ -19,7 +20,7 @@ public class UserService {
     }
 
     public Users findById(Long id) {
-        return userRepository.findById(id).orElse(null);
+        return userRepository.findById((long) Math.toIntExact(id)).orElse(null);
     }
 
     public Users save(Users user) {
@@ -27,7 +28,7 @@ public class UserService {
     }
 
     public void delete(Long id) {
-        userRepository.deleteById(id);
+        userRepository.deleteById((long) Math.toIntExact(id));
     }
 
 }
