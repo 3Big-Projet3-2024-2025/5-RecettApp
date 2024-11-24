@@ -27,36 +27,31 @@ public class Ingredient {
      * Code specifying the subgroup of the food item.
      */
     @Column(nullable = false)
-    private int AlimentSpecifyGroupCode;
+    private int alimentSpecifyGroupCode;
 
     /**
      * Code of the food group.
      */
     @Column(nullable = false)
-    private int AlimentGroupCode;
+    private int alimentGroupCode;
 
     /**
      * Name of the food group.
      */
     @Column(nullable = false)
-    private String AlimentGroupName;
+    private String alimentGroupName;
 
     /**
      * Name of the food item.
      */
     @Column(nullable = false)
-    private String AlimentName;
+    private String alimentName;
 
     /**
      * Name specifying the subgroup of the food item.
      */
     @Column(nullable = false)
-    private String AlimentSpecifyGroupName;
+    private String alimentSpecifyGroupName;
 
-    /**
-     * Energy in kilocalories per 100 grams.
-     */
-    @Column(nullable = false)
-    private int Energy_kcal_100g;
 
 }
