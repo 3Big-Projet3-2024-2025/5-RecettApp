@@ -1,5 +1,6 @@
 package be.helha.api_recettapp.utils;
 
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.User;
@@ -78,5 +79,30 @@ public class JWTUtils {
                         .add("roles",user.getAuthorities())
                         .build())
                 .signWith(key, Jwts.SIG.HS512).compact();
+    }
+
+    /**
+     * Validates the provided JWT.
+     *
+     * @param token The JWT to be validated.
+     * @return {@code true} if the token is valid; {@code false} otherwise.
+     */
+    public boolean validateToken(String token) {
+        try {
+            parseToken(token);
+            return true;
+        }catch (JwtException e){
+            return false;
+        }
+    }
+
+    /**
+     * Parses the provided JWT and extracts its claims.
+     *
+     * @param token The JWT to be parsed.
+     * @throws JwtException if the token is invalid or cannot be parsed.
+     */
+    public void parseToken(String token) throws JwtException {
+        Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload();
     }
 }
