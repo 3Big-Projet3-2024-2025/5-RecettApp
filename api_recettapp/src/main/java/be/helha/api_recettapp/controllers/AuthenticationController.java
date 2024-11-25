@@ -48,9 +48,9 @@ public class AuthenticationController {
      * This endpoint is used to authenticate users.
      */
     @PostMapping("login")
-    public ResponseEntity<?> authenticate(@RequestParam String username, @RequestParam String password) {
+    public ResponseEntity<?> authenticate(@RequestParam String email, @RequestParam String password) {
         try{
-            Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+            Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
             SecurityContextHolder.getContext().setAuthentication(auth);
             User user = (User)auth.getPrincipal();
             JWT jwt = new JWT(jwtUtils.generateAccessToken(user),jwtUtils.generateRefreshToken(user));
