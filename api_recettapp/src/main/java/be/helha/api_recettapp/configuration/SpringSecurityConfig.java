@@ -7,9 +7,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 
 
 /**
@@ -29,6 +31,22 @@ public class SpringSecurityConfig {
      */
     @Autowired
     UserDetailsService userDetailsService;
+
+    /**
+     * Configures the Spring Security filter chain for the application.
+     * This method defines the security rules for handling HTTP requests, including enabling or disabling
+     * CSRF protection and configuring authorization requirements for different endpoints.
+     *
+     * The function use {@code @Bean} annotation to indicate that this method produces a Spring bean, which will be managed by the Spring container.
+     */
+    @Bean
+    public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
+        return http.csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(authorizeRequests -> {
+                    // Permits all requests to all endpoints for the moment, to easily test API
+                    authorizeRequests.requestMatchers("/**").permitAll();
+                }).build();
+    }
 
     /**
      * Bean definition for the password encoder used to encode passwords.
