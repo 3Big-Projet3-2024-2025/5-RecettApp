@@ -5,7 +5,7 @@ import be.helha.api_recettapp.models.Recipe;
 import be.helha.api_recettapp.models.RecipeComponent;
 import be.helha.api_recettapp.services.IngredientServiceDB;
 import be.helha.api_recettapp.services.RecipeComponentServiceDB;
-import be.helha.api_recettapp.services.RecipeService;
+import be.helha.api_recettapp.services.RecipeServiceDB;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 public class RecipeComponentsTest {
     @Autowired
-    private RecipeService recipeService;
+    private RecipeServiceDB recipeServiceDB;
     @Autowired
     private IngredientServiceDB ingredientServiceDB;
     @Autowired
@@ -34,7 +34,7 @@ public class RecipeComponentsTest {
         List<Ingredient> ingredients = new ArrayList<>();
         ingredients.add(ingredient);
 
-        Recipe recipe = recipeService.getRecipeById(4); // ID existant dans la DB
+        Recipe recipe = recipeServiceDB.getRecipeById(4); // ID existant dans la DB
         if (recipe == null) {
             throw new IllegalStateException("Recipe with ID 1 not found.");
         }
