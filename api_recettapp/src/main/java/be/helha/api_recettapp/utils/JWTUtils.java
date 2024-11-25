@@ -37,13 +37,6 @@ public class JWTUtils {
     private long expirationRefreshToken;
 
     /**
-     * The {@link SecretKey} instance used to sign the JWTs.
-     * It is initialized using the secret and the HMAC-SHA-512 algorithm.
-     */
-    private final SecretKey key = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA512");
-
-
-    /**
      * Generates an access token for the given user.
      *
      * @param user The {@link User} for whom the token is being generated.
@@ -71,6 +64,7 @@ public class JWTUtils {
      * @return A signed JWT.
      */
     private String generateToken(User user,long expiration) {
+        SecretKey key = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA512");
         return Jwts.builder()
                 .claims(Jwts.claims()
                         .subject(user.getUsername())
@@ -103,6 +97,7 @@ public class JWTUtils {
      * @throws JwtException if the token is invalid or cannot be parsed.
      */
     public void parseToken(String token) throws JwtException {
+        SecretKey key = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA512");
         Jwts.parser().verifyWith(key).build().parseSignedClaims(token).getPayload();
     }
 }
