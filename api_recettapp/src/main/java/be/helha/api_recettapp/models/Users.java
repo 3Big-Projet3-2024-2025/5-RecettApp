@@ -71,12 +71,12 @@ public class Users {
      */
     private String phone_number;
 
-    /*
+
     /**
      * List of entries (inscriptions) associated with the user.
      * One user can have multiple entries.
      */
-    /*
+
     @OneToMany(mappedBy = "users")
     private List<Entry> registrations;
 
@@ -84,9 +84,9 @@ public class Users {
      * List of roles associated with the user.
      * One user can have multiple roles.
      */
-    /*
+
     @OneToMany(mappedBy = "users")
     private List<Role> roles;
 
-*/
+
 }
