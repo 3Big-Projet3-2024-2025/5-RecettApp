@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/auth")
-public class AuthentificationControler {
+public class AuthenticationController {
 
     /**
      * Utility class for handling JWT operations.
