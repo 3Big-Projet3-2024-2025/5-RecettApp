@@ -3,6 +3,7 @@ package be.helha.api_recettapp.controllers;
 import be.helha.api_recettapp.models.Users;
 import be.helha.api_recettapp.services.IUserService;
 import be.helha.api_recettapp.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 public class UsersController {
 
 
+    @Autowired
     private final UserService userService;
 
     /**
