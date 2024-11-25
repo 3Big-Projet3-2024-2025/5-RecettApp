@@ -9,30 +9,48 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
+/**
+ * Service class for managing {@link RecipeComponent} entities, providing CRUD operations and database interactions.
+ * @author Demba Mohamed Samba
+ */
 @Service
-public class RecipeComponentServiceDB implements IRecipeComponent{
+@Primary
+public class RecipeComponentServiceDB implements IRecipeComponent {
+
     @Autowired
     private RecipeComponentRepository recipeComponentRepository;
+
     /**
      * Retrieves a paginated list of recipe components.
      *
      * @param page the {@link Pageable} object containing pagination information.
      * @return a {@link Page} of {@link RecipeComponent} objects.
+     * @throws RuntimeException if any error occurs during the operation.
      */
     @Override
     public Page<RecipeComponent> getRecipeComponents(Pageable page) {
-        return null;
+        try {
+            return recipeComponentRepository.findAll(page);
+        } catch (Exception e) {
+            throw new RuntimeException("Error retrieving recipe components: " + e.getMessage(), e);
+        }
     }
 
     /**
      * Retrieves a list of all recipe components.
      *
      * @return a {@link List} of {@link RecipeComponent} objects.
+     * @throws RuntimeException if any error occurs during the operation.
      */
     @Override
     public List<RecipeComponent> getRecipeComponents() {
-        return List.of();
+        try {
+            return recipeComponentRepository.findAll();
+        } catch (Exception e) {
+            throw new RuntimeException("Error retrieving recipe components: " + e.getMessage(), e);
+        }
     }
 
     /**
@@ -40,10 +58,15 @@ public class RecipeComponentServiceDB implements IRecipeComponent{
      *
      * @param recipeComponent the {@link RecipeComponent} object to add.
      * @return the added {@link RecipeComponent}.
+     * @throws RuntimeException if any error occurs during the operation.
      */
     @Override
     public RecipeComponent addRecipeComponent(RecipeComponent recipeComponent) {
-        return null;
+        try {
+            return recipeComponentRepository.save(recipeComponent);
+        } catch (Exception e) {
+            throw new RuntimeException("Error adding recipe component: " + e.getMessage(), e);
+        }
     }
 
     /**
@@ -51,30 +74,51 @@ public class RecipeComponentServiceDB implements IRecipeComponent{
      *
      * @param recipeComponent the {@link RecipeComponent} object with updated information.
      * @return the updated {@link RecipeComponent}.
+     * @throws NoSuchElementException if the recipe component with the given id does not exist.
+     * @throws RuntimeException if any error occurs during the operation.
      */
     @Override
     public RecipeComponent updateRecipeComponent(RecipeComponent recipeComponent) {
-        return null;
+        if (!recipeComponentRepository.existsById(recipeComponent.getId())) {
+            throw new NoSuchElementException("RecipeComponent with id " + recipeComponent.getId() + " not found");
+        }
+        try {
+            return recipeComponentRepository.save(recipeComponent);
+        } catch (Exception e) {
+            throw new RuntimeException("Error updating recipe component: " + e.getMessage(), e);
+        }
     }
 
     /**
-     * Deletes a recipe component by its ID.
+     * Deletes a recipe component by its id.
      *
-     * @param id the ID of the {@link RecipeComponent} to delete.
+     * @param id the id of the {@link RecipeComponent} to delete.
+     * @throws NoSuchElementException if the recipe component with the given id does not exist.
+     * @throws RuntimeException if any error occurs during the operation.
      */
     @Override
     public void deleteRecipeComponent(int id) {
-
+        if (!recipeComponentRepository.existsById(id)) {
+            throw new NoSuchElementException("RecipeComponent with id " + id + " not found");
+        }
+        try {
+            recipeComponentRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new RuntimeException("Error deleting recipe component: " + e.getMessage(), e);
+        }
     }
 
     /**
-     * Retrieves a recipe component by its ID.
+     * Retrieves a recipe component by its id.
      *
-     * @param id the ID of the {@link RecipeComponent} to retrieve.
+     * @param id the id of the {@link RecipeComponent} to retrieve.
      * @return the requested {@link RecipeComponent}.
+     * @throws NoSuchElementException if the recipe component with the given id does not exist.
+     * @throws RuntimeException if any error occurs during the operation.
      */
     @Override
     public RecipeComponent getRecipeComponentById(int id) {
-        return null;
+        return recipeComponentRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("RecipeComponent with id " + id + " not found"));
     }
 }

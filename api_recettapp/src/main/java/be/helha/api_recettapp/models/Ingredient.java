@@ -3,6 +3,8 @@ package be.helha.api_recettapp.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 /**
  * @author Demba Mohamed Samba
  *
@@ -54,5 +56,7 @@ public class Ingredient {
     @Column(nullable = false)
     private String alimentSpecifyGroupName;
 
+    @OneToMany(mappedBy = "ingredient")
+    private List<RecipeComponent> recipeComponent;
 
 }

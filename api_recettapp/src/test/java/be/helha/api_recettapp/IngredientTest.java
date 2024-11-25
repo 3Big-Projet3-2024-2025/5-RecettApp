@@ -42,8 +42,8 @@ class IngredientTest {
     @Order(1)
     void addIngredient() {
         // Create and add ingredientsList to the list
-        Ingredient ingredient1 = new Ingredient(0, 101, 10, "Vegetables", "Carrot", "Root Vegetables");
-        Ingredient ingredient2 = new Ingredient( 0,102, 11, "Fruits", "Apple", "Tree Fruits");
+        Ingredient ingredient1 = new Ingredient(0, 101, 10, "Vegetables", "Carrot", "Root Vegetables",null);
+        Ingredient ingredient2 = new Ingredient( 0,102, 11, "Fruits", "Apple", "Tree Fruits",null);
 
         // Add ingredientsList to the database
         Ingredient savedIngredient1 = ingredientService.addIngredient(ingredient1);

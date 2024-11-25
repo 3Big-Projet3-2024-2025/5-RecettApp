@@ -40,10 +40,8 @@ public class Recipe {
 
     /**
      * Detailed description of the recipe.
-     * Stored as a Large Object (LOB).
      */
     @Column(nullable = false)
-    @Lob
     private String description;
 
     /**
@@ -78,10 +76,8 @@ public class Recipe {
 
     /**
      * Instructions for preparing the recipe.
-     * Stored as a Large Object (LOB).
      */
     @Column(nullable = false)
-    @Lob
     private String instructions;
 
     /**

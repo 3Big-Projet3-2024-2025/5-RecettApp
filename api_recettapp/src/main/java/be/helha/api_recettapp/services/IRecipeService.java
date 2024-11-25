@@ -13,4 +13,5 @@ public interface IRecipeService {
     public Recipe addRecipe(Recipe recipe);
     public Recipe updateRecipe(Recipe recipe);
     public void deleteRecipe(int id);
+    public Recipe getRecipeById(int id);
 }
