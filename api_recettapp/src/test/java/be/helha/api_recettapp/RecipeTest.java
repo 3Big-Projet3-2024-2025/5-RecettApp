@@ -82,4 +82,23 @@ public class RecipeTest {
 
 
     }
+
+    @Test
+    public void testGetRecipeById() throws Exception {
+        Recipe recipe = createRecipe("Chocolate Cake", "Delicious chocolate cake recipe.", "Dessert");
+        recipe.setId(1);
+
+        given(recipeService.getRecipeById(1)).willReturn(recipe);
+
+        mockMvc.perform(get("/recipe/1")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("Chocolate Cake"))
+                .andExpect(jsonPath("$.category").value("Dessert"))
+                .andExpect(jsonPath("$.preparation_time").value(30))
+                .andExpect(jsonPath("$.cooking_time").value(45))
+                .andExpect(jsonPath("$.servings").value(8))
+                .andExpect(jsonPath("$.difficulty_level").value("Medium"))
+                .andExpect(jsonPath("$.approved").value(true));
+    }
 }
