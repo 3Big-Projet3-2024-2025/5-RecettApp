@@ -1,6 +1,7 @@
 package be.helha.api_recettapp;
 
 import be.helha.api_recettapp.models.Ingredient;
+import be.helha.api_recettapp.controllers.IngredientController;
 import be.helha.api_recettapp.services.*;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -23,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 /**
- * Unit tests for {@link IngredientServiceDB}, focusing on CRUD operations for {@link Ingredient} withe {@link MockMvc}.
+ * Unit tests for {@link IngredientController}, focusing on CRUD operations for {@link Ingredient} withe {@link MockMvc}.
  * @author Demba Mohamed Samba
  * **/
 //@WebMvcTest(IngredientController.class)
