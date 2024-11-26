@@ -30,6 +30,18 @@ public class ContestCategoryController {
     }
 
     /**
+     * Find categories by title.
+     *
+     * @param title the title to search for.
+     * @return a list of matching contest categories.
+     */
+    @GetMapping("/search")
+    public ResponseEntity<List<ContestCategory>> searchByTitle(@RequestParam String title) {
+        List<ContestCategory> categories = service.findByTitle(title);
+        return ResponseEntity.ok(categories);
+    }
+
+    /**
      * Get a specific contest category by ID.
      *
      * @param id the ID of the category.

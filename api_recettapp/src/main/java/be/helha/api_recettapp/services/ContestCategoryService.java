@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service class for managing ContestCategory.
@@ -25,6 +26,21 @@ public class ContestCategoryService {
      */
     public List<ContestCategory> findAll() {
         return repository.findAll();
+    }
+
+    /**
+     * Find categories by title.
+     * This method retrieves all categories and filters them by the given title.
+     *
+     * @param title the title to search for.
+     * @return a list of matching contest categories.
+     */
+    public List<ContestCategory> findByTitle(String title) {
+        // Retrieve all categories and filter by title (case-insensitive, partial match)
+        return repository.findAll().stream()
+                .filter(category -> category.getTitle() != null &&
+                        category.getTitle().toLowerCase().contains(title.toLowerCase()))
+                .collect(Collectors.toList());
     }
 
     /**
