@@ -1,20 +1,14 @@
 package be.helha.api_recettapp;
 
-import be.helha.api_recettapp.controllers.IngredientController;
 import be.helha.api_recettapp.models.Ingredient;
-import be.helha.api_recettapp.services.IIngredientService;
-import be.helha.api_recettapp.services.IngredientServiceDB;
+import be.helha.api_recettapp.services.*;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -33,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author Demba Mohamed Samba
  * **/
 //@WebMvcTest(IngredientController.class)
-@SpringBootTest // Démarre tout le contexte Spring
+@SpringBootTest
 @AutoConfigureMockMvc
 class IngredientTest {
 
@@ -44,7 +38,12 @@ class IngredientTest {
     @MockBean
     private IIngredientService ingredientService;
 
-
+    /**
+     * Tests the getIngredients API endpoint by performing HTTP GET request
+     * with specific pagination parameters and verifying the response.
+     *
+     * @throws Exception if there is an error during the test execution
+     */
     @Test
     public void testGetIngredients() throws Exception {
         Pageable pageable = PageRequest.of(0, 10);
@@ -66,7 +65,12 @@ class IngredientTest {
                 .andExpect(jsonPath("$.content[1].alimentName", is("Carrot")));
     }
 
-
+    /**
+     * Tests the `getAllIngredients` API endpoint by performing an HTTP GET request
+     * and verifying that the response contains the expected list of ingredients.
+     *
+     * @throws Exception if there is an error during the test execution
+     */
     @Test
     public void testGetAllIngredients() throws Exception {
         List<Ingredient> ingredients = Arrays.asList(
@@ -84,7 +88,12 @@ class IngredientTest {
                 .andExpect(jsonPath("$[1].alimentSpecifyGroupName", is("Fresh Carrot")));
     }
 
-
+    /**
+     * Tests the `getIngredientById` API endpoint by performing an HTTP GET request
+     * to retrieve a specific ingredient by its ID and verifying the response.
+     *
+     * @throws Exception if there is an error during the test execution
+     */
     @Test
     public void testGetIngredientById() throws Exception {
         Ingredient ingredient = new Ingredient(1, 101, 201, "Fruits", "Apple", "Fresh Apple", null);
@@ -98,7 +107,12 @@ class IngredientTest {
                 .andExpect(jsonPath("$.alimentName", is("Apple")));
     }
 
-
+    /**
+     * Tests the `addIngredient` API endpoint by performing an HTTP POST request to add a new ingredient
+     * and verifying that the response contains the expected ingredient details.
+     *
+     * @throws Exception if there is an error during the test execution
+     */
     @Test
     public void testAddIngredient() throws Exception {
         Ingredient newIngredient = new Ingredient(3, 103, 203, "Meat", "Chicken", "Fresh Chicken", null);
@@ -113,7 +127,13 @@ class IngredientTest {
                 .andExpect(jsonPath("$.alimentName", is("Chicken")));
     }
 
-
+    /**
+     * Tests the `updateIngredient` API endpoint by performing an HTTP PUT request
+     * to update an existing ingredient and verifies that the response contains the
+     * expected updated ingredient details.
+     *
+     * @throws Exception if there is an error during the test execution
+     */
     @Test
     public void testUpdateIngredient() throws Exception {
         Ingredient updatedIngredient = new Ingredient(1, 101, 201, "Fruits", "Updated Apple", "Fresh Apple", null);
@@ -127,6 +147,15 @@ class IngredientTest {
                 .andExpect(jsonPath("$.alimentName", is("Updated Apple")));
     }
 
+    /**
+     * Performs a test to verify the deletion of an ingredient via the delete API endpoint.
+     *
+     * This test performs an HTTP DELETE request to the
+     * /ingredients/1 endpoint and expects a 200 OK status and verifies that the
+     * `deleteIngredient` method was called exactly once with the specified ID.
+     *
+     * @throws Exception if there is an error during the test execution.
+     */
     @Test
     public void testDeleteIngredient() throws Exception {
         doNothing().when(ingredientService).deleteIngredient(1);
