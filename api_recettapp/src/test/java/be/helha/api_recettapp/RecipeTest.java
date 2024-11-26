@@ -15,6 +15,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -100,5 +103,23 @@ public class RecipeTest {
                 .andExpect(jsonPath("$.servings").value(8))
                 .andExpect(jsonPath("$.difficulty_level").value("Medium"))
                 .andExpect(jsonPath("$.approved").value(true));
+    }
+
+    @Test
+    public void testGetAllRecipes() throws Exception {
+        Recipe recipe1 = createRecipe("Chocolate Cake", "Delicious chocolate cake recipe.", "Dessert");
+        recipe1.setId(1);
+
+        Recipe recipe2 = createRecipe("Vanilla Ice Cream", "Delicious vanilla ice cream recipe.", "Dessert");
+        recipe2.setId(2);
+
+        given(recipeService.getRecipes()).willReturn(List.of(recipe1, recipe2));
+
+        mockMvc.perform(get("/recipe/all")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].title").value("Chocolate Cake"))
+                .andExpect(jsonPath("$[1].title").value("Vanilla Ice Cream"));
     }
 }
