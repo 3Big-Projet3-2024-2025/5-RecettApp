@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.junit.jupiter.api.Test;
@@ -122,4 +125,28 @@ public class RecipeTest {
                 .andExpect(jsonPath("$[0].title").value("Chocolate Cake"))
                 .andExpect(jsonPath("$[1].title").value("Vanilla Ice Cream"));
     }
+
+    @Test
+    public void testGetRecipesWithPagination() throws Exception {
+
+        Recipe recipe1 = createRecipe("Chocolate Cake", "Delicious chocolate cake recipe.", "Dessert");
+        recipe1.setId(1);
+
+        Recipe recipe2 = createRecipe("Vanilla Ice Cream", "Delicious vanilla ice cream recipe.", "Dessert");
+        recipe2.setId(2);
+
+        Page<Recipe> pagedRecipes = new PageImpl<>(List.of(recipe1, recipe2)); // Utilise PageImpl pour simuler une page
+
+        given(recipeService.getRecipes(Mockito.any(Pageable.class))).willReturn(pagedRecipes);
+
+        mockMvc.perform(get("/recipe")
+                        .param("page", "0")
+                        .param("size", "2")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content", hasSize(2)))
+                .andExpect(jsonPath("$.content[0].title").value("Chocolate Cake"))
+                .andExpect(jsonPath("$.content[1].title").value("Vanilla Ice Cream"));
+    }
+
 }
