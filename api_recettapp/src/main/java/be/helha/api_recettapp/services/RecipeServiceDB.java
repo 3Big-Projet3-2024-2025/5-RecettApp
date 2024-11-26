@@ -15,6 +15,10 @@ public class RecipeServiceDB implements IRecipeService{
 
     @Autowired
     private RecipeRepository recipeRepository;
+    @Autowired
+    private ContestService contestService;
+    @Autowired
+    private ContestCategoryService contestCategoryService;
 
     /**
      * Retrieves a paginated list of recipes.
@@ -54,7 +58,10 @@ public class RecipeServiceDB implements IRecipeService{
      */
     @Override
     public Recipe addRecipe(Recipe recipe) {
+
         try {
+            if (recipe.getContest() == null) throw new RuntimeException("Contest is mandatory and cannot be null.");
+            //if (contestService.getContestById(recipe.getContest().getId()) == null)     throw new RuntimeException("Contest with ID " + recipe.getContest().getId() + " does not exist in the db.");
             return recipeRepository.save(recipe);
         } catch (Exception e) {
             throw new RuntimeException("Error adding recipe: " + e.getMessage(), e);

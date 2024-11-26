@@ -43,6 +43,15 @@ public class RecipeTest {
     @MockBean
     private IRecipeService recipeService;
 
+    /**
+     * Creates a new Recipe instance with the provided title, description, and category,
+     * and sets default values for other fields.
+     *
+     * @param title       The title of the recipe.
+     * @param description The description of the recipe.
+     * @param category    The category of the recipe (e.g., Dessert, Main Course).
+     * @return A new {@link Recipe}  with the provided and default values.
+     */
     private Recipe createRecipe(String title,String description,String category) {
         Recipe recipe = new Recipe();
         recipe.setTitle(title);
@@ -66,6 +75,14 @@ public class RecipeTest {
         return recipe;
     }
 
+    /**
+     * Tests the addRecipe functionality of the RecipeController.
+     *
+     * This method verifies if a recipe can be successfully added via a POST request to the
+     * "/recipe" endpoint.
+     *
+     * @throws Exception if any error occurs during the test execution.
+     */
     @Test
     public void testAddRecipe()throws Exception{
 
@@ -89,6 +106,12 @@ public class RecipeTest {
 
     }
 
+    /**
+     * Tests the getRecipeById functionality of the RecipeController.
+     *
+     * This method verifies if a recipe can be successfully retrieved via a GET request to the "/recipe/1" endpoint.
+     * @throws Exception if any error occurs during the test execution.
+     */
     @Test
     public void testGetRecipeById() throws Exception {
         Recipe recipe = createRecipe("Chocolate Cake", "Delicious chocolate cake recipe.", "Dessert");
@@ -108,6 +131,14 @@ public class RecipeTest {
                 .andExpect(jsonPath("$.approved").value(true));
     }
 
+    /**
+     * Tests the getAllRecipes functionality of the RecipeController.
+     *
+     * This method verifies if a list of recipes can be successfully retrieved
+     * via a GET request to the "/recipe/all" endpoint.
+     *
+     * @throws Exception if any error occurs during the test execution.
+     */
     @Test
     public void testGetAllRecipes() throws Exception {
         Recipe recipe1 = createRecipe("Chocolate Cake", "Delicious chocolate cake recipe.", "Dessert");
@@ -126,6 +157,14 @@ public class RecipeTest {
                 .andExpect(jsonPath("$[1].title").value("Vanilla Ice Cream"));
     }
 
+    /**
+     * Tests the getRecipesWithPagination functionality of the RecipeController.
+     *
+     * This method verifies if a paginated list of recipes can be successfully retrieved
+     * via a GET request to the "/recipe" endpoint with specific page and size parameters.
+     *
+     * @throws Exception if any error occurs during the test execution.
+     */
     @Test
     public void testGetRecipesWithPagination() throws Exception {
 
@@ -149,6 +188,13 @@ public class RecipeTest {
                 .andExpect(jsonPath("$.content[1].title").value("Vanilla Ice Cream"));
     }
 
+    /**
+     * Tests the updateRecipe functionality of the RecipeController.
+     *
+     * This method verifies if a recipe can be successfully updated via a PUT request to the "/recipe" endpoint.
+     *
+     * @throws Exception if any error occurs during the test execution.
+     */
     @Test
     public void testUpdateRecipe() throws Exception {
         Recipe updatedRecipe = createRecipe("Updated Cake", "Delicious chocolate cake recipe", "Dessert");
@@ -165,4 +211,19 @@ public class RecipeTest {
                 .andExpect(jsonPath("$.description").value("Delicious chocolate cake recipe"));
     }
 
+    /**
+     * Tests the deleteRecipe functionality of the RecipeController.
+     *
+     * This method verifies if a recipe can be successfully deleted via a DELETE request to the
+     * "/recipe/1" endpoint using the mockMvc framework.
+     *
+     * @throws Exception if any error occurs during the test execution.
+     */
+    @Test
+    void testDeleteRecipe() throws Exception {
+        Mockito.doNothing().when(recipeService).deleteRecipe(1);
+
+        mockMvc.perform(delete("/recipe/1"))
+                .andExpect(status().isOk());
+    }
 }

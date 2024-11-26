@@ -1,5 +1,7 @@
 package be.helha.api_recettapp.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,6 +29,8 @@ public class RecipeComponent {
 
     @ManyToOne
     @JoinColumn(name="RECIPE_ID")
+
+    @JsonManagedReference
     private Recipe recipe;
 
     /**
