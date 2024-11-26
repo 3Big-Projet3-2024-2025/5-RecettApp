@@ -1,0 +1,58 @@
+package be.helha.api_recettapp.services;
+
+import be.helha.api_recettapp.models.RecipeType;
+import be.helha.api_recettapp.repositories.jpa.RecipeTypeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+/**
+ * Service for managing RecipeType.
+ * Contains the business logic for handling recipe types.
+ */
+@Service
+public class RecipeTypeService {
+
+    @Autowired
+    private RecipeTypeRepository repository;
+
+    /**
+     * Retrieve all recipe types from the database.
+     *
+     * @return a list of all recipe types.
+     */
+    public List<RecipeType> findAll() {
+        return repository.findAll();
+    }
+
+    /**
+     * Find a specific recipe type by its ID.
+     *
+     * @param id the ID of the recipe type.
+     * @return an Optional containing the recipe type if found, or empty if not.
+     */
+    public Optional<RecipeType> findById(int id) {
+        return repository.findById(id);
+    }
+
+    /**
+     * Save a new recipe type or update an existing one.
+     *
+     * @param recipeType the recipe type to save or update.
+     * @return the saved recipe type.
+     */
+    public RecipeType save(RecipeType recipeType) {
+        return repository.save(recipeType);
+    }
+
+    /**
+     * Delete a recipe type by its ID.
+     *
+     * @param id the ID of the recipe type to delete.
+     */
+    public void deleteById(int id) {
+        repository.deleteById(id);
+    }
+}

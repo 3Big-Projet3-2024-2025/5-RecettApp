@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="be.helha.api_recettapp.ApiRecettappApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-11-24T17:56:45" hostname="DESKTOP-IOCPO1M" time="1.032">
+  <properties/>
+  <testcase name="contextLoads()" classname="be.helha.api_recettapp.ApiRecettappApplicationTests" time="1.032"/>
+  <system-out><![CDATA[18:56:33.909 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [be.helha.api_recettapp.ApiRecettappApplicationTests]: ApiRecettappApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+18:56:34.130 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration be.helha.api_recettapp.ApiRecettappApplication for test class be.helha.api_recettapp.ApiRecettappApplicationTests
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.5)
+
+2024-11-24T18:56:35.133+01:00  INFO 4880 --- [api_recettapp] [    Test worker] b.h.a.ApiRecettappApplicationTests       : Starting ApiRecettappApplicationTests using Java 17 with PID 4880 (started by lamha in C:\Workspace\5-RecettApp\api_recettapp)
+2024-11-24T18:56:35.137+01:00  INFO 4880 --- [api_recettapp] [    Test worker] b.h.a.ApiRecettappApplicationTests       : No active profile set, falling back to 1 default profile: "default"
+2024-11-24T18:56:36.641+01:00  INFO 4880 --- [api_recettapp] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-11-24T18:56:36.722+01:00  INFO 4880 --- [api_recettapp] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 65 ms. Found 1 JPA repository interface.
+2024-11-24T18:56:38.315+01:00  INFO 4880 --- [api_recettapp] [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-11-24T18:56:38.443+01:00  INFO 4880 --- [api_recettapp] [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2024-11-24T18:56:38.543+01:00  INFO 4880 --- [api_recettapp] [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-11-24T18:56:39.278+01:00  INFO 4880 --- [api_recettapp] [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-11-24T18:56:39.338+01:00  INFO 4880 --- [api_recettapp] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-11-24T18:56:39.903+01:00  INFO 4880 --- [api_recettapp] [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@1e8bccfb
+2024-11-24T18:56:39.907+01:00  INFO 4880 --- [api_recettapp] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-11-24T18:56:42.589+01:00  INFO 4880 --- [api_recettapp] [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-11-24T18:56:42.942+01:00  WARN 4880 --- [api_recettapp] [    Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2024-11-24T18:56:42.942+01:00  WARN 4880 --- [api_recettapp] [    Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : constraint "uk8fygs7ujegvf4dneu8ck36n4f" of relation "evaluation" does not exist, skipping
+2024-11-24T18:56:42.954+01:00  WARN 4880 --- [api_recettapp] [    Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2024-11-24T18:56:42.955+01:00  WARN 4880 --- [api_recettapp] [    Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : constraint "ukrp71bm4yy4j63n3qai88u30oy" of relation "evaluation" does not exist, skipping
+2024-11-24T18:56:42.968+01:00  WARN 4880 --- [api_recettapp] [    Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2024-11-24T18:56:42.968+01:00  WARN 4880 --- [api_recettapp] [    Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : constraint "uk7sppweuyfrp2cd7lis8mptokx" of relation "recipe_component" does not exist, skipping
+2024-11-24T18:56:42.983+01:00  WARN 4880 --- [api_recettapp] [    Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2024-11-24T18:56:42.984+01:00  WARN 4880 --- [api_recettapp] [    Test worker] o.h.engine.jdbc.spi.SqlExceptionHelper   : constraint "uk6dotkott2kjsp8vw4d0m25fb7" of relation "users" does not exist, skipping
+2024-11-24T18:56:43.092+01:00  INFO 4880 --- [api_recettapp] [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-11-24T18:56:44.233+01:00  WARN 4880 --- [api_recettapp] [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-11-24T18:56:45.155+01:00  INFO 4880 --- [api_recettapp] [    Test worker] b.h.a.ApiRecettappApplicationTests       : Started ApiRecettappApplicationTests in 10.635 seconds (process running for 13.031)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
