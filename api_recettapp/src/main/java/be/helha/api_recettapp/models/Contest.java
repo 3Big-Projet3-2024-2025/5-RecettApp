@@ -20,6 +20,7 @@ public class Contest {
      * It uses JPA annotation {@code @Id} to automatically signal at the database that is the primary key of the table.
      * It uses JPA annotation {@code @GeneratedValue(strategy = GenerationType.IDENTITY)} to automatically generate the primary key (id).
      */
+    @Setter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -69,4 +70,32 @@ public class Contest {
     @ManyToOne
     @JoinColumn(name = "id_category_competition")
     private ContestCategory category;
+
+    /**
+     * Check validity of a Contest Object
+     * @param contest the contest to check
+     * @return true
+     * @throws IllegalArgumentException if an attribut is null or if start date is after end date
+     */
+    public static boolean checkContest(Contest contest) throws IllegalArgumentException{
+        if (contest.getTitle() == null || contest.getTitle().isEmpty()) {
+            throw new IllegalArgumentException("Title cannot be null or empty.");
+        }
+        if (contest.getMax_participants() <= 0) {
+            throw new IllegalArgumentException("Max participants must be greater than 0.");
+        }
+        if (contest.getStart_date() == null || contest.getEnd_date() == null) {
+            throw new IllegalArgumentException("Start date and end date cannot be null.");
+        }
+        if (contest.getStart_date().after(contest.getEnd_date())) {
+            throw new IllegalArgumentException("Start date cannot be after end date.");
+        }
+        if (contest.getStatus() == null || contest.getStatus().isEmpty()) {
+            throw new IllegalArgumentException("Status cannot be null or empty.");
+        }
+        /*if (contest.getCategory() == null) {
+            throw new IllegalArgumentException("Category cannot be null.");
+        }*/
+        return true;
+    }
 }
