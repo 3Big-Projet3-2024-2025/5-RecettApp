@@ -43,6 +43,18 @@ public class RecipeTypeController {
     }
 
     /**
+     * Find recipe types by name.
+     *
+     * @param name the name to search for.
+     * @return a list of matching recipe types.
+     */
+    @GetMapping("/search")
+    public ResponseEntity<List<RecipeType>> searchByName(@RequestParam String name) {
+        List<RecipeType> recipeTypes = service.findByName(name);
+        return ResponseEntity.ok(recipeTypes);
+    }
+
+    /**
      * Create a new recipe type.
      *
      * @param recipeType the recipe type to create.

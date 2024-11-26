@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service for managing RecipeType.
@@ -35,6 +36,21 @@ public class RecipeTypeService {
      */
     public Optional<RecipeType> findById(int id) {
         return repository.findById(id);
+    }
+
+    /**
+     * Find recipe types by name.
+     * This method retrieves all recipe types and filters them by the given name.
+     *
+     * @param name the name to search for.
+     * @return a list of matching recipe types.
+     */
+    public List<RecipeType> findByName(String name) {
+        // Retrieve all recipe types and filter by name (case-insensitive, partial match)
+        return repository.findAll().stream()
+                .filter(type -> type.getName() != null &&
+                        type.getName().toLowerCase().contains(name.toLowerCase()))
+                .collect(Collectors.toList());
     }
 
     /**
