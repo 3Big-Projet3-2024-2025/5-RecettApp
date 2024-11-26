@@ -135,7 +135,7 @@ public class RecipeTest {
         Recipe recipe2 = createRecipe("Vanilla Ice Cream", "Delicious vanilla ice cream recipe.", "Dessert");
         recipe2.setId(2);
 
-        Page<Recipe> pagedRecipes = new PageImpl<>(List.of(recipe1, recipe2)); // Utilise PageImpl pour simuler une page
+        Page<Recipe> pagedRecipes = new PageImpl<>(List.of(recipe1, recipe2)); // Use PageImpl to simulate a page
 
         given(recipeService.getRecipes(Mockito.any(Pageable.class))).willReturn(pagedRecipes);
 
@@ -147,6 +147,22 @@ public class RecipeTest {
                 .andExpect(jsonPath("$.content", hasSize(2)))
                 .andExpect(jsonPath("$.content[0].title").value("Chocolate Cake"))
                 .andExpect(jsonPath("$.content[1].title").value("Vanilla Ice Cream"));
+    }
+
+    @Test
+    public void testUpdateRecipe() throws Exception {
+        Recipe updatedRecipe = createRecipe("Updated Cake", "Delicious chocolate cake recipe", "Dessert");
+        updatedRecipe.setId(1);
+
+        given(recipeService.updateRecipe(Mockito.any(Recipe.class))).willReturn(updatedRecipe);
+
+        mockMvc.perform(put("/recipe")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updatedRecipe)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("Updated Cake"))
+                .andExpect(jsonPath("$.category").value("Dessert"))
+                .andExpect(jsonPath("$.description").value("Delicious chocolate cake recipe"));
     }
 
 }
