@@ -1,8 +1,6 @@
 package be.helha.api_recettapp;
 
-import be.helha.api_recettapp.models.Ingredient;
-import be.helha.api_recettapp.models.Recipe;
-import be.helha.api_recettapp.models.RecipeComponent;
+import be.helha.api_recettapp.models.*;
 import be.helha.api_recettapp.services.IRecipeComponent;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -17,11 +15,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @SpringBootTest
@@ -111,4 +109,29 @@ public class RecipeComponentsTest {
                 .andExpect(jsonPath("$.ingredient.id").value(1));
     }
 
+    /**
+     * Tests the retrieval of all RecipeComponent entities in the system.
+     *
+     * This method sends a GET request to the "/recipe-components/all" endpoint
+     * and verifies the response. The expected response should be a list of
+     * two RecipeComponents with the specified quantities and units.
+     *
+     * @throws Exception if any error occurs during the execution of the test.
+     */
+    @Test
+    public void testGetAllRecipeComponents() throws Exception {
+        RecipeComponent component1 = createRecipeComponent(1, 200, "g");
+        RecipeComponent component2 = createRecipeComponent(2, 100, "ml");
+
+        given(recipeComponentService.getRecipeComponents()).willReturn(List.of(component1, component2));
+
+        mockMvc.perform(get("/recipe-components/all")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].quantity").value(200))
+                .andExpect(jsonPath("$[0].unit").value("g"))
+                .andExpect(jsonPath("$[1].quantity").value(100))
+                .andExpect(jsonPath("$[1].unit").value("ml"));
+    }
 }
