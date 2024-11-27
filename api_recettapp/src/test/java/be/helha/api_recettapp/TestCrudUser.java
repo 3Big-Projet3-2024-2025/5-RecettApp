@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
  * Unit tests for UsersController.
  * These tests validate the behavior of the controller for CRUD operations.
  */
-class UsersControllerTest {
+class TestCrudUser {
 
     @Mock
     private UserService userService;
@@ -38,7 +38,7 @@ class UsersControllerTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        user = new Users(1L, "Abdel", "Alahyane", "abdel@gmail.com", "password", "active", LocalDate.now(), "0471772755");
+        user = new Users(1L, "Abdel", "Alahyane", "abdel@gmail.com", "password", "active", LocalDate.now(), "0471772755",null,null);
     }
 
 
