@@ -28,9 +28,7 @@ public class RecipeComponent {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name="RECIPE_ID")
-
-    @JsonManagedReference
+    @JoinColumn(name="RECIPE_ID",nullable = false)
     private Recipe recipe;
 
     /**
@@ -49,7 +47,7 @@ public class RecipeComponent {
      * A RecipeComponent can have multiple Ingredients.
      */
     @ManyToOne
-    @JoinColumn(name="Ingredient_ID")
+    @JoinColumn(name="Ingredient_ID",nullable = false)
     public Ingredient ingredient;
 
 

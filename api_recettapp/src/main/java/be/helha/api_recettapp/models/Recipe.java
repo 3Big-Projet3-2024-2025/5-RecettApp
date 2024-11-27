@@ -111,7 +111,7 @@ public class Recipe {
      * Mapped by the "recipe" field in the {@link RecipeComponent} class.
      */
     @OneToMany(mappedBy = "recipe")
-    @JsonIgnore
+    //@JsonIgnore
     private List<RecipeComponent> components;
 
 

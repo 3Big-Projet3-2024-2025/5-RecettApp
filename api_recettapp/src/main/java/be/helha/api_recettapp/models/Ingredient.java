@@ -59,7 +59,7 @@ public class Ingredient {
     private String alimentSpecifyGroupName;
 
     @OneToMany(mappedBy = "ingredient")
-    @JsonIgnore
+    //@JsonIgnore
     private List<RecipeComponent> recipeComponent;
 
 }
