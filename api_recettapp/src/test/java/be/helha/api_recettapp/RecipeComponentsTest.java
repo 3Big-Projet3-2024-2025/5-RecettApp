@@ -134,4 +134,28 @@ public class RecipeComponentsTest {
                 .andExpect(jsonPath("$[1].quantity").value(100))
                 .andExpect(jsonPath("$[1].unit").value("ml"));
     }
+
+    /**
+     * Tests the functionality of updating an existing recipe component.
+     *
+     * This method verifies if a recipe component can be successfully updated via a PUT request to the
+     * "/recipe-components" endpoint.
+     *
+     * @throws Exception if any error occurs during the execution of the test.
+     */
+    @Test
+    public void testUpdateRecipeComponent() throws Exception {
+        RecipeComponent updatedComponent = createRecipeComponent(1, 300, "kg");
+
+        given(recipeComponentService.updateRecipeComponent(Mockito.any(RecipeComponent.class))).willReturn(updatedComponent);
+
+        mockMvc.perform(put("/recipe-components")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updatedComponent)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.quantity").value(300))
+                .andExpect(jsonPath("$.unit").value("kg"))
+                .andExpect(jsonPath("$.recipe.id").value(1))
+                .andExpect(jsonPath("$.ingredient.id").value(1));
+    }
 }
