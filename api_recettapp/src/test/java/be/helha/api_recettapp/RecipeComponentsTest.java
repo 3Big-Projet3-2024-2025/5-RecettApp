@@ -4,9 +4,6 @@ import be.helha.api_recettapp.models.Ingredient;
 import be.helha.api_recettapp.models.Recipe;
 import be.helha.api_recettapp.models.RecipeComponent;
 import be.helha.api_recettapp.services.IRecipeComponent;
-import be.helha.api_recettapp.services.IngredientServiceDB;
-import be.helha.api_recettapp.services.RecipeComponentServiceDB;
-import be.helha.api_recettapp.services.RecipeServiceDB;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -25,6 +22,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -83,6 +81,29 @@ public class RecipeComponentsTest {
         mockMvc.perform(post("/recipe-components")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(recipeComponent)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.quantity").value(200))
+                .andExpect(jsonPath("$.unit").value("g"))
+                .andExpect(jsonPath("$.recipe.id").value(1))
+                .andExpect(jsonPath("$.ingredient.id").value(1));
+    }
+
+    /**
+     * Tests the retrieval of a RecipeComponent by its ID.
+     *
+     * This method ensures that a GET request to the "/recipe-components/1" endpoint
+     * returns the correct RecipeComponent with the appropriate details.
+     *
+     * @throws Exception if any error occurs during the execution of the test.
+     */
+    @Test
+    public void testGetRecipeComponentById() throws Exception {
+        RecipeComponent recipeComponent = createRecipeComponent(1, 200, "g");
+
+        given(recipeComponentService.getRecipeComponentById(1)).willReturn(recipeComponent);
+
+        mockMvc.perform(get("/recipe-components/1")
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.quantity").value(200))
                 .andExpect(jsonPath("$.unit").value("g"))
