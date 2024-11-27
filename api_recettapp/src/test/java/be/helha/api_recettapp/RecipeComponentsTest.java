@@ -158,4 +158,21 @@ public class RecipeComponentsTest {
                 .andExpect(jsonPath("$.recipe.id").value(1))
                 .andExpect(jsonPath("$.ingredient.id").value(1));
     }
+
+    /**
+     * Tests the functionality of deleting a recipe component.
+     *
+     * This method verifies that a DELETE request to the "/recipe-components/1" endpoint
+     * results in a successful deletion (HTTP 200 OK status) of the specified RecipeComponent.
+     *
+     * @throws Exception if any error occurs during the execution of the test.
+     */
+    @Test
+    public void testDeleteRecipeComponent() throws Exception {
+        Mockito.doNothing().when(recipeComponentService).deleteRecipeComponent(1);
+        // No need to mock return value for void methods
+        mockMvc.perform(delete("/recipe-components/1"))
+                .andExpect(status().isOk());
+
+    }
 }
