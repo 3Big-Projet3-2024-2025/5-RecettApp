@@ -11,7 +11,9 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import be.helha.api_recettapp.security.KeycloakRoleConverter;
 
 
 /**
@@ -45,7 +47,9 @@ public class SpringSecurityConfig {
                 .authorizeHttpRequests(authorizeRequests -> {
                     // Permits all requests to all endpoints for the moment, to easily test API
                     authorizeRequests.requestMatchers("/**").permitAll();
-                }).build();
+                }).oauth2ResourceServer(oauth2 ->
+                        oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                ).build();
     }
 
     /**
@@ -72,5 +76,11 @@ public class SpringSecurityConfig {
         AuthenticationManagerBuilder authenticationManagerBuiler = http.getSharedObject(AuthenticationManagerBuilder.class);
         authenticationManagerBuiler.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
         return authenticationManagerBuiler.build();
+    }
+
+    private JwtAuthenticationConverter jwtAuthenticationConverter() {
+        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+        converter.setJwtGrantedAuthoritiesConverter(new KeycloakRoleConverter());
+        return converter;
     }
 }
