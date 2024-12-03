@@ -10,9 +10,13 @@ export class RecipeService {
   
 
   constructor(private http: HttpClient) { }
-  private Url = "http://localhost:8080/recipe/all";
+  private Url = "http://localhost:8080/recipe";
 
   getAllRecipe(): Observable<Recipe[]> {
-    return this.http.get<Recipe[]>(this.Url);
+    return this.http.get<Recipe[]>(this.Url+'/all');
+  } 
+  
+  getRecipeById(id: number): Observable<Recipe> {
+    return this.http.get<Recipe>(`${this.Url}/${id}`);
   }
 }
