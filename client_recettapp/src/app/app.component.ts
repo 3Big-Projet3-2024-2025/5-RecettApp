@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { RecipeComponent } from './recipe/recipe.component';
+import { ContestCategoryComponent } from './contest-category/contest-category.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RecipeComponent],
+  imports: [RouterOutlet,ContestCategoryComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
