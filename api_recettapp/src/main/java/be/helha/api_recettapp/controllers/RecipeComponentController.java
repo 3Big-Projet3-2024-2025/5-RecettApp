@@ -87,4 +87,9 @@ public class RecipeComponentController {
     public void deleteRecipeComponent(@PathVariable int id) {
         recipeComponentService.deleteRecipeComponent(id);
     }
+
+    @GetMapping("/recipe/{id}")
+    public List<RecipeComponent> findRecipeComponentsByRecipeId(@PathVariable int id) {
+        return recipeComponentService.findRecipeComponentsByRecipeId(id);
+    }
 }
