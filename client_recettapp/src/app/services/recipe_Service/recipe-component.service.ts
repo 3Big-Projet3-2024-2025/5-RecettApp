@@ -10,8 +10,8 @@ export class RecipeComponentService {
 
 
   constructor(private http: HttpClient) { }
-  private Url = "http://localhost:8080/recipe";
+  private Url = "http://localhost:8080/recipe-components";
 
   getRecipeComponentsByIdRecipe(idRecipe: number): Observable<RecipeComponent[]> {
-    return this.http.get<RecipeComponent[]>(`${this.Url}/${idRecipe}`);
+    return this.http.get<RecipeComponent[]>(`${this.Url}/recipe/${idRecipe}`);
   }}

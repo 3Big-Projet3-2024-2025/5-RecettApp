@@ -3,6 +3,7 @@ import { Recipe } from '../models/recipe';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RecipeService } from '../services/recipe_Service/recipe.service';
 import { CommonModule } from '@angular/common';
+import { RecipeComponentService } from '../services/recipe_Service/recipe-component.service';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -14,14 +15,20 @@ import { CommonModule } from '@angular/common';
 export class RecipeDetailComponent implements OnInit {
   recipe?: Recipe;
 
-  constructor(private route: ActivatedRoute,private router: Router, private service: RecipeService) {}
+  constructor(private route: ActivatedRoute,private router: Router, private service: RecipeService, private serviceRecipeComponent: RecipeComponentService) {}
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.service.getRecipeById(+id).subscribe((data) => {
         this.recipe = data;
-      });
+      });  
+      this.serviceRecipeComponent.getRecipeComponentsByIdRecipe(+id).subscribe((data) => {
+        if (this.recipe) {
+          this.recipe.components = data;
+        }
+      });  
+
     }
   }
   backRecipeList(): void {
