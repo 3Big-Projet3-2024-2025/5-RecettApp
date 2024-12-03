@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { RecipeService } from '../Service/recipe.service';
-import { Recipe } from '../Interface/recipe';
+import { RecipeService } from '../services/recipe_Service/recipe.service';
+import { Recipe } from '../models/recipe';
 import { Observable } from 'rxjs';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule, AsyncPipe, NgFor } from '@angular/common';
@@ -8,7 +8,7 @@ import { CommonModule, AsyncPipe, NgFor } from '@angular/common';
 @Component({
   selector: 'app-recipe',
   standalone: true,
-  imports: [CommonModule,AsyncPipe,FormsModule,NgFor],
+  imports: [CommonModule,FormsModule],
   templateUrl: './recipe.component.html',
   styleUrl: './recipe.component.css'
 })
