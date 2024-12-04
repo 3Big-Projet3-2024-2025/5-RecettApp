@@ -1,1 +1,115 @@
-<p>contest-table works!</p>
+<div class="container mt-5">
+    
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 class="text-primary">Contests</h1>
+      <button class="btn btn-success" (click)="addContest()">
+        <i class="bi bi-plus-circle"></i> Add Contest
+      </button>
+    </div>
+    
+
+  
+    <!-- Formulaire -->
+    <div *ngIf="showForm" class="card border-primary mb-4">
+      <div class="card-header bg-primary text-white">
+        <h3 class="mb-0">{{ isEditing ? 'Edit Contest' : 'Add New Contest' }}</h3>
+      </div>
+      <div class="card-body">
+        <form (ngSubmit)="saveContest()">
+          <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input
+              type="text"
+              id="title"
+              [(ngModel)]="currentContest.title"
+              name="title"
+              class="form-control"
+              required
+            />
+          </div>
+          <div class="mb-3">
+            <label for="max_participants" class="form-label">Max Participants</label>
+            <input
+            type="number"
+              id="max_participants"
+              [(ngModel)]="currentContest.max_participants"
+              name="max_participants"
+              class="form-control"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="start_date" class="form-label">Start</label>
+            <input
+            type="datetime-local"
+              id="start_date"
+              [(ngModel)]="currentContest.start_date"
+              name="start_date"
+              class="form-control"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="end_date" class="form-label">End</label>
+            <input
+            type="datetime-local"
+              id="end_date"
+              [(ngModel)]="currentContest.end_date"
+              name="end_date"
+              class="form-control"
+            />
+          </div>
+          <div class="form-check mb-3">
+            <input
+              type="checkbox"
+              id="status"
+              [(ngModel)]="currentContest.status"
+              name="status"
+              class="form-check-input"
+            />
+            <label for="status" class="form-check-label">Active</label>
+          </div>
+          <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary me-2">
+              <i class="bi bi-save"></i> {{ isEditing ? 'Update' : 'Save' }}
+            </button>
+            <button type="button" class="btn btn-secondary" (click)="cancel()">
+              <i class="bi bi-x-circle"></i> Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    
+    <!-- Liste des catégories -->
+    <table class="table table-hover table-bordered align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Title</th>
+          <th>Max Participants</th>
+          <th>Status</th>
+          <th class="text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let contest of contests">
+          <td>{{ contest.id }}</td>
+          <td>{{ contest.title }}</td>
+          <td>{{ contest.max_participants }}</td>
+          <td>
+            <span class="badge" [ngClass]="{'bg-success': contest.status, 'bg-danger': !contest.status}">
+              {{ contest.status ? 'Active' : 'Inactive' }}
+            </span>
+          </td>
+          <td class="text-center">
+            <button class="btn btn-warning btn-sm me-2" (click)="editContest(contest)">
+              <i class="bi bi-pencil-square"></i> Edit
+            </button>
+            <button class="btn btn-danger btn-sm" (click)="deleteContest(contest.id!)">
+              <i class="bi bi-trash"></i> Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  

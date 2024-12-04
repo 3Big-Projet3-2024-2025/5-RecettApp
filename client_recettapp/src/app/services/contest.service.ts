@@ -15,4 +15,8 @@ export class ContestService {
   getAllContests(): Observable<Contest[]> {
     return this.http.get<Contest[]>(this.apiUrl);
   }
+
+  addContest(contest: Contest): Observable<Contest> {
+    return this.http.post<Contest>(this.apiUrl, contest);
+  }
 }

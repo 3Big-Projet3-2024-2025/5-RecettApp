@@ -1,11 +1,11 @@
 import { ContestCategory } from "./contest-category";
 
 export interface Contest {
-    id: number,
+    id?: number,
     title: string,
     max_participants: number,
-    start_date?: Date,
-    end_date?: Date,
+    start_date?: string,
+    end_date?: string,
     status: string,
     category?: ContestCategory
 }
