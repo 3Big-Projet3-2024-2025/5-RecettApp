@@ -41,7 +41,7 @@ export class ContestTableComponent {
   convertToLocalDateFormat(date: string): string {
     const localDate = new Date(date);
     // Format "yyyy-MM-ddTHH:mm"
-    return localDate.toISOString().slice(0, 16); 
+    return localDate.toISOString().slice(0, 16);
   }
 
   getAllContests(): void {
@@ -61,8 +61,9 @@ export class ContestTableComponent {
     this.currentContest = this.initContest();
     this.isEditing = false;
     this.showForm = true;
-  
+
   }
+
 
   checkContest(contest: Contest): boolean {
     if (!contest.title || contest.max_participants <= 0 || !contest.status) {
@@ -88,32 +89,51 @@ export class ContestTableComponent {
       return false;
     }
 
-    
+
     return true;
 
   }
 
   convertDateToIsoFormat(inputDate: string | undefined): string {
-    if (inputDate == undefined){
+    if (inputDate == undefined) {
       return "";
     }
     const date = new Date(inputDate);
     return date.toISOString();
   }
 
-  editContest(contest: Contest):void {
-
+  editContest(contest: Contest): void {
+    this.currentContest = { ...contest }; 
+    this.isEditing = true;
+    this.showForm = true;
   }
 
-  deleteContest(idContest: number):void {
-   
+  deleteContest(idContest: number): void {
+    if (confirm('Are you sure you want to delete this contest?')) {
+      this.contestService.deleteContest(idContest).subscribe(() => {
+        this.getAllContests();
+      });
+    }
   }
 
-  saveContest():void {
-    if (this.isEditing){
-
-    } else{
-      if(this.checkContest(this.currentContest)){
+  saveContest(): void {
+    if (this.isEditing) {
+      if (this.checkContest(this.currentContest)) {
+        this.currentContest.start_date = this.convertDateToIsoFormat(this.currentContest.start_date);
+        this.currentContest.end_date = this.convertDateToIsoFormat(this.currentContest.end_date);
+        const sub = this.contestService.updateContest(this.currentContest).subscribe({
+          next: () => {
+            this.getAllContests();
+            this.showForm = false;
+            this.currentContest = this.initContest();
+          }, error: (err) => {
+            console.log("ERROR UPDATE CONTEST");
+            sub.unsubscribe();
+          }
+        })
+      }
+    } else {
+      if (this.checkContest(this.currentContest)) {
         this.currentContest.start_date = this.convertDateToIsoFormat(this.currentContest.start_date);
         this.currentContest.end_date = this.convertDateToIsoFormat(this.currentContest.end_date);
         const sub = this.contestService.addContest(this.currentContest).subscribe({
@@ -130,13 +150,13 @@ export class ContestTableComponent {
     }
   }
 
-  cancel():void {
+  cancel(): void {
     this.showForm = false;
     this.currentContest = this.initContest();
   }
 
-  initContest():Contest {
-    return { title: "", max_participants: 0,start_date: "", end_date: "",status: "" };
+  initContest(): Contest {
+    return { title: "", max_participants: 0, start_date: "", end_date: "", status: "" };
   }
 
 }

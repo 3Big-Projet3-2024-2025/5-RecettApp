@@ -19,4 +19,12 @@ export class ContestService {
   addContest(contest: Contest): Observable<Contest> {
     return this.http.post<Contest>(this.apiUrl, contest);
   }
+
+  updateContest(contest: Contest): Observable<Contest> {
+    return this.http.put<Contest>(this.apiUrl, contest);
+  }
+
+  deleteContest(idContest : number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${idContest}`);
+  }
 }
