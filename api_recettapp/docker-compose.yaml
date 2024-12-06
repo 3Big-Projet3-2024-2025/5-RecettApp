@@ -32,9 +32,6 @@ services:
       KC_HOSTNAME_STRICT: "false"
       KC_HOSTNAME: 'http://localhost:8081'
       KC_PROXY: 'edge'
-      #To export the configuration made in the UI of keycloak for the other developers
-      KC_EXPORT: realm
-      KC_EXPORT_REALM: ./realm-keycloak-config.json
     volumes:
       - C:/path/to/timezone:/etc/timezone:ro
       - C:/path/to/localtime:/etc/localtime:ro
