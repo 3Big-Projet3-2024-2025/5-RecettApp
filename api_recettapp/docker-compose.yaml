@@ -38,5 +38,6 @@ services:
     volumes:
       - C:/path/to/timezone:/etc/timezone:ro
       - C:/path/to/localtime:/etc/localtime:ro
+      - ./src/main/resources/keycloak_themes:/opt/keycloak/themes
     depends_on:
       - postgresql
