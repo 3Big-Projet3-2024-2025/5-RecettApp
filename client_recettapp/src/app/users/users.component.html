@@ -1,17 +1,17 @@
 <div class="users-container">
   <h1 class="title">Liste des utilisateurs</h1>
 
-<!--
-   <div class="search-container">
-    <input
-      type="text"
-      placeholder="Rechercher un utilisateur..."
-      [(ngModel)]="searchTerm"
-      (ngModelChange)="onSearch()"
-    />
-  </div>
+<!-- Barre de recherche
+<div class="search-container">
+  <input
+    type="text"
+    placeholder="Rechercher un utilisateur..."
+    [(ngModel)]="searchTerm"
+    (ngModelChange)="onSearch()"
+    class="search-input"
+  />
+</div>
 -->
-
 
   <table class="users-table">
 
@@ -50,12 +50,15 @@
   </table>
 
    <!-- Pagination -->
-   <div class="pagination">
-    <button
-      *ngFor="let page of [].constructor(totalPages); let i = index"
-      (click)="onPageChange(i + 1)"
-      [class.active]="currentPage === (i + 1)">
+   <!-- Pagination -->
+  <div class="pagination-container">
+    <button *ngIf="currentPage > 1" class="pagination-btn prev" (click)="onPageChange(currentPage - 1)">Précédent</button>
+
+    <button *ngFor="let page of [].constructor(totalPages); let i = index" class="pagination-btn"
+      (click)="onPageChange(i + 1)" [class.active]="currentPage === (i + 1)">
       {{ i + 1 }}
     </button>
+
+    <button *ngIf="currentPage < totalPages" class="pagination-btn next" (click)="onPageChange(currentPage + 1)">Suivant</button>
   </div>
 </div>
