@@ -6,16 +6,16 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-contest-category',
-  standalone:true,
-  imports:[FormsModule,CommonModule],
+  standalone: true,
+  imports: [FormsModule, CommonModule],
   templateUrl: './contest-category.component.html',
   styleUrls: ['./contest-category.component.css'],
 })
 export class ContestCategoryComponent implements OnInit {
   categories: ContestCategory[] = [];
-  currentCategory: ContestCategory = { title: '', description: '', status: true };
-  isEditing = false; // Pour différencier création et édition
-  showForm = false; // Pour afficher/masquer le formulaire
+  currentCategory: ContestCategory = { title: '', description: '' };
+  isEditing = false; // To differentiate between creation and editing
+  showForm = false; // To show/hide the form
 
   constructor(private categoryService: ContestCategoryService) {}
 
@@ -23,28 +23,28 @@ export class ContestCategoryComponent implements OnInit {
     this.loadCategories();
   }
 
-  // Charger toutes les catégories
+  // Load all categories
   loadCategories(): void {
     this.categoryService.getAllCategories().subscribe((data) => {
       this.categories = data;
     });
   }
 
-  // Ouvrir le formulaire pour ajouter une catégorie
+  // Open the form to add a new category
   addCategory(): void {
-    this.currentCategory = { title: '', description: '', status: true };
+    this.currentCategory = { title: '', description: '' };
     this.isEditing = false;
     this.showForm = true;
   }
 
-  // Charger les données pour édition
+  // Load data for editing
   editCategory(category: ContestCategory): void {
-    this.currentCategory = { ...category }; // Cloner pour éviter de modifier directement
+    this.currentCategory = { ...category }; // Clone to avoid direct modification
     this.isEditing = true;
     this.showForm = true;
   }
 
-  // Supprimer une catégorie
+  // Delete a category
   deleteCategory(id: number): void {
     if (confirm('Are you sure you want to delete this category?')) {
       this.categoryService.deleteCategory(id).subscribe(() => {
@@ -53,7 +53,7 @@ export class ContestCategoryComponent implements OnInit {
     }
   }
 
-  // Sauvegarder une catégorie (création ou mise à jour)
+  // Save a category (create or update)
   saveCategory(): void {
     if (this.isEditing) {
       this.categoryService.updateCategory(this.currentCategory.id!, this.currentCategory).subscribe(() => {
@@ -68,9 +68,9 @@ export class ContestCategoryComponent implements OnInit {
     }
   }
 
-  // Annuler l'édition/création
+  // Cancel editing/creation
   cancel(): void {
     this.showForm = false;
-    this.currentCategory = { title: '', description: '', status: true };
+    this.currentCategory = { title: '', description: '' };
   }
 }

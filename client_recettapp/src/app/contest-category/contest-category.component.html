@@ -34,16 +34,6 @@
               rows="3"
             ></textarea>
           </div>
-          <div class="form-check mb-3">
-            <input
-              type="checkbox"
-              id="status"
-              [(ngModel)]="currentCategory.status"
-              name="status"
-              class="form-check-input"
-            />
-            <label for="status" class="form-check-label">Active</label>
-          </div>
           <div class="d-flex justify-content-end">
             <button type="submit" class="btn btn-primary me-2">
               <i class="bi bi-save"></i> {{ isEditing ? 'Update' : 'Save' }}
@@ -63,7 +53,6 @@
           <th>ID</th>
           <th>Title</th>
           <th>Description</th>
-          <th>Status</th>
           <th class="text-center">Actions</th>
         </tr>
       </thead>
@@ -72,11 +61,6 @@
           <td>{{ category.id }}</td>
           <td>{{ category.title }}</td>
           <td>{{ category.description }}</td>
-          <td>
-            <span class="badge" [ngClass]="{'bg-success': category.status, 'bg-danger': !category.status}">
-              {{ category.status ? 'Active' : 'Inactive' }}
-            </span>
-          </td>
           <td class="text-center">
             <button class="btn btn-warning btn-sm me-2" (click)="editCategory(category)">
               <i class="bi bi-pencil-square"></i> Edit
