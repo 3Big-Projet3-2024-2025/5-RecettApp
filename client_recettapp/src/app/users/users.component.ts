@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [CommonModule,FormsModule  ],
+  imports: [CommonModule,FormsModule],
   templateUrl: './users.component.html',
   styleUrl: './users.component.css'
 })
@@ -54,20 +54,20 @@ export class UsersComponent implements OnInit {
     return Math.ceil(this.totalUsers / this.pageSize);
   }
 
-  /*
-  onSearch(): void {
-    if (this.searchTerm.trim()) {
-      this.filteredUsers = this.users.filter(user =>
-        user.firstName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        user.lastName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        user.email.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        user.phoneNumber.toLowerCase().includes(this.searchTerm.toLowerCase())
-      );
-    } else {
-      this.filteredUsers = [...this.users];
-    }
+ // Fonction de recherche dynamique
+ onSearch(): void {
+  if (this.searchTerm.trim()) {
+    this.filteredUsers = this.users.filter(user =>
+      user.firstName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+      user.lastName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+      user.phoneNumber.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
+  } else {
+    this.filteredUsers = [...this.users];
   }
-*/
+  this.paginateUsers();
+}
 
 
   onDelete(id: number): void {
