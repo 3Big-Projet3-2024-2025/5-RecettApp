@@ -1,4 +1,6 @@
 import { RecipeComponent } from "../models/recipe-component";
+import { Contest } from "./contest";
+import { RecipeType } from "./recipe-type";
 
 export interface Recipe {
     id: number; 
@@ -12,7 +14,7 @@ export interface Recipe {
     instructions: string; 
     photo_url?: string;
     approved: boolean; 
-    recipe_type_id: string | null; 
-    contest_id: number; 
+    recipe_type?: RecipeType; 
+    contest?: Contest; 
     components: RecipeComponent[];
 }
