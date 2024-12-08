@@ -6,7 +6,7 @@
       </div>
     <div class="row">
       <div class="col-md-4 mb-4" *ngFor="let recipe of recipeList">
-        <div class="card recipe-card shadow-sm" (click)="detailRecipe(recipe.id)">
+        <div class="card recipe-card shadow-sm"(click)="detailRecipe(recipe.id)">
           <div class="recipe-image-container">
             <img *ngIf="recipe.photo_url" [src]="recipe.photo_url" [alt]="recipe.title" class="card-img-top recipe-photo" />
           </div>

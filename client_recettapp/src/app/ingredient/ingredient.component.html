@@ -1,1 +1,29 @@
-<p>ingredient works!</p>
+<div class="container mt-4">
+    <h1 class="text-center text-success mb-4">Add Recipe with Ingredients</h1>
+  
+    <form  #recipeForm="ngForm">
+      <div class="mb-3">
+        <label for="ingredientSearch" class="form-label">Search for Ingredients</label>
+        <input
+          type="text"
+          id="ingredientSearch"
+          class="form-control"
+          [(ngModel)]="searchTerm"
+          name="ingredientSearch"
+          placeholder="Type an ingredient name..."
+          autocomplete="off"
+        />
+      
+        <ul *ngIf="suggestions.length > 0" class="list-group mt-2">
+          <li
+            class="list-group-item list-group-item-action"
+            *ngFor="let suggestion of suggestions"
+            style="cursor: pointer"
+          >
+            {{ suggestion.alimentName }} ({{ suggestion.alimentSpecifyGroupName }})
+          </li>
+        </ul>
+      </div>
+    </form>
+  </div>
+  
