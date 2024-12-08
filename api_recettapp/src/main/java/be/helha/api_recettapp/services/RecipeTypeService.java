@@ -46,7 +46,6 @@ public class RecipeTypeService {
      * @return a list of matching recipe types.
      */
     public List<RecipeType> findByName(String name) {
-        // Retrieve all recipe types and filter by name (case-insensitive, partial match)
         return repository.findAll().stream()
                 .filter(type -> type.getName() != null &&
                         type.getName().toLowerCase().contains(name.toLowerCase()))
