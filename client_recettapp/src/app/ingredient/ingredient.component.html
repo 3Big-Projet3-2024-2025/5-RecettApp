@@ -10,6 +10,7 @@
           class="form-control"
           [(ngModel)]="searchTerm"
           name="ingredientSearch"
+          (input)="onSearch()"
           placeholder="Type an ingredient name..."
           autocomplete="off"
         />
@@ -18,6 +19,8 @@
           <li
             class="list-group-item list-group-item-action"
             *ngFor="let suggestion of suggestions"
+            (click)="fillSearchInput(suggestion)"
+            (dblclick)="fillSearchInput(suggestion)"
             style="cursor: pointer"
           >
             {{ suggestion.alimentName }} ({{ suggestion.alimentSpecifyGroupName }})

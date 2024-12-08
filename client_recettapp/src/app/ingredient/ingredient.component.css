@@ -1,0 +1,6 @@
+.list-group-item.active {
+    background-color: #28a745; 
+    color: white; 
+    font-weight: bold; 
+  }
+  
