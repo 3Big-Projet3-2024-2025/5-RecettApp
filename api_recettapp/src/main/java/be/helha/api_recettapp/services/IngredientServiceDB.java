@@ -2,6 +2,7 @@ package be.helha.api_recettapp.services;
 
 import be.helha.api_recettapp.models.Ingredient;
 import be.helha.api_recettapp.repositories.jpa.IngredientRepository;
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.annotation.*;
 import org.springframework.data.domain.Page;
@@ -24,6 +25,9 @@ public class IngredientServiceDB implements IIngredientService{
 
     @Autowired
     private IngredientRepository ingredientRepository;
+
+    @Autowired
+    private EntityManager entityManager;
 
     /**
      * Retrieves a paginated list of ingredients.
@@ -122,6 +126,23 @@ public class IngredientServiceDB implements IIngredientService{
             ingredientRepository.deleteById(id);
         } catch (Exception e) {
             throw new RuntimeException("Error deleting ingredient: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Searches ingredients dynamically based on a search term.
+     *
+     * @param searchTerm the term to search for in ingredient names.
+     * @return a list of ingredients matching the search term.
+     */
+    public List<Ingredient> searchIngredients(String searchTerm) {
+        String jpql = "SELECT i FROM Ingredient i WHERE LOWER(i.alimentName) LIKE LOWER(:searchTerm)";
+        try {
+            return entityManager.createQuery(jpql, Ingredient.class)
+                    .setParameter("searchTerm", "%" + searchTerm + "%")
+                    .getResultList();
+        } catch (Exception e) {
+            throw new RuntimeException("Error searching ingredients: " + e.getMessage(), e);
         }
     }
 
