@@ -19,4 +19,8 @@ export class RecipeService {
   getRecipeById(id: number): Observable<Recipe> {
     return this.http.get<Recipe>(`${this.Url}/${id}`);
   }
+
+  addRecipe(recipe: Recipe): Observable<Recipe>{
+    return this.http.post<Recipe>(this.Url,recipe);
+  }
 }
