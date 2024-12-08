@@ -94,5 +94,19 @@ public class IngredientController {
     public void deleteIngredient(@PathVariable int id) {
         ingredientService.deleteIngredient(id);
     }
+
+    /**
+     * Searches ingredients dynamically based on a search term.
+     *
+     * @param searchTerm the term to search for in ingredient names.
+     * @return a list of ingredients matching the search term.
+     */
+    @GetMapping("/search")
+    public List<Ingredient> searchIngredients(@RequestParam("term") String searchTerm) {
+
+            List<Ingredient> ingredients = ingredientService.searchIngredients(searchTerm);
+            return ingredients;
+
+    }
 }
 
