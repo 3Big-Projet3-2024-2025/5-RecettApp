@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
 })
 export class ContestCategoryComponent implements OnInit {
   categories: ContestCategory[] = [];
-  currentCategory: ContestCategory = { title: '', description: '', status: true };
+  currentCategory: ContestCategory = { title: '', description: ''};
   isEditing = false; // Pour différencier création et édition
   showForm = false; // Pour afficher/masquer le formulaire
 
@@ -32,7 +32,7 @@ export class ContestCategoryComponent implements OnInit {
 
   // Ouvrir le formulaire pour ajouter une catégorie
   addCategory(): void {
-    this.currentCategory = { title: '', description: '', status: true };
+    this.currentCategory = { title: '', description: '' };
     this.isEditing = false;
     this.showForm = true;
   }
@@ -71,6 +71,6 @@ export class ContestCategoryComponent implements OnInit {
   // Annuler l'édition/création
   cancel(): void {
     this.showForm = false;
-    this.currentCategory = { title: '', description: '', status: true };
+    this.currentCategory = { title: '', description: '' };
   }
 }
