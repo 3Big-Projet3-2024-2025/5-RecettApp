@@ -34,16 +34,10 @@ public class ContestCategory {
     private String description;
 
     /**
-     * Status of the category (active or inactive).
-     */
-    private boolean status;
-
-    /**
      * No-arguments constructor.
      * Required by JPA or to create an empty instance.
      */
     public ContestCategory() {
-        // Default, empty constructor
     }
 
     /**
@@ -53,13 +47,10 @@ public class ContestCategory {
      * @param id          Unique identifier for the category.
      * @param title       Title of the category.
      * @param description Description of the category.
-     * @param status      Status of the category.
      */
-    public ContestCategory(Long id, String title,
-                           String description, boolean status) {
+    public ContestCategory(Long id, String title, String description) {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.status = status;
     }
 }
