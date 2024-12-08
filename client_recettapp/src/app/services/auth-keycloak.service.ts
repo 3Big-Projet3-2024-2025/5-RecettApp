@@ -17,7 +17,7 @@ export class AuthKeycloakService {
   async init() {
     await this.keycloakService.init({
       config: {
-        url: 'https://localhost:8081/realms/recettapp',
+        url: 'http://localhost:8081',
         realm: 'recettapp',
         clientId: 'frontend_recettapp'
       },

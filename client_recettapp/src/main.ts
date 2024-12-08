@@ -5,10 +5,11 @@ import { routes } from './app/app.routes';
 import { provideHttpClient } from '@angular/common/http';
 import {AuthKeycloakService} from "./app/services/auth-keycloak.service";
 import {APP_INITIALIZER} from "@angular/core";
-import {KeycloakAngularModule} from "keycloak-angular";
+import {KeycloakAngularModule, KeycloakService} from "keycloak-angular";
 
 bootstrapApplication(AppComponent, {
   providers: [provideRouter(routes), provideHttpClient(),
+    KeycloakService,
     {
       provide: APP_INITIALIZER,
       useFactory: initializeKeycloak,
@@ -29,5 +30,12 @@ bootstrapApplication(AppComponent, {
  * @returns {() => Promise<void>} A function that, when invoked, initializes the Keycloak service.
  */
 export function initializeKeycloak(authKeycloakService: AuthKeycloakService) {
-  return () => authKeycloakService.init();
+  return async () => {
+    try {
+      await authKeycloakService.init();
+    } catch (err) {
+      console.error('Erreur lors de l\'initialisation de Keycloak:', err);
+      // Optionnel : Redirigez l'utilisateur vers une page d'erreur ou affichez un message.
+    }
+  };
 }
