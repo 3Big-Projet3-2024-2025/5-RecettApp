@@ -1,6 +1,10 @@
 <div class="container mt-4">
   <h1 class="text-center text-success mb-4">Recipe List</h1>
   <div *ngIf="recipes | async as recipeList; else loading">
+  
+      <div class="card-footer bg-light text-center">
+        <button class="btn btn-dark">Add Recipe</button>
+      </div>
     <div class="row">
       <div class="col-md-4 mb-4" *ngFor="let recipe of recipeList">
         <div class="card recipe-card shadow-sm" (click)="detailRecipe(recipe.id)">
