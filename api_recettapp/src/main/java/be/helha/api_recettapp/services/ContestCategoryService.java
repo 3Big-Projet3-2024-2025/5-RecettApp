@@ -30,13 +30,11 @@ public class ContestCategoryService {
 
     /**
      * Find categories by title.
-     * This method retrieves all categories and filters them by the given title.
      *
      * @param title the title to search for.
      * @return a list of matching contest categories.
      */
     public List<ContestCategory> findByTitle(String title) {
-        // Retrieve all categories and filter by title (case-insensitive, partial match)
         return repository.findAll().stream()
                 .filter(category -> category.getTitle() != null &&
                         category.getTitle().toLowerCase().contains(title.toLowerCase()))
