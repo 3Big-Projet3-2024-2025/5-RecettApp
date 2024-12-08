@@ -17,8 +17,9 @@ public interface IEvaluationService {
      * Deletes a review by its ID.
      *
      * @param id The ID of the assessment to delete.
+     * @param isAdmin Indique si l'utilisateur est administrateur.
      */
-    void deleteEvaluation(Long id);
+    void deleteEvaluation(Long id, boolean isAdmin);
 
     /**
      * Retrieves all ratings.
@@ -26,4 +27,5 @@ public interface IEvaluationService {
      * @return A list of evaluations.
      */
     List<Evaluation> getAllEvaluations();
+
 }
