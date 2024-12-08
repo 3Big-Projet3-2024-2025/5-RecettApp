@@ -53,14 +53,7 @@
         "id": "c7b44a6f-785f-4dbf-b17d-d20ea9893860",
         "name": "user",
         "description": "every user of the website",
-        "composite": true,
-        "composites": {
-          "client": {
-            "backend_recettapp": [
-              "client_user"
-            ]
-          }
-        },
+        "composite": false,
         "clientRole": false,
         "containerId": "0abdfc80-d4b4-45ad-b08e-1db841dec0b7",
         "attributes": {}
@@ -82,7 +75,8 @@
         "composites": {
           "realm": [
             "offline_access",
-            "uma_authorization"
+            "uma_authorization",
+            "user"
           ],
           "client": {
             "account": [
@@ -99,14 +93,7 @@
         "id": "106572af-2391-4a24-95e2-ebc33a942bdf",
         "name": "admin",
         "description": "administrator of the website",
-        "composite": true,
-        "composites": {
-          "client": {
-            "backend_recettapp": [
-              "client_admin"
-            ]
-          }
-        },
+        "composite": false,
         "clientRole": false,
         "containerId": "0abdfc80-d4b4-45ad-b08e-1db841dec0b7",
         "attributes": {}
@@ -334,26 +321,7 @@
           "attributes": {}
         }
       ],
-      "backend_recettapp": [
-        {
-          "id": "2abbafa3-0b38-478c-9543-9bacd57eebf8",
-          "name": "client_user",
-          "description": "",
-          "composite": false,
-          "clientRole": true,
-          "containerId": "06796860-8358-4f35-9a4e-b3e6b7a7b769",
-          "attributes": {}
-        },
-        {
-          "id": "fb6ad4af-a690-43f9-9277-b0b549d5ae01",
-          "name": "client_admin",
-          "description": "",
-          "composite": false,
-          "clientRole": true,
-          "containerId": "06796860-8358-4f35-9a4e-b3e6b7a7b769",
-          "attributes": {}
-        }
-      ],
+      "backend_recettapp": [],
       "security-admin-console": [],
       "admin-cli": [],
       "account-console": [],
@@ -368,6 +336,7 @@
           "attributes": {}
         }
       ],
+      "frontend_recettapp": [],
       "account": [
         {
           "id": "0ba1b539-0d98-4589-8ca0-8ee1f7c9d4c7",
@@ -694,7 +663,6 @@
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
-        "http://localhost:8081/*",
         "http://localhost:8080/*"
       ],
       "webOrigins": [
@@ -711,14 +679,23 @@
       "frontchannelLogout": true,
       "protocol": "openid-connect",
       "attributes": {
+        "client.secret.creation.time": "1733144829",
+        "client.introspection.response.allow.jwt.claim.enabled": "false",
+        "login_theme": "keycloak.v2",
+        "oauth2.device.authorization.grant.enabled": "false",
+        "use.jwks.url": "false",
+        "backchannel.logout.revoke.offline.tokens": "false",
+        "use.refresh.tokens": "true",
         "realm_client": "false",
         "oidc.ciba.grant.enabled": "false",
-        "client.secret.creation.time": "1733144829",
+        "client.use.lightweight.access.token.enabled": "false",
         "backchannel.logout.session.required": "true",
-        "login_theme": "keycloak.v2",
+        "client_credentials.use_refresh_token": "false",
+        "acr.loa.map": "{}",
+        "require.pushed.authorization.requests": "false",
+        "tls.client.certificate.bound.access.tokens": "false",
         "display.on.consent.screen": "false",
-        "oauth2.device.authorization.grant.enabled": "false",
-        "backchannel.logout.revoke.offline.tokens": "false"
+        "token.response.type.bearer.lower-case": "false"
       },
       "authenticationFlowBindingOverrides": {},
       "fullScopeAllowed": true,
@@ -765,6 +742,64 @@
       "authenticationFlowBindingOverrides": {},
       "fullScopeAllowed": false,
       "nodeReRegistrationTimeout": 0,
+      "defaultClientScopes": [
+        "web-origins",
+        "acr",
+        "roles",
+        "profile",
+        "basic",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "address",
+        "phone",
+        "organization",
+        "offline_access",
+        "microprofile-jwt"
+      ]
+    },
+    {
+      "id": "1f5abd15-42fa-4a89-b837-723cc5713aaa",
+      "clientId": "frontend_recettapp",
+      "name": "frontend_recettapp",
+      "description": "frontend_recettapp",
+      "rootUrl": "",
+      "adminUrl": "",
+      "baseUrl": "",
+      "surrogateAuthRequired": false,
+      "enabled": true,
+      "alwaysDisplayInConsole": false,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "**********",
+      "redirectUris": [
+        "http://localhost:4200/*"
+      ],
+      "webOrigins": [
+        "*"
+      ],
+      "notBefore": 0,
+      "bearerOnly": false,
+      "consentRequired": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": false,
+      "publicClient": false,
+      "frontchannelLogout": true,
+      "protocol": "openid-connect",
+      "attributes": {
+        "realm_client": "false",
+        "oidc.ciba.grant.enabled": "false",
+        "client.secret.creation.time": "1733672260",
+        "backchannel.logout.session.required": "true",
+        "login_theme": "custom",
+        "display.on.consent.screen": "false",
+        "oauth2.device.authorization.grant.enabled": "false",
+        "backchannel.logout.revoke.offline.tokens": "false"
+      },
+      "authenticationFlowBindingOverrides": {},
+      "fullScopeAllowed": true,
+      "nodeReRegistrationTimeout": -1,
       "defaultClientScopes": [
         "web-origins",
         "acr",
@@ -992,12 +1027,15 @@
           "protocolMapper": "oidc-usermodel-client-role-mapper",
           "consentRequired": false,
           "config": {
-            "user.attribute": "foo",
             "introspection.token.claim": "true",
+            "multivalued": "true",
+            "userinfo.token.claim": "true",
+            "user.attribute": "foo",
+            "id.token.claim": "false",
+            "lightweight.claim": "false",
             "access.token.claim": "true",
             "claim.name": "resource_access.${client_id}.roles",
-            "jsonType.label": "String",
-            "multivalued": "true"
+            "jsonType.label": "String"
           }
         },
         {
