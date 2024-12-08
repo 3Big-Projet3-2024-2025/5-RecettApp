@@ -29,11 +29,7 @@ public class EvaluationService implements IEvaluationService{
 
     @Override
     public List<Evaluation> getAllEvaluations() {
-        return null;
+        return evaluationRepository.findAll();
     }
 
-    @Override
-    public Evaluation updateEvaluation(Long id, Evaluation newEvaluation, boolean isAdmin) {
-        return null;
-    }
 }
