@@ -12,13 +12,10 @@ public class Evaluation {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
-    /**
-     * The recipe evaluated
-     */
-    @OneToOne
-    private Recipe recipe;
+
+
 
     /**
      * The Entry that give the rate
@@ -30,4 +27,15 @@ public class Evaluation {
      * A rate between 0 and 5
      */
     private int rate;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private Users user;
+
+    /**
+     * The recipe evaluated
+     */
+    @ManyToOne
+    @JoinColumn(name = "recipe_id", nullable = false)
+    private Recipe recipe;
 }
