@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ContestCategoryService } from '../services/contest-category.service';
+import { ContestCategoryService } from '../Services/contest-category.service';
 import { ContestCategory } from '../models/contest-category';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
