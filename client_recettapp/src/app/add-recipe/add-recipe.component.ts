@@ -4,6 +4,7 @@ import { Recipe } from '../models/recipe';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
+import { RecipeService } from '../services/recipe_Service/recipe.service';
 
 @Component({
   selector: 'app-add-recipe',
@@ -14,7 +15,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class AddRecipeComponent {
 
-  constructor(private route: ActivatedRoute){}
+  constructor(private route: ActivatedRoute,private recipeService: RecipeService){}
   ngOnInit(): void {
     const contestId = this.route.snapshot.paramMap.get('idConstest');
     if (contestId != null) {
@@ -38,4 +39,18 @@ export class AddRecipeComponent {
     recipe_type_id: null
   };
 
+
+
+  onSubmit(): void {
+      this.recipeService.addRecipe(this.recipeToAdd).subscribe(
+        {
+          next(value) {
+            console.log("succes add")
+          },
+          error(err) {
+            console.log(err.error.message)
+          },
+        }
+      )
+  }
 }

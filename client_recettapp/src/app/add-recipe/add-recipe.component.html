@@ -1,6 +1,6 @@
 <div class="container mt-4">
     <h1 class="text-center text-success mb-4">Add a New Recipe</h1>
-    <form #recipeForm="ngForm">
+    <form (ngSubmit)="onSubmit()" #recipeForm="ngForm">
       <div class="form-group mb-3">
         <label for="title" class="form-label">Recipe Title</label>
         <input type="text" id="title" class="form-control" name="title" [(ngModel)]="recipeToAdd.title" required placeholder="Enter recipe title"
@@ -47,7 +47,7 @@
         />
       </div>
   
-      <button type="submit" class="btn btn-success w-100">Add Recipe</button>
+      <button (click)="onSubmit()" class="btn btn-success w-100">Add Recipe</button>
     </form>
   </div>
   
