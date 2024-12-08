@@ -16,9 +16,9 @@ export class KeycloakService {
    */
   private initKeycloak(): void {
     this.keycloakInstance = new Keycloak({
-      url: 'https://your-keycloak-server/auth',
-      realm: 'your-realm',
-      clientId: 'your-client-id'
+      url: 'http://localhost:8081',
+      realm: 'recettapp',
+      clientId: 'frontend_recettapp'
     });
   }
 
