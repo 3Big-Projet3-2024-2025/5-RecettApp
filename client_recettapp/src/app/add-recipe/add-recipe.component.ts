@@ -6,11 +6,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { RecipeService } from '../services/recipe_Service/recipe.service';
 import { Contest } from '../models/contest';
+import { IngredientComponent } from "../ingredient/ingredient.component";
 
 @Component({
   selector: 'app-add-recipe',
   standalone: true,
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule, FormsModule, IngredientComponent],
   templateUrl: './add-recipe.component.html',
   styleUrl: './add-recipe.component.css'
 })

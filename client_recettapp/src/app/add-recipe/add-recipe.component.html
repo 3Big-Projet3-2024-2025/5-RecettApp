@@ -46,7 +46,7 @@
         <input type="url" id="photo_url" class="form-control" name="photo_url" [(ngModel)]="recipeToAdd.photo_url" required placeholder="Enter a valid URL for the recipe photo"
         />
       </div>
-  
+      <app-ingredient></app-ingredient>
       <button (click)="onSubmit()" class="btn btn-success w-100">Add Recipe</button>
     </form>
   </div>
