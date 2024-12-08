@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/evaluations")
 public class EvaluationController {
@@ -22,6 +24,11 @@ public class EvaluationController {
     public ResponseEntity<Void> deleteEvaluation(@PathVariable Long id, @RequestParam boolean isAdmin) {
         evaluationService.deleteEvaluation(id, isAdmin);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Evaluation>> getAllEvaluations() {
+        return ResponseEntity.ok(evaluationService.getAllEvaluations());
     }
 
 }
