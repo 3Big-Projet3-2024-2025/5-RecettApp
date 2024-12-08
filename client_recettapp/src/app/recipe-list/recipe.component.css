@@ -1,27 +1,20 @@
-.recipe-container {
-    font-family: Arial, sans-serif;
-    padding: 20px;
-  }
-  
-  .recipe-card {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 15px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  .recipe-photo {
-    width: 100%;
-    max-width: 300px;
-    height: auto;
-    border-radius: 5px;
-    margin-bottom: 10px;
-  }
-  
-  .contest-details {
-    margin-top: 15px;
-    font-style: italic;
-    color: #555;
-  }
-  
+.recipe-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.recipe-card:hover {
+  transform: scale(1.05); /* Zoom effect */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Add shadow on hover */
+}
+
+.recipe-photo {
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px 8px 0 0; /* Rounded corners at the top */
+}
+
+.recipe-image-container {
+  overflow: hidden; /* Hide overflow for smooth zoom effect */
+  border-radius: 8px 8px 0 0;
+}

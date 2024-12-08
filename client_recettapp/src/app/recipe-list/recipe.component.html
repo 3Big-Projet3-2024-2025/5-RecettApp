@@ -1,28 +1,30 @@
-<div class="recipe-container">
-    <h1>Recipe List</h1>
-    <div *ngIf="recipes | async as recipeList; else loading">
-      <div *ngIf="recipeList.length > 0; else noData">
-        <div class="recipe-card" *ngFor="let recipe of recipeList">
-          <div  (click)="detailRecipe(recipe.id)">
-              <h2>{{ recipe.title }}</h2>
-            <img *ngIf="recipe.photo_url" [src]="recipe.photo_url" [alt]="recipe.title" class="recipe-photo" />
-            <p><strong>Description:</strong> {{ recipe.description }}</p>
-            <p><strong>Category:</strong> {{ recipe.category }}</p>
-            <p><strong>Preparation Time:</strong> {{ recipe.preparation_time }} minutes</p>
-            <p><strong>Servings:</strong> {{ recipe.servings }}</p>
-            <p><strong>Difficulty:</strong> {{ recipe.difficulty_level }}</p>
+<div class="container mt-4">
+  <h1 class="text-center text-success mb-4">Recipe List</h1>
+  <div *ngIf="recipes | async as recipeList; else loading">
+    <div class="row">
+      <div class="col-md-4 mb-4" *ngFor="let recipe of recipeList">
+        <div class="card recipe-card shadow-sm" (click)="detailRecipe(recipe.id)">
+          <div class="recipe-image-container">
+            <img *ngIf="recipe.photo_url" [src]="recipe.photo_url" [alt]="recipe.title" class="card-img-top recipe-photo" />
           </div>
-          
+          <div class="card-body">
+            <h5 class="card-title text-success">{{ recipe.title }}</h5>
+            <p class="card-text"><strong>Description:</strong> {{ recipe.description }}</p>
+            <p class="card-text"><strong>Category:</strong> {{ recipe.category }}</p>
+            <p class="card-text"><strong>Preparation Time:</strong> {{ recipe.preparation_time }} minutes</p>
+            <p class="card-text"><strong>Servings:</strong> {{ recipe.servings }}</p>
+            <p class="card-text"><strong>Difficulty:</strong> {{ recipe.difficulty_level }}</p>
+          </div>
         </div>
       </div>
-  
-      <ng-template #noData>
-        <p>No recipes available.</p>
-      </ng-template>
     </div>
-  
-    <ng-template #loading>
-      <p>Loading recipes...</p>
+
+    <ng-template #noData>
+      <p class="text-center text-danger">No recipes available.</p>
     </ng-template>
   </div>
-  
+
+  <ng-template #loading>
+    <p class="text-center text-primary">Loading recipes...</p>
+  </ng-template>
+</div>
