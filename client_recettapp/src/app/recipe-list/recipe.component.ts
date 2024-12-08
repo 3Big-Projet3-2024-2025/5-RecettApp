@@ -27,4 +27,8 @@ export class RecipeComponent {
   detailRecipe(id: number) : void {
     this.router.navigate(['/recipe', id]);
   }
+
+  addRecipe(id: number) : void {
+    this.router.navigate(['/recipe/add/', id]);
+  }
 }
