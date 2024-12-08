@@ -14,7 +14,8 @@ export class IngredientComponent {
   
   searchTerm: string = ''; // sear Term
   suggestions: any[] = []; // List of ingredient suggestions
-
+  ingredients: any[] = [];
+  selectedIngredient: any = null;
   currentIngredient: any = {
     ingredient: null,
     quantity: null,
@@ -39,10 +40,32 @@ export class IngredientComponent {
     }
   }
 
+  addIngredient() {
+    if (
+      this.currentIngredient.ingredient &&
+      this.currentIngredient.quantity &&
+      this.currentIngredient.unit
+    ) {
+      // Ajouter l'ingrédient à la liste
+      this.ingredients.push({ ...this.currentIngredient });
+  
+      // Réinitialiser les champs après ajout
+      this.currentIngredient = { ingredient: null, quantity: null, unit: '' };
+      this.searchTerm = ''; // Réinitialise le champ de recherche
+      this.suggestions = []; // Vide les suggestions
+    } else {
+      alert('Please fill in all fields before adding the ingredient.');
+    }
+  }
+
   fillSearchInput(suggestion: any) {
     this.searchTerm = suggestion.alimentName; 
     this.currentIngredient.ingredient = suggestion; 
     this.suggestions = []; 
+  }
+
+  removeIngredient(ingredient: any) {
+    this.ingredients = this.ingredients.filter((ing) => ing !== ingredient);
   }
 
   
