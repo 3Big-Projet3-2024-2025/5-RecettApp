@@ -11,3 +11,30 @@ services:
     volumes:
       - ./data/postgresql/data:/var/lib/postgresql/data:rw
     restart: always
+
+# To implement keycloak you need to create the database keycloak and the schema keycloak in postgres first.
+# Then you need to create a user keycloak with password "keycloak" and with all grants on the database keycloak.
+# Finally, you can make a docker-compose up (I'll try to automate this after).
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0.6
+    entrypoint: [ "/opt/keycloak/bin/kc.sh", "start-dev"]
+    ports:
+      - "8081:8080"
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgresql/keycloak?currentSchema=keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak
+      KC_DB_SCHEMA: keycloak
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HTTP_ENABLED: "true"
+      KC_HOSTNAME_STRICT: "false"
+      KC_HOSTNAME: 'http://localhost:8081'
+      KC_PROXY: 'edge'
+    volumes:
+      - C:/path/to/timezone:/etc/timezone:ro
+      - C:/path/to/localtime:/etc/localtime:ro
+      - ./src/main/resources/keycloak_themes:/opt/keycloak/themes
+    depends_on:
+      - postgresql
