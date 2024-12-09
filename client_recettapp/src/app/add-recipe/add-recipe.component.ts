@@ -7,6 +7,8 @@ import { FormsModule } from '@angular/forms';
 import { RecipeService } from '../services/recipe_Service/recipe.service';
 import { Contest } from '../models/contest';
 import { IngredientComponent } from "../ingredient/ingredient.component";
+import { RecipeComponentService } from '../services/recipe_Service/recipe-component.service';
+import { RecipeComponent } from '../models/recipe-component';
 
 @Component({
   selector: 'app-add-recipe',
@@ -17,7 +19,7 @@ import { IngredientComponent } from "../ingredient/ingredient.component";
 })
 export class AddRecipeComponent {
 
-  constructor(private route: ActivatedRoute,private recipeService: RecipeService){}
+  constructor(private route: ActivatedRoute,private recipeService: RecipeService, private componentService: RecipeComponentService){}
   ngOnInit(): void {
     const contestId = this.route.snapshot.paramMap.get('idConstest');
     if (contestId != null) {
@@ -53,7 +55,8 @@ export class AddRecipeComponent {
       this.recipeService.addRecipe(this.recipeToAdd).subscribe(
         {
           next: (value: Recipe) => {
-            this.recipeToAdd.id = value.id
+            this.recipeToAdd.id = value.id; // Recovery of the recipe updated with its new id
+            this.addRecipeComponent();
 
           },
           error: (err) => {
@@ -66,5 +69,29 @@ export class AddRecipeComponent {
 
   onRecipeComponentsChange(components: any[]) {
     this.recipeToAdd.components = components;
+  }
+
+  addRecipeComponent(){
+    this.recipeToAdd.components.forEach(element => {
+      
+     // element.recipe = this.recipeToAdd // Recovery of the recipe updated with its new id
+        this.componentService.addRecipeComponents(this.creatComponent(element)).subscribe({
+          error: (err) => {
+            console.log(err)
+          }
+        })
+    });
+  }
+
+  creatComponent( element: RecipeComponent): RecipeComponent{
+    const componentToAdd: RecipeComponent = {
+      id: element.id,
+      recipe: this.recipeToAdd,
+    quantity: element.quantity,
+    ingredient: element.ingredient, 
+    unit: element.unit
+    }
+
+    return componentToAdd
   }
 }

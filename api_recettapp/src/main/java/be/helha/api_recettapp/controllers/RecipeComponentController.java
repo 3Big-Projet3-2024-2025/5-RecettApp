@@ -62,6 +62,7 @@ public class RecipeComponentController {
      */
     @PostMapping
     public RecipeComponent addRecipeComponent(@RequestBody RecipeComponent recipeComponent) {
+        recipeComponent.setId(0);
         return recipeComponentService.addRecipeComponent(recipeComponent);
     }
 
