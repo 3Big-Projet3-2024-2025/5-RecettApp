@@ -6,17 +6,22 @@
       </div>
     <div class="row">
       <div class="col-md-4 mb-4" *ngFor="let recipe of recipeList">
-        <div class="card recipe-card shadow-sm"(click)="detailRecipe(recipe.id)">
-          <div class="recipe-image-container">
-            <img *ngIf="recipe.photo_url" [src]="recipe.photo_url" [alt]="recipe.title" class="card-img-top recipe-photo" />
+        <div class="card recipe-card shadow-sm">
+          <div (click)="detailRecipe(recipe.id)">
+            <div class="recipe-image-container">
+              <img *ngIf="recipe.photo_url" [src]="recipe.photo_url" [alt]="recipe.title" class="card-img-top recipe-photo" />
+            </div>
+            <div class="card-body">
+              <h5 class="card-title text-success">{{ recipe.title }}</h5>
+              <p class="card-text"><strong>Description:</strong> {{ recipe.description }}</p>
+              <p class="card-text"><strong>Category:</strong> {{ recipe.category }}</p>
+              <p class="card-text"><strong>Preparation Time:</strong> {{ recipe.preparation_time }} minutes</p>
+              <p class="card-text"><strong>Servings:</strong> {{ recipe.servings }}</p>
+              <p class="card-text"><strong>Difficulty:</strong> {{ recipe.difficulty_level }}</p>
           </div>
-          <div class="card-body">
-            <h5 class="card-title text-success">{{ recipe.title }}</h5>
-            <p class="card-text"><strong>Description:</strong> {{ recipe.description }}</p>
-            <p class="card-text"><strong>Category:</strong> {{ recipe.category }}</p>
-            <p class="card-text"><strong>Preparation Time:</strong> {{ recipe.preparation_time }} minutes</p>
-            <p class="card-text"><strong>Servings:</strong> {{ recipe.servings }}</p>
-            <p class="card-text"><strong>Difficulty:</strong> {{ recipe.difficulty_level }}</p>
+          </div>
+          <div class="card-footer text-center">
+            <button class="btn btn-danger btn-sm">Delete Recipe </button>
           </div>
         </div>
       </div>
