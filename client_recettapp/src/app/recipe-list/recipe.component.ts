@@ -31,4 +31,12 @@ export class RecipeComponent {
   addRecipe(id: number) : void {
     this.router.navigate(['/recipe/add/', id]);
   }
+
+  deleteRecipe(id: number) : void {
+    this.service.deleteRecipe(id).subscribe({
+      error: (err) => {
+        console.log(err.error.message)
+      }
+    })
+  }
 }
