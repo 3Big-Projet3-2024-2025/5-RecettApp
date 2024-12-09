@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -72,7 +73,7 @@ public class ContestCategoryController {
      * @return the created category.
      */
     @PostMapping
-    public ResponseEntity<?> createCategory(@RequestBody ContestCategory category) {
+    public ResponseEntity<?> createCategory(@Valid @RequestBody ContestCategory category) {
         try {
             ContestCategory savedCategory = service.save(category);
             return ResponseEntity.ok("ContestCategory created successfully with ID: " + savedCategory.getId());
@@ -88,15 +89,8 @@ public class ContestCategoryController {
      * @param updatedCategory the updated category details.
      * @return the updated category if it exists, or a 404 error if not found.
      */
-    /**
-     * Update an existing contest category.
-     *
-     * @param id the ID of the category to update.
-     * @param updatedCategory the updated category details.
-     * @return the updated category if it exists, or a 404 error if not found.
-     */
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateCategory(@PathVariable Long id, @RequestBody ContestCategory updatedCategory) {
+    public ResponseEntity<?> updateCategory(@PathVariable Long id, @Valid @RequestBody ContestCategory updatedCategory) {
         return service.findById(id)
                 .map(existingCategory -> {
                     existingCategory.setTitle(updatedCategory.getTitle());
@@ -106,7 +100,6 @@ public class ContestCategoryController {
                 })
                 .orElse(ResponseEntity.status(404).body(new AppError("ContestCategory with ID " + id + " not found.")));
     }
-
 
     /**
      * Delete a contest category by ID.
