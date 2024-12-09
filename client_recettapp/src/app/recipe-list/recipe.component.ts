@@ -34,9 +34,18 @@ export class RecipeComponent {
 
   deleteRecipe(id: number) : void {
     this.service.deleteRecipe(id).subscribe({
+      next: (value) =>{
+        window.location.reload();
+      },
       error: (err) => {
         console.log(err.error.message)
       }
     })
+  }
+  confirmDelete(id: number, title: string): void {
+    const confirmed = window.confirm(`Are you sure you want to delete the recipe "${title}"?`);
+    if (confirmed) {
+      this.deleteRecipe(id);
+    }
   }
 }

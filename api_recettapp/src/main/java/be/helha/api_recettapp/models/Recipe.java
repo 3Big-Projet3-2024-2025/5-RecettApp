@@ -109,7 +109,7 @@ public class Recipe {
      * List of components (ingredients) used in the recipe.
      * Mapped by the "recipe" field in the {@link RecipeComponent} class.
      */
-    @OneToMany(mappedBy = "recipe")
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<RecipeComponent> components;
 
