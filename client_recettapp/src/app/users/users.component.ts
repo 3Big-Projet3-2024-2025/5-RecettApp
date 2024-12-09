@@ -61,7 +61,7 @@ export class UsersComponent implements OnInit {
       user.firstName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
       user.lastName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
       user.email.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-      user.phoneNumber.toLowerCase().includes(this.searchTerm.toLowerCase())
+      user.phone_number.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
   } else {
     this.filteredUsers = [...this.users];
