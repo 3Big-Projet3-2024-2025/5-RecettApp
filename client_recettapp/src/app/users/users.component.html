@@ -36,8 +36,8 @@
         <td>{{ user.lastName }}</td>
         <td>{{ user.email }}</td>
         <td>{{ user.status }}</td>
-        <td>{{ user.dateRegistration | date: 'dd/MM/yyyy' }}</td>
-        <td>{{ user.phoneNumber }}</td>
+        <td>{{ user.date_registration | date: 'dd/MM/yyyy' }}</td>
+        <td>{{ user.phone_number }}</td>
         <td>
           <button class="action-btn delete-btn" (click)="onDelete(user.id)">Supprimer</button>
         </td>
