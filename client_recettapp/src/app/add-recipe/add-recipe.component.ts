@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Recipe } from '../models/recipe';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
@@ -19,7 +19,7 @@ import { RecipeComponent } from '../models/recipe-component';
 })
 export class AddRecipeComponent {
 
-  constructor(private route: ActivatedRoute,private recipeService: RecipeService, private componentService: RecipeComponentService){}
+  constructor(private route: ActivatedRoute,private recipeService: RecipeService, private componentService: RecipeComponentService,private router: Router){}
   ngOnInit(): void {
     const contestId = this.route.snapshot.paramMap.get('idConstest');
     if (contestId != null) {
@@ -57,7 +57,7 @@ export class AddRecipeComponent {
           next: (value: Recipe) => {
             this.recipeToAdd.id = value.id; // Recovery of the recipe updated with its new id
             this.addRecipeComponent();
-
+            this.router.navigate(['/recipe']);
           },
           error: (err) => {
             console.log(err.error.message)
@@ -77,7 +77,7 @@ export class AddRecipeComponent {
      // element.recipe = this.recipeToAdd // Recovery of the recipe updated with its new id
         this.componentService.addRecipeComponents(this.creatComponent(element)).subscribe({
           error: (err) => {
-            console.log(err)
+            console.log(err.error.message)
           }
         })
     });
