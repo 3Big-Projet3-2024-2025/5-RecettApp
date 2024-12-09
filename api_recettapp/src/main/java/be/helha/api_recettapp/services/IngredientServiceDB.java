@@ -140,6 +140,7 @@ public class IngredientServiceDB implements IIngredientService{
         try {
             return entityManager.createQuery(jpql, Ingredient.class)
                     .setParameter("searchTerm", "%" + searchTerm + "%")
+                    .setMaxResults(10)
                     .getResultList();
         } catch (Exception e) {
             throw new RuntimeException("Error searching ingredients: " + e.getMessage(), e);
