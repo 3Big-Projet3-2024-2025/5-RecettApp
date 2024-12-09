@@ -1,10 +1,18 @@
 package be.helha.api_recettapp.models;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * This class represents an evaluation of a recipe by a participant of a contest (Entry)
  */
+
+
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 public class Evaluation {
     /**
