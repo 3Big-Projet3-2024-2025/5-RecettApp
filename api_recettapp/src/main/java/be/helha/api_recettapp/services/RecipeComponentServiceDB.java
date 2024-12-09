@@ -2,6 +2,7 @@ package be.helha.api_recettapp.services;
 
 import be.helha.api_recettapp.models.RecipeComponent;
 import be.helha.api_recettapp.repositories.jpa.RecipeComponentRepository;
+import be.helha.api_recettapp.repositories.jpa.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
@@ -21,6 +22,11 @@ public class RecipeComponentServiceDB implements IRecipeComponent {
 
     @Autowired
     private RecipeComponentRepository recipeComponentRepository;
+    @Autowired
+    private RecipeServiceDB recipeServiceDB;
+    @Autowired
+    private IngredientServiceDB ingredientServiceDB;
+
 
     /**
      * Retrieves a paginated list of recipe components.
@@ -63,6 +69,16 @@ public class RecipeComponentServiceDB implements IRecipeComponent {
     @Override
     public RecipeComponent addRecipeComponent(RecipeComponent recipeComponent) {
         try {
+            if (recipeComponentRepository.existsByRecipeIdAndIngredientId(
+                    recipeComponent.getRecipe().getId(),
+                    recipeComponent.getIngredient().getId())) {
+                throw new RuntimeException("Recipe component with the same recipe and ingredient already exists.");
+            }
+            if (recipeServiceDB.getRecipeById(recipeComponent.getRecipe().getId()) == null) {
+                throw new NoSuchElementException("Recipe with the " + recipeComponent.getRecipe().getId() + " not found in the database.");
+            }if (ingredientServiceDB.getIngredientById(recipeComponent.getIngredient().getId()) == null) {
+                throw new NoSuchElementException("Ingredient with the " + recipeComponent.getIngredient().getId() + " not found in the database.");
+            }
             return recipeComponentRepository.save(recipeComponent);
         } catch (Exception e) {
             throw new RuntimeException("Error adding recipe component: " + e.getMessage(), e);

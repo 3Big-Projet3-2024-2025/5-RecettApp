@@ -7,10 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
- *  Controller to manage Contest Categories.
- * It provides endpoints for CRUD operations.
+ * Controller to manage Contest Categories.
+ * Provides endpoints for CRUD operations with descriptive messages.
  */
 @RestController
 @RequestMapping("/api/contest-categories")
@@ -25,8 +26,12 @@ public class ContestCategoryController {
      * @return a list of all contest categories.
      */
     @GetMapping
-    public ResponseEntity<List<ContestCategory>> getAllCategories() {
-        return ResponseEntity.ok(service.findAll());
+    public ResponseEntity<?> getAllCategories() {
+        List<ContestCategory> categories = service.findAll();
+        if (categories.isEmpty()) {
+            return ResponseEntity.ok("No ContestCategory found.");
+        }
+        return ResponseEntity.ok(categories);
     }
 
     /**
@@ -36,8 +41,11 @@ public class ContestCategoryController {
      * @return a list of matching contest categories.
      */
     @GetMapping("/search")
-    public ResponseEntity<List<ContestCategory>> searchByTitle(@RequestParam String title) {
+    public ResponseEntity<?> searchByTitle(@RequestParam String title) {
         List<ContestCategory> categories = service.findByTitle(title);
+        if (categories.isEmpty()) {
+            return ResponseEntity.status(404).body("No ContestCategory found with title: " + title);
+        }
         return ResponseEntity.ok(categories);
     }
 
@@ -48,11 +56,14 @@ public class ContestCategoryController {
      * @return the category if found, or a 404 error if not found.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<ContestCategory> getCategoryById(@PathVariable Long id) {
-        return service.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<?> getCategoryById(@PathVariable Long id) {
+        Optional<ContestCategory> category = service.findById(id);
+        if (category.isPresent()) {
+            return ResponseEntity.ok(category.get());
+        }
+        return ResponseEntity.status(404).body("ContestCategory with ID " + id + " not found.");
     }
+
 
     /**
      * Create a new contest category.
@@ -61,8 +72,13 @@ public class ContestCategoryController {
      * @return the created category.
      */
     @PostMapping
-    public ResponseEntity<ContestCategory> createCategory(@RequestBody ContestCategory category) {
-        return ResponseEntity.ok(service.save(category));
+    public ResponseEntity<?> createCategory(@RequestBody ContestCategory category) {
+        try {
+            ContestCategory savedCategory = service.save(category);
+            return ResponseEntity.ok("ContestCategory created successfully with ID: " + savedCategory.getId());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Failed to create ContestCategory: " + e.getMessage());
+        }
     }
 
     /**
@@ -73,15 +89,15 @@ public class ContestCategoryController {
      * @return the updated category if it exists, or a 404 error if not found.
      */
     @PutMapping("/{id}")
-    public ResponseEntity<ContestCategory> updateCategory(@PathVariable Long id, @RequestBody ContestCategory updatedCategory) {
+    public ResponseEntity<?> updateCategory(@PathVariable Long id, @RequestBody ContestCategory updatedCategory) {
         return service.findById(id)
                 .map(existingCategory -> {
                     existingCategory.setTitle(updatedCategory.getTitle());
                     existingCategory.setDescription(updatedCategory.getDescription());
-                    existingCategory.setStatus(updatedCategory.isStatus());
-                    return ResponseEntity.ok(service.save(existingCategory));
+                    service.save(existingCategory);
+                    return ResponseEntity.ok("ContestCategory with ID " + id + " updated successfully.");
                 })
-                .orElse(ResponseEntity.notFound().build());
+                .orElse(ResponseEntity.status(404).body("ContestCategory with ID " + id + " not found."));
     }
 
     /**
@@ -91,11 +107,12 @@ public class ContestCategoryController {
      * @return a 204 status if the category was deleted, or a 404 error if not found.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
+    public ResponseEntity<?> deleteCategory(@PathVariable Long id) {
         if (service.findById(id).isPresent()) {
             service.deleteById(id);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok("ContestCategory with ID " + id + " deleted successfully.");
+        } else {
+            return ResponseEntity.status(404).body("ContestCategory with ID " + id + " not found. Deletion failed.");
         }
-        return ResponseEntity.notFound().build();
     }
 }

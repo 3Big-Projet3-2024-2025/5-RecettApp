@@ -1,38 +1,28 @@
 <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
-      <h1 class="text-primary">Contest Categories</h1>
-      <button class="btn btn-success" (click)="addCategory()">
-        <i class="bi bi-plus-circle"></i> Add Category
+      <h1 class="text-primary">Recipe Types</h1>
+      <button class="btn btn-success" (click)="addRecipeType()">
+        <i class="bi bi-plus-circle"></i> Add Recipe Type
       </button>
     </div>
   
     <!-- Formulaire -->
     <div *ngIf="showForm" class="card border-primary mb-4">
       <div class="card-header bg-primary text-white">
-        <h3 class="mb-0">{{ isEditing ? 'Edit Category' : 'Add New Category' }}</h3>
+        <h3 class="mb-0">{{ isEditing ? 'Edit Recipe Type' : 'Add New Recipe Type' }}</h3>
       </div>
       <div class="card-body">
-        <form (ngSubmit)="saveCategory()">
+        <form (ngSubmit)="saveRecipeType()">
           <div class="mb-3">
-            <label for="title" class="form-label">Title</label>
+            <label for="name" class="form-label">Name</label>
             <input
               type="text"
-              id="title"
-              [(ngModel)]="currentCategory.title"
-              name="title"
+              id="name"
+              [(ngModel)]="currentRecipeType.name"
+              name="name"
               class="form-control"
               required
             />
-          </div>
-          <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
-            <textarea
-              id="description"
-              [(ngModel)]="currentCategory.description"
-              name="description"
-              class="form-control"
-              rows="3"
-            ></textarea>
           </div>
           <div class="d-flex justify-content-end">
             <button type="submit" class="btn btn-primary me-2">
@@ -46,26 +36,24 @@
       </div>
     </div>
   
-    <!-- Liste des catégories -->
+    <!-- Liste des types de recettes -->
     <table class="table table-hover table-bordered align-middle">
       <thead class="table-dark">
         <tr>
           <th>ID</th>
-          <th>Title</th>
-          <th>Description</th>
+          <th>Name</th>
           <th class="text-center">Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let category of categories">
-          <td>{{ category.id }}</td>
-          <td>{{ category.title }}</td>
-          <td>{{ category.description }}</td>
+        <tr *ngFor="let recipeType of recipeTypes">
+          <td>{{ recipeType.id }}</td>
+          <td>{{ recipeType.name }}</td>
           <td class="text-center">
-            <button class="btn btn-warning btn-sm me-2" (click)="editCategory(category)">
+            <button class="btn btn-warning btn-sm me-2" (click)="editRecipeType(recipeType)">
               <i class="bi bi-pencil-square"></i> Edit
             </button>
-            <button class="btn btn-danger btn-sm" (click)="deleteCategory(category.id!)">
+            <button class="btn btn-danger btn-sm" (click)="deleteRecipeType(recipeType.id!)">
               <i class="bi bi-trash"></i> Delete
             </button>
           </td>
