@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { IngredientService } from '../services/ingredient.service';
 import { CommonModule, NgFor } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
@@ -12,17 +12,16 @@ import { FormsModule, NgForm } from '@angular/forms';
 })
 export class IngredientComponent {
   
-  searchTerm: string = ''; // sear Term
+  searchTerm: string = ''; 
   suggestions: any[] = []; // List of ingredient suggestions
-  ingredients: any[] = [];
-  selectedIngredient: any = null;
+  selectedIngredient: any = null;  
   currentIngredient: any = {
     ingredient: null,
     quantity: null,
     unit: ''
   };
-
-
+  recipeComponents: any[] = [];
+  @Output() recipeComponentsChange = new EventEmitter<any[]>();
   constructor(private ingredientService: IngredientService) {}
 
   onSearch() {
@@ -46,13 +45,15 @@ export class IngredientComponent {
       this.currentIngredient.quantity &&
       this.currentIngredient.unit
     ) {
-      // Ajouter l'ingrédient à la liste
-      this.ingredients.push({ ...this.currentIngredient });
+      
+      this.recipeComponents.push({ ...this.currentIngredient });
+      this.recipeComponentsChange.emit(this.recipeComponents);
+      
   
-      // Réinitialiser les champs après ajout
+      
       this.currentIngredient = { ingredient: null, quantity: null, unit: '' };
-      this.searchTerm = ''; // Réinitialise le champ de recherche
-      this.suggestions = []; // Vide les suggestions
+      this.searchTerm = ''; 
+      this.suggestions = []; 
     } else {
       alert('Please fill in all fields before adding the ingredient.');
     }
@@ -65,7 +66,9 @@ export class IngredientComponent {
   }
 
   removeIngredient(ingredient: any) {
-    this.ingredients = this.ingredients.filter((ing) => ing !== ingredient);
+
+    this.recipeComponents = this.recipeComponents.filter((ing) => ing !== ingredient);
+    this.recipeComponentsChange.emit(this.recipeComponents);
   }
 
   

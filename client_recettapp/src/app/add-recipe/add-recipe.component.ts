@@ -49,10 +49,8 @@ export class AddRecipeComponent {
     recipe_type: undefined
   };
 
-
-
   onSubmit(): void {
-      this.recipeService.addRecipe(this.recipeToAdd).subscribe(
+      /**this.recipeService.addRecipe(this.recipeToAdd).subscribe(
         {
           next(value) {
               console.log("succes add")
@@ -61,6 +59,12 @@ export class AddRecipeComponent {
             console.log(err.error.message)
           },
         }
-      )
+      )**/
+        console.log(this.recipeToAdd)
+  }
+
+  onRecipeComponentsChange(components: any[]) {
+    this.recipeToAdd.components = components;
+    
   }
 }
