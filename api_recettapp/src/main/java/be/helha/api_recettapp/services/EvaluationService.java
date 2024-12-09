@@ -10,6 +10,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Service class responsible for managing evaluations.
+ * Implements the {@link IEvaluationService} interface to provide the core logic for adding, deleting,
+ * and retrieving evaluations.
+ */
 @Service
 public class EvaluationService implements IEvaluationService{
 
@@ -17,11 +22,26 @@ public class EvaluationService implements IEvaluationService{
     private EvaluationRepository evaluationRepository;
 
 
+    /**
+     * Adds a new evaluation to the database.
+     *
+     * @param evaluation the evaluation to be added
+     * @return the added evaluation
+     */
     @Override
     public Evaluation addEvaluation(Evaluation evaluation) {
         return evaluationRepository.save(evaluation);
     }
 
+
+    /**
+     * Deletes an evaluation by its ID.
+     * Only administrators are allowed to delete evaluations.
+     *
+     * @param id      the ID of the evaluation to delete
+     * @param isAdmin a flag indicating whether the user is an administrator
+     * @throws SecurityException if the user is not an administrator
+     */
     @Override
     public void deleteEvaluation(Long id, boolean isAdmin) {
         if (!isAdmin) {
@@ -30,6 +50,11 @@ public class EvaluationService implements IEvaluationService{
         evaluationRepository.deleteById(id);
     }
 
+    /**
+     * Retrieves all evaluations from the database.
+     *
+     * @return a list of all evaluations
+     */
     @Override
     public List<Evaluation> getAllEvaluations() {
         return evaluationRepository.findAll();

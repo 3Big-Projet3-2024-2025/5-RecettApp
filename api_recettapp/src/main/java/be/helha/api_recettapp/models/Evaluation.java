@@ -6,42 +6,46 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * This class represents an evaluation of a recipe by a participant of a contest (Entry)
+ * Represents an evaluation of a recipe by a user in a contest entry.
+ * An evaluation includes a rate, the associated user, recipe, and entry details.
  */
-
-
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
 public class Evaluation {
     /**
-     * Identifier of an evaluation
+     * Unique identifier for the evaluation.
+     * Automatically generated using the IDENTITY strategy.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-
-
     /**
-     * The Entry that give the rate
+     * The contest entry associated with this evaluation.
+     * Each evaluation corresponds to a single entry.
      */
     @OneToOne
     private Entry entry;
 
     /**
-     * A rate between 0 and 5
+     * The rating given by the user for the recipe.
+     * This value should be between 0 and 5.
      */
     private int rate;
 
+    /**
+     * The user who provided the evaluation.
+     * This is a mandatory field in the evaluation.
+     */
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private Users user;
 
     /**
-     * The recipe evaluated
+     * The recipe that is being evaluated.
+     * This is a mandatory field in the evaluation.
      */
     @ManyToOne
     @JoinColumn(name = "recipe_id", nullable = false)
