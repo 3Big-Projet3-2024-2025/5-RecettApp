@@ -1,8 +1,11 @@
 package be.helha.api_recettapp.services;
 
 import be.helha.api_recettapp.models.Evaluation;
+import be.helha.api_recettapp.models.Users;
 import be.helha.api_recettapp.repositories.jpa.EvaluationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,6 +33,17 @@ public class EvaluationService implements IEvaluationService{
     @Override
     public List<Evaluation> getAllEvaluations() {
         return evaluationRepository.findAll();
+    }
+
+    /**
+     * Saves a user to the database.
+     * Can be used to create a new user or update an existing user.
+     * @param evaluation the user to save
+     * @return the saved user
+     */
+    public Evaluation save(Evaluation evaluation) {
+
+        return evaluationRepository.save(evaluation);
     }
 
 }
