@@ -50,21 +50,21 @@ export class AddRecipeComponent {
   };
 
   onSubmit(): void {
-      /**this.recipeService.addRecipe(this.recipeToAdd).subscribe(
+      this.recipeService.addRecipe(this.recipeToAdd).subscribe(
         {
-          next(value) {
-              console.log("succes add")
+          next: (value: Recipe) => {
+            this.recipeToAdd.id = value.id
+
           },
-          error(err) {
+          error: (err) => {
             console.log(err.error.message)
           },
         }
-      )**/
-        console.log(this.recipeToAdd)
+      )
+        //console.log(this.recipeToAdd)
   }
 
   onRecipeComponentsChange(components: any[]) {
     this.recipeToAdd.components = components;
-    
   }
 }

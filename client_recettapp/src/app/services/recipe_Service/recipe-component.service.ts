@@ -14,4 +14,9 @@ export class RecipeComponentService {
 
   getRecipeComponentsByIdRecipe(idRecipe: number): Observable<RecipeComponent[]> {
     return this.http.get<RecipeComponent[]>(`${this.Url}/recipe/${idRecipe}`);
-  }}
+  }
+
+  addRecipeComponents(recipeComponents: RecipeComponent): Observable<RecipeComponent>{
+    return this.http.post<RecipeComponent>(this.Url,recipeComponents);
+  }
+}
