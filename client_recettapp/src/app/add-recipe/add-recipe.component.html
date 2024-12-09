@@ -1,10 +1,24 @@
 <div class="container mt-4">
     <h1 class="text-center text-success mb-4">Add a New Recipe</h1>
     <form #recipeForm="ngForm">
-      <div class="form-group mb-3">
+      <div class="form-group mb-3"> 
+        <div class="form-group mb-3">
         <label for="title" class="form-label">Recipe Title</label>
-        <input required type="text" id="title" class="form-control" name="title" [(ngModel)]="recipeToAdd.title" required placeholder="Enter recipe title"
+        <input
+            type="text"
+            id="title"
+            class="form-control"
+            name="title"
+            [(ngModel)]="recipeToAdd.title"
+            required
+            placeholder="Enter recipe title"
+            [class.is-invalid]="recipeForm.submitted && !title.valid"
+            #title="ngModel"
         />
+        <div *ngIf="recipeForm.submitted && !title.valid" class="invalid-feedback">
+            Recipe title is required.
+        </div>
+    </div>
       </div>
   
       <div class="form-group mb-3">
@@ -42,12 +56,12 @@
       </div>
   
       <div class="form-group mb-3">
-        <label for="photo_url" class="form-label">Photo URL</label>
-        <input required type="url" id="photo_url" class="form-control" name="photo_url" [(ngModel)]="recipeToAdd.photo_url" required placeholder="Enter a valid URL for the recipe photo"
+        <label for="photo_url" class="form-label">Photo URL</label> <!-- temporary no required -->
+        <input required type="url" id="photo_url" class="form-control" name="photo_url" [(ngModel)]="recipeToAdd.photo_url" placeholder="Enter a valid URL for the recipe photo"
         />
       </div>
       <app-ingredient (recipeComponentsChange)="onRecipeComponentsChange($event)"></app-ingredient>
-      <button (click)="onSubmit()" class="btn btn-success w-100">Add Recipe</button>
+      <button (click)="onSubmit()" [disabled]="!recipeForm.valid" class="btn btn-success w-100">Add Recipe</button>
     </form>
   </div>
   
