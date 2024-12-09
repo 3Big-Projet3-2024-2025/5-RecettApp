@@ -75,12 +75,19 @@ public class ContestCategoryController {
     @PostMapping
     public ResponseEntity<?> createCategory(@Valid @RequestBody ContestCategory category) {
         try {
+            // Check if a ContestCategory with the same title already exists
+            List<ContestCategory> existingCategories = service.findByTitle(category.getTitle());
+            if (!existingCategories.isEmpty()) {
+                return ResponseEntity.status(400).body(new AppError("A ContestCategory with the same title already exists."));
+            }
+
             ContestCategory savedCategory = service.save(category);
-            return ResponseEntity.ok("ContestCategory created successfully with ID: " + savedCategory.getId());
+            return ResponseEntity.ok(new AppError("ContestCategory created successfully with ID: " + savedCategory.getId()));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(new AppError("Failed to create ContestCategory: " + e.getMessage()));
         }
     }
+
 
     /**
      * Update an existing contest category.
@@ -111,7 +118,7 @@ public class ContestCategoryController {
     public ResponseEntity<?> deleteCategory(@PathVariable Long id) {
         if (service.findById(id).isPresent()) {
             service.deleteById(id);
-            return ResponseEntity.ok("ContestCategory with ID " + id + " deleted successfully.");
+            return ResponseEntity.ok(new AppError("ContestCategory with ID " + id + " deleted successfully."));
         } else {
             return ResponseEntity.status(404).body(new AppError("ContestCategory with ID " + id + " not found. Deletion failed."));
         }
