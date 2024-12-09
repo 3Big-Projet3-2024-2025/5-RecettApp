@@ -5,8 +5,8 @@ export interface User {
   email: string;
   password: string;
   status: string;
-  dateRegistration: string;
-  phoneNumber: string;
+  date_registration: string;
+  phone_number: string;
   //registrations?: Entry[];
   //roles?: Role[];
 }
