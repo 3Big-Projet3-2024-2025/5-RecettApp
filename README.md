@@ -1,8 +1,8 @@
 # RecettApp
 
-## Lancez Docker 
+## Start Docker
 ```
 cd ./api_recettapp
 docker-compose up
 ```
-Verifer que le port 5432 n'est pas déjà utilisé (par un postgresql local par exemple)
+Check that port 5432 is not already in use (by a local postgresql, for example)
