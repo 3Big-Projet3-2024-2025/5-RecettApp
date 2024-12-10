@@ -1,66 +1,79 @@
 <div class="container mt-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h1 class="text-primary">Contest Categories</h1>
-      <button class="btn btn-success" (click)="addCategory()">
-        <i class="bi bi-plus-circle"></i> Add Category
-      </button>
+  <div class="text-center mb-4">
+    <h1 class="text-primary">Contest Categories</h1>
+  </div>
+
+  <!-- Formulaire -->
+  <div class="card shadow mb-4">
+    <div class="card-header bg-primary text-white">
+      <h3 class="mb-0">{{ isEditing ? 'Edit Category' : 'Add New Category' }}</h3>
     </div>
-  
-    <!-- Formulaire -->
-    <div *ngIf="showForm" class="card border-primary mb-4">
-      <div class="card-header bg-primary text-white">
-        <h3 class="mb-0">{{ isEditing ? 'Edit Category' : 'Add New Category' }}</h3>
-      </div>
-      <div class="card-body">
-        <form (ngSubmit)="saveCategory()">
-          <div class="mb-3">
-            <label for="title" class="form-label">Title</label>
-            <input
-              type="text"
-              id="title"
-              [(ngModel)]="currentCategory.title"
-              name="title"
-              class="form-control"
-              required
-            />
+    <div class="card-body">
+      <form [formGroup]="categoryForm" (ngSubmit)="saveCategory()">
+        <div class="mb-3">
+          <label for="title" class="form-label fw-bold">Title</label>
+          <input
+            type="text"
+            id="title"
+            formControlName="title"
+            class="form-control"
+            [ngClass]="{
+              'is-invalid': categoryForm.get('title')?.invalid && categoryForm.get('title')?.touched
+            }"
+            placeholder="Enter category title"
+          />
+          <div *ngIf="categoryForm.get('title')?.invalid && categoryForm.get('title')?.touched" class="text-danger">
+            Title is required and must be less than 255 characters.
           </div>
-          <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
-            <textarea
-              id="description"
-              [(ngModel)]="currentCategory.description"
-              name="description"
-              class="form-control"
-              rows="3"
-            ></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="description" class="form-label fw-bold">Description</label>
+          <textarea
+            id="description"
+            formControlName="description"
+            class="form-control"
+            [ngClass]="{
+              'is-invalid': categoryForm.get('description')?.invalid && categoryForm.get('description')?.touched
+            }"
+            placeholder="Enter category description"
+            rows="3"
+          ></textarea>
+          <div *ngIf="categoryForm.get('description')?.invalid && categoryForm.get('description')?.touched" class="text-danger">
+            Description is required and must be between 8 and 255 characters.
           </div>
-          <div class="d-flex justify-content-end">
-            <button type="submit" class="btn btn-primary me-2">
-              <i class="bi bi-save"></i> {{ isEditing ? 'Update' : 'Save' }}
-            </button>
-            <button type="button" class="btn btn-secondary" (click)="cancel()">
-              <i class="bi bi-x-circle"></i> Cancel
-            </button>
-          </div>
-        </form>
-      </div>
+        </div>
+
+        <div class="d-flex justify-content-end">
+          <button type="submit" class="btn btn-primary me-2 px-4" [disabled]="categoryForm.invalid">
+            <i class="bi bi-save"></i> {{ isEditing ? 'Update' : 'Save' }}
+          </button>
+          <button type="button" class="btn btn-secondary px-4" (click)="resetForm()">
+            <i class="bi bi-x-circle"></i> Cancel
+          </button>
+        </div>
+      </form>
     </div>
-  
-    <!-- Liste des catégories -->
-    <table class="table table-hover table-bordered align-middle">
+  </div>
+
+  <!-- Message ou tableau -->
+  <div *ngIf="categories.length === 0" class="alert alert-info text-center shadow-sm">
+    <i class="bi bi-info-circle"></i> No categories available. Add one to get started!
+  </div>
+
+  <div *ngIf="categories.length > 0" class="table-responsive shadow-sm">
+    <table class="table table-striped table-hover align-middle">
       <thead class="table-dark">
         <tr>
-          <th>ID</th>
-          <th>Title</th>
-          <th>Description</th>
+          <th class="text-center">Title</th>
+          <th class="text-center">Description</th>
           <th class="text-center">Actions</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let category of categories">
-          <td>{{ category.id }}</td>
-          <td>{{ category.title }}</td>
-          <td>{{ category.description }}</td>
+          <td class="text-center">{{ category.title }}</td>
+          <td class="text-center">{{ category.description }}</td>
           <td class="text-center">
             <button class="btn btn-warning btn-sm me-2" (click)="editCategory(category)">
               <i class="bi bi-pencil-square"></i> Edit
@@ -73,4 +86,4 @@
       </tbody>
     </table>
   </div>
-  
+</div>
