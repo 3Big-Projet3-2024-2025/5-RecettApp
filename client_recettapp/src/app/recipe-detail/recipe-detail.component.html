@@ -1,0 +1,36 @@
+<div class="container mt-4" *ngIf="recipe">
+    <div class="recipe-detail card shadow-lg border-0">
+      <div class="card-header bg-success text-white">
+        <h1 class="card-title text-center">{{ recipe.title }}</h1>
+      </div>
+      <div class="card-body">
+        <div class="text-center mb-3">
+          <img *ngIf="recipe.photo_url" [src]="recipe.photo_url" [alt]="recipe.title" class="recipe-photo img-fluid rounded" />
+        </div>
+        <p><strong class="text-success">Description:</strong> {{ recipe.description }}</p>
+        <p><strong class="text-success">Category:</strong> {{ recipe.category }}</p>
+        <p><strong class="text-success">Preparation Time:</strong> {{ recipe.preparation_time }} minutes</p>
+        <p><strong class="text-success">Cooking Time:</strong> {{ recipe.cooking_time }} minutes</p>
+        <p><strong class="text-success">Servings:</strong> {{ recipe.servings }}</p>
+        <p><strong class="text-success">Difficulty:</strong> {{ recipe.difficulty_level }}</p>
+        <p><strong class="text-success">Instructions:</strong> {{ recipe.instructions }}</p>
+        <p><strong class="text-success">Approved:</strong> {{ recipe.approved ? 'Yes' : 'No' }}</p>
+        <hr />
+  
+        <h3 class="text-success">Ingredients</h3>
+        <ul class="list-group">
+          <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let component of recipe.components">
+            <span>
+              <strong>{{ component.ingredient.alimentName }}</strong> ({{ component.ingredient.alimentGroupName }}) - 
+              {{ component.quantity }} {{ component.unit }}
+            </span>
+          </li>
+        </ul>
+        
+      </div>
+      <div class="card-footer bg-light text-center">
+        <button class="btn btn-success" (click)="backRecipeList()">Back to Recipes</button>
+      </div>
+    </div>
+  </div>
+  

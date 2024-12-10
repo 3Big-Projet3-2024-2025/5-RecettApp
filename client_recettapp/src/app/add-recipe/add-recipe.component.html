@@ -1,0 +1,107 @@
+<div class="container mt-4">
+    <h1 class="text-center text-success mb-4">Add a New Recipe</h1>
+    <form #recipeForm="ngForm">
+      <div class="form-group mb-3"> 
+        <div class="form-group mb-3">
+          <label for="title" class="form-label">Recipe Title</label>
+          <input type="text" id="title" class="form-control" name="title" [(ngModel)]="recipeToAdd.title" required  minlength="3" placeholder="Enter recipe title" 
+          minlength="3"  [class.is-invalid]="title.invalid && (title.dirty || title.touched)" #title="ngModel"
+          />
+          <div  *ngIf="title.invalid && title.dirty" class="invalid-feedback">
+              <small *ngIf="title.errors?.['required']">Title is required.</small>
+              <small *ngIf="title.errors?.['minlength']">Title must be at least 3 characters long.</small>
+      
+          </div>
+          
+        </div>
+      </div>
+  
+      <div class="form-group mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea id="description" class="form-control" name="description" [(ngModel)]="recipeToAdd.description" required rows="3" 
+                  placeholder="Enter recipe description" [class.is-invalid]="recipeForm.submitted && !description.valid" #description="ngModel">
+        </textarea>
+        <div *ngIf="recipeForm.submitted && !description.valid" class="invalid-feedback">
+          Recipe description is required.
+      </div>
+      </div>
+  
+      <div class="form-group mb-3">
+        <label for="category" class="form-label">Category</label>
+        <input required type="text" id="category" class="form-control" name="category" [(ngModel)]="recipeToAdd.category" required placeholder="Enter category (e.g., Dessert, Main Course)"
+               [class.is-invalid]="recipeForm.submitted && !category.valid" #category="ngModel"
+        />
+        <div *ngIf="recipeForm.submitted && !category.valid" class="invalid-feedback">
+          Recipe category is required.
+        </div>
+      </div>
+  
+      <div class="row">
+        <div class="col-md-4 mb-3"> 
+          <label for="preparation_time" class="form-label">Preparation Time (minutes)</label> 
+          <input required   type="number"   id="preparation_time"   class="form-control"   name="preparation_time" [(ngModel)]="recipeToAdd.preparation_time"
+             required   placeholder="0"  [class.is-invalid]="recipeForm.submitted && !preparation_time.valid" #preparation_time="ngModel"
+         />
+         <div *ngIf="recipeForm.submitted && !preparation_time.valid" class="invalid-feedback">
+             Preparation time is required.
+         </div>
+        </div>
+
+        <div class="col-md-4 mb-3"> 
+          <label for="cooking_time" class="form-label">Cooking Time (minutes)</label>
+          <input type="number"   id="cooking_time"   class="form-control"   name="cooking_time"   [(ngModel)]="recipeToAdd.cooking_time"
+                 required   placeholder="0"  [class.is-invalid]="recipeForm.submitted && !cooking_time.valid" #cooking_time="ngModel"
+             />
+             <div *ngIf="recipeForm.submitted && !cooking_time.valid" class="invalid-feedback">
+                 Cooking time is required.
+             </div>
+        </div>
+        <div class="col-md-4 mb-3">
+          <label for="servings" class="form-label">Servings</label> 
+          <input type="number"   id="servings"   class="form-control"   name="servings"   [(ngModel)]="recipeToAdd.servings"
+                 required   placeholder="0" [class.is-invalid]="recipeForm.submitted && !servings.valid" #servings="ngModel"
+             />
+             <div *ngIf="recipeForm.submitted && !servings.valid" class="invalid-feedback">
+                 Number of servings is required.
+             </div>
+        </div>
+      </div>
+  
+      <div class="form-group mb-3">
+        <label for="difficulty_level" class="form-label">Difficulty Level</label>
+        <select id="difficulty_level" class="form-select" name="difficulty_level" [(ngModel)]="recipeToAdd.difficulty_level" required
+                [class.is-invalid]="recipeForm.submitted && !difficulty_level.valid" #difficulty_level="ngModel"
+        >
+          <option value="" disabled selected>Select difficulty</option>
+          <option value="Easy">Easy</option> 
+          <option value="Medium">Medium</option>
+          <option value="Hard">Hard</option>
+        </select>
+        <div *ngIf="recipeForm.submitted && !difficulty_level.valid" class="invalid-feedback">
+          Difficulty level is required.
+        </div>
+      </div>
+  
+      <div class="form-group mb-3">
+        <label for="instructions" class="form-label">Instructions</label>
+        <textarea id="instructions" class="form-control" name="instructions" [(ngModel)]="recipeToAdd.instructions" required rows="5" placeholder="Enter recipe instructions"
+                  [class.is-invalid]="recipeForm.submitted && !instructions.valid" #instructions="ngModel"
+        ></textarea>
+        <div *ngIf="recipeForm.submitted && !instructions.valid" class="invalid-feedback">
+          Recipe instructions are required.
+        </div>
+      </div>
+  
+      <div class="form-group mb-3">
+        <label for="photo_url" class="form-label">Photo URL</label> <!-- temporary no required -->
+        <input required type="url" id="photo_url" class="form-control" name="photo_url" [(ngModel)]="recipeToAdd.photo_url" placeholder="Enter a valid URL for the recipe photo"
+        />
+      </div>
+      <div>  
+        <app-ingredient (recipeComponentsChange)="onRecipeComponentsChange($event)"></app-ingredient>
+        <p class="text-danger">{{ recipeComponentError}}</p>
+        </div>
+      <button (click)="onSubmit()" [disabled]="!recipeForm.valid" class="btn btn-success w-100">Add Recipe</button>
+    </form>
+  </div>
+  

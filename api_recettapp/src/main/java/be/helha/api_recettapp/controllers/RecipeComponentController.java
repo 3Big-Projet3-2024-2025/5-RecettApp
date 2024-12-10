@@ -63,6 +63,7 @@ public class RecipeComponentController {
      */
     @PostMapping
     public RecipeComponent addRecipeComponent(@RequestBody RecipeComponent recipeComponent) {
+        recipeComponent.setId(0);
         return recipeComponentService.addRecipeComponent(recipeComponent);
     }
 
@@ -87,5 +88,10 @@ public class RecipeComponentController {
     @DeleteMapping("/{id}")
     public void deleteRecipeComponent(@PathVariable int id) {
         recipeComponentService.deleteRecipeComponent(id);
+    }
+
+    @GetMapping("/recipe/{id}")
+    public List<RecipeComponent> findRecipeComponentsByRecipeId(@PathVariable int id) {
+        return recipeComponentService.findRecipeComponentsByRecipeId(id);
     }
 }
