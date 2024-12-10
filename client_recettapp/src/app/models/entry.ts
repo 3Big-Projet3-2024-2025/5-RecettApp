@@ -2,7 +2,8 @@ import { User } from "./users"
 import { Contest } from "./contest"
 
 export interface Entry {
-    id : number,
-    user : User,
-    contest : Contest
+    id ?: number,
+    users ?: User,
+    contest ?: Contest,
+    status ?: string
 }

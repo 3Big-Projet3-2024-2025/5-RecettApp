@@ -5,6 +5,7 @@ import { ContestTableComponent } from './contest-table/contest-table.component';
 import { RecipeTypeComponent } from './recipe-type/recipe-type.component';
 
 import { UsersComponent } from './users/users.component';
+import { EntriesTableComponent } from './entries-table/entries-table.component';
 
 
 export const routes: Routes = [
@@ -15,6 +16,7 @@ export const routes: Routes = [
         { path:'RecipeType',component:RecipeTypeComponent},
         { path: 'users', component : UsersComponent},
         { path: 'contests', component: ContestTableComponent},
+        { path: 'entries', component: EntriesTableComponent},
 
 
 ];

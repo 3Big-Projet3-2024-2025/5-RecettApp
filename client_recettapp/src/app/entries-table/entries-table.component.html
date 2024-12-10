@@ -1,1 +1,43 @@
-<p>entries-table works!</p>
+<div class="container mt-5">
+    
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 class="text-primary">Entries</h1>
+      <button class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> Add Entry
+      </button>
+    </div>
+    
+
+    <table class="table table-hover table-bordered align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Participant</th>
+          <th>Concours</th>
+          <th>Status</th>
+          <th class="text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let entry of entries">
+          <td>{{ entry.id }}</td>
+          <td>{{ entry.users?.lastName}}</td>
+          <td>{{ entry.contest?.title }}</td>
+          <td>
+            <span class="badge" [ngClass]="{'bg-success': entry.status, 'bg-danger': !entry.status}">
+              {{ entry.status ? 'Active' : 'Inactive' }}
+            </span>
+          </td>
+          <td class="text-center">
+            <button class="btn btn-warning btn-sm me-2">
+              <i class="bi bi-pencil-square"></i> Edit
+            </button>
+            <button class="btn btn-danger btn-sm" (click)="deleteEntry(entry.id!)">
+              <i class="bi bi-trash"></i> Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
