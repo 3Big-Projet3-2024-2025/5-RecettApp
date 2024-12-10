@@ -97,7 +97,10 @@
         <input required type="url" id="photo_url" class="form-control" name="photo_url" [(ngModel)]="recipeToAdd.photo_url" placeholder="Enter a valid URL for the recipe photo"
         />
       </div>
-      <app-ingredient (recipeComponentsChange)="onRecipeComponentsChange($event)"></app-ingredient>
+      <div>  
+        <app-ingredient (recipeComponentsChange)="onRecipeComponentsChange($event)"></app-ingredient>
+        <p class="text-danger">{{ recipeComponentError}}</p>
+        </div>
       <button (click)="onSubmit()" [disabled]="!recipeForm.valid" class="btn btn-success w-100">Add Recipe</button>
     </form>
   </div>

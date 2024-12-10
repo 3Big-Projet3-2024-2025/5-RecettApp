@@ -50,21 +50,22 @@ export class AddRecipeComponent {
     components: [],
     recipe_type: undefined
   };
-
+  recipeComponentError = "";
   onSubmit(): void {
-      this.recipeService.addRecipe(this.recipeToAdd).subscribe(
-        {
-          next: (value: Recipe) => {
-            this.recipeToAdd.id = value.id; // Recovery of the recipe updated with its new id
-            this.addRecipeComponent();
-            this.router.navigate(['/recipe']);
-          },
-          error: (err) => {
-            console.log(err.error.message)
-          },
-        }
-      )
-        //console.log(this.recipeToAdd)
+    if (this.checkValidRecipeToAdd(this.recipeToAdd)) {
+        this.recipeService.addRecipe(this.recipeToAdd).subscribe(
+          {
+            next: (value: Recipe) => {
+              this.recipeToAdd.id = value.id; // Recovery of the recipe updated with its new id
+              this.addRecipeComponent();
+              this.router.navigate(['/recipe']);
+            },
+            error: (err) => {
+              console.log(err.error.message)
+            },
+          }
+        )//console.log(this.recipeToAdd)
+      } 
   }
 
   onRecipeComponentsChange(components: any[]) {
@@ -93,5 +94,13 @@ export class AddRecipeComponent {
     }
 
     return componentToAdd
+  }
+
+  checkValidRecipeToAdd(recipe: Recipe): boolean {
+    if (!recipe.components || recipe.components.length === 0) {
+      this.recipeComponentError = "Recipe must have at least one ingredient";
+      return false;
+    }
+    return true;
   }
 }
