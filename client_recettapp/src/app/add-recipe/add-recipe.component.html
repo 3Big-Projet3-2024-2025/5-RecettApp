@@ -4,12 +4,15 @@
       <div class="form-group mb-3"> 
         <div class="form-group mb-3">
           <label for="title" class="form-label">Recipe Title</label>
-          <input type="text" id="title" class="form-control" name="title" [(ngModel)]="recipeToAdd.title" required placeholder="Enter recipe title" 
-                [class.is-invalid]="recipeForm.submitted && !title.valid" #title="ngModel"
+          <input type="text" id="title" class="form-control" name="title" [(ngModel)]="recipeToAdd.title" required  minlength="3" placeholder="Enter recipe title" 
+          minlength="3"  [class.is-invalid]="title.invalid && (title.dirty || title.touched)" #title="ngModel"
           />
-          <div *ngIf="recipeForm.submitted && !title.valid" class="invalid-feedback">
-              Recipe title is required.
+          <div  *ngIf="title.invalid && title.dirty" class="invalid-feedback">
+              <small *ngIf="title.errors?.['required']">Title is required.</small>
+              <small *ngIf="title.errors?.['minlength']">Title must be at least 3 characters long.</small>
+      
           </div>
+          
         </div>
       </div>
   
