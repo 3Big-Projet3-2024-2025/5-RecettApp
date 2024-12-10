@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RecipeComponentRepository  extends JpaRepository<RecipeComponent, Integer>, PagingAndSortingRepository<RecipeComponent, Integer> {
-
+    boolean existsByRecipeIdAndIngredientId(int recipeId, int ingredientId);
 }

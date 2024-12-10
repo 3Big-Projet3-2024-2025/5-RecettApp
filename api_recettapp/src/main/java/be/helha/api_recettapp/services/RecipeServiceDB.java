@@ -1,6 +1,7 @@
 package be.helha.api_recettapp.services;
 
 import be.helha.api_recettapp.models.Recipe;
+import be.helha.api_recettapp.repositories.jpa.ContestRepository;
 import be.helha.api_recettapp.repositories.jpa.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,12 @@ public class RecipeServiceDB implements IRecipeService{
 
     @Autowired
     private RecipeRepository recipeRepository;
+    @Autowired
+    private ContestService contestService;
+    @Autowired
+    private ContestCategoryService contestCategoryService;
+    @Autowired
+    private ContestRepository contestRepository;
 
     /**
      * Retrieves a paginated list of recipes.
@@ -54,7 +61,13 @@ public class RecipeServiceDB implements IRecipeService{
      */
     @Override
     public Recipe addRecipe(Recipe recipe) {
+
         try {
+            if (recipe.getContest() == null) throw new RuntimeException("Contest is mandatory and cannot be null.");
+            int idContest = recipe.getContest().getId();
+            if (contestRepository.findById(idContest).isEmpty()) {
+                throw new RuntimeException("Contest with ID " + idContest + " does not exist.");
+            }
             return recipeRepository.save(recipe);
         } catch (Exception e) {
             throw new RuntimeException("Error adding recipe: " + e.getMessage(), e);

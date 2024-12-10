@@ -1,8 +1,9 @@
 package be.helha.api_recettapp.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
-
 
 /**
  * Represents a contest category.
@@ -24,26 +25,25 @@ public class ContestCategory {
 
     /**
      * Title of the category.
+     * Must not be blank and cannot exceed 255 characters.
      */
+    @NotBlank(message = "Title is mandatory.")
+    @Size(max = 255, message = "Title cannot exceed 255 characters.")
     private String title;
 
     /**
      * Optional description of the category.
      * Provides additional details about the category.
+     * Cannot exceed 255 characters.
      */
+    @Size(max = 255, message = "Description cannot exceed 255 characters.")
     private String description;
-
-    /**
-     * Status of the category (active or inactive).
-     */
-    private boolean status;
 
     /**
      * No-arguments constructor.
      * Required by JPA or to create an empty instance.
      */
     public ContestCategory() {
-        // Default, empty constructor
     }
 
     /**
@@ -53,13 +53,10 @@ public class ContestCategory {
      * @param id          Unique identifier for the category.
      * @param title       Title of the category.
      * @param description Description of the category.
-     * @param status      Status of the category.
      */
-    public ContestCategory(Long id, String title,
-                           String description, boolean status) {
+    public ContestCategory(Long id, String title, String description) {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.status = status;
     }
 }

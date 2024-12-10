@@ -1,7 +1,9 @@
 package be.helha.api_recettapp.models;
 
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,7 +30,7 @@ public class RecipeComponent {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name="RECIPE_ID")
+    @JoinColumn(name="RECIPE_ID",nullable = false)
     private Recipe recipe;
 
     /**
@@ -47,7 +49,7 @@ public class RecipeComponent {
      * A RecipeComponent can have multiple Ingredients.
      */
     @ManyToOne
-    @JoinColumn(name="Ingredient_ID")
+    @JoinColumn(name="Ingredient_ID",nullable = false)
     public Ingredient ingredient;
 
 

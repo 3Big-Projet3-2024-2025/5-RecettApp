@@ -1,6 +1,9 @@
 package be.helha.api_recettapp.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -58,6 +61,7 @@ public class Ingredient {
     private String alimentSpecifyGroupName;
 
     @OneToMany(mappedBy = "ingredient")
+
     @JsonIgnore
     private List<RecipeComponent> recipeComponent;
 
