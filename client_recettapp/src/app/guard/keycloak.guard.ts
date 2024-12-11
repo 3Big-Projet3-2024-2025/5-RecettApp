@@ -16,7 +16,7 @@ export class KeycloakGuard extends KeycloakAuthGuard {
   ): Promise<boolean> {
     return new Promise(async (resolve) => {
       if (!this.authenticated) {
-        await this.keycloakService.login(); // Redirige vers la page de login Keycloak
+        await this.keycloakService.login(); // Redirect to keycloak login page
         resolve(false);
       } else {
         resolve(true);
