@@ -45,11 +45,18 @@ export class IngredientComponent {
       this.currentIngredient.quantity &&
       this.currentIngredient.unit
     ) {
-      
+
+      const existingIngredient = this.recipeComponents.find(
+        (ing) => ing.ingredient.id === this.currentIngredient.ingredient.id
+      );
+      if (existingIngredient) {
+        existingIngredient.quantity = this.currentIngredient.quantity;
+        existingIngredient.unit = this.currentIngredient.unit;
+      } else {
       this.recipeComponents.push({ ...this.currentIngredient });
+    }
+    
       this.recipeComponentsChange.emit(this.recipeComponents);
-      
-  
       
       this.currentIngredient = { ingredient: null, quantity: null, unit: '' };
       this.searchTerm = ''; 

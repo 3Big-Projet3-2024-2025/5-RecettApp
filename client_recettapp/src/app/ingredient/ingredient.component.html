@@ -21,19 +21,21 @@
         <div class="col-md-6">   
             <label for="quantity" class="form-label">Quantity</label>   
             <input type="number" min="1" id="quantity" class="form-control" [(ngModel)]="currentIngredient.quantity" name="quantity"
-                   placeholder="Enter quantity"   [class.is-invalid]="quantity.invalid && (quantity.dirty || quantity.touched)"   required  #quantity="ngModel" 
+                   placeholder="Enter quantity"   [class.is-invalid]="recipeForm.submitted && !quantity.valid"  required  #quantity="ngModel" 
             />
-            <div *ngIf="quantity.invalid && quantity.dirty" class="invalid-feedback">
+            <div *ngIf="recipeForm.submitted && !quantity.valid" class="invalid-feedback">
               <small *ngIf="quantity.errors?.['required']">quantity is required.</small>
               <small *ngIf="quantity.errors?.['min']">quantity must be greater than 0.</small>
             </div>
         </div> 
+
+        <!-- Input for unit -->
         <div class="col-md-6">
             <label for="unit" class="form-label">Unit</label>
             <input type="text" id="unit" class="form-control" [(ngModel)]="currentIngredient.unit"  name="unit" placeholder="Enter unit (e.g., g, pcs)"
-                   [class.is-invalid]="unit.invalid && (unit.dirty || unit.touched)"   required  #unit="ngModel" 
+                [class.is-invalid]="recipeForm.submitted && !unit.valid"   required  #unit="ngModel" 
             /> 
-            <div *ngIf="unit.invalid && unit.dirty" class="invalid-feedback">
+            <div *ngIf="recipeForm.submitted && !unit.valid" class="invalid-feedback">
               <small *ngIf="unit.errors?.['required']">unit is required.</small>
             </div>
         </div>
@@ -48,10 +50,7 @@
     <div class="mt-4">
         <h3 class="text-success">Ingredients Added</h3>
         <ul class="list-group">
-          <li
-            class="list-group-item d-flex justify-content-between align-items-center"
-            *ngFor="let ingredient of recipeComponents"
-          >
+          <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let ingredient of recipeComponents">
             <div>
               <strong>{{ ingredient.ingredient.alimentName }}</strong> - 
               {{ ingredient.quantity }} {{ ingredient.unit }}
