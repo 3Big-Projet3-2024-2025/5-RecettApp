@@ -19,12 +19,10 @@ import { UsersComponent } from './users/users.component';
 export const routes: Routes = [
 
         { path: '', redirectTo: 'Contest', pathMatch: 'full' },
-
-
         { path: 'recipe', component: RecipeComponent },
         { path: 'recipe/:id', component: RecipeDetailComponent },
         { path: 'recipe/add/:idConstest', component: AddRecipeComponent },
-        { path: 'ContestCategory', component: ContestCategoryComponent , canActivate: [KeycloakGuard]},
+        { path: 'ContestCategory', component: ContestCategoryComponent , canActivate: [KeycloakGuard]},  
         { path:'RecipeType',component:RecipeTypeComponent},
         { path: 'users', component : UsersComponent},
         { path: 'contests', component: ContestTableComponent},
