@@ -26,7 +26,7 @@
         </div>
       </div>
   
-      <!-- Category -->
+      <!--Input for Category -->
       <div class="form-group mb-3">
         <label for="category" class="form-label">Category</label>
         <input required type="text" id="category" class="form-control" name="category" [(ngModel)]="recipeToAdd.category" required placeholder="Enter category (e.g., Dessert, Main Course)"
@@ -38,7 +38,7 @@
         </div>
       </div>
       
-      <!-- preparation time -->
+      <!--Input for preparation time -->
       <div class="row">
         <div class="col-md-4 mb-3"> 
           <label for="preparation_time" class="form-label">Preparation Time (minutes)</label> 
@@ -47,18 +47,20 @@
          />
         <div *ngIf="preparation_time.invalid && preparation_time.dirty" class="invalid-feedback">
           <small *ngIf="preparation_time.errors?.['required']">Preparation time is required.</small>
-          <small *ngIf="preparation_time.errors?.['min']">Preparation time must be greater than 0.</small>
+          <small *ngIf="preparation_time.errors?.['min']">Preparation time must be greater than 0.</small>          
         </div>
       </div>
 
+      <!--Input for cooking time -->
       <div class="col-md-4 mb-3"> 
         <label for="cooking_time" class="form-label">Cooking Time (minutes)</label>
         <input type="number"   id="cooking_time"   class="form-control"   name="cooking_time"   [(ngModel)]="recipeToAdd.cooking_time"
-                required   placeholder="0"  [class.is-invalid]="recipeForm.submitted && !cooking_time.valid" #cooking_time="ngModel"
-            />
-            <div *ngIf="recipeForm.submitted && !cooking_time.valid" class="invalid-feedback">
-                Cooking time is required.
-            </div>
+                required min="1"  placeholder="0"  [class.is-invalid]="cooking_time.invalid && (cooking_time.dirty || cooking_time.touched)" #cooking_time="ngModel"
+        />
+        <div *ngIf="cooking_time.invalid && cooking_time.dirty" class="invalid-feedback">
+          <small *ngIf="cooking_time.errors?.['required']">cooking time is required.</small>
+          <small *ngIf="cooking_time.errors?.['min']">cooking time must be greater than 0.</small>
+        </div>
       </div>
 
         <div class="col-md-4 mb-3">
