@@ -1,7 +1,8 @@
 <div class="container mt-4">
     <h1 class="text-center text-success mb-4">Add a New Recipe</h1>
     <form #recipeForm="ngForm">
-      <div class="form-group mb-3"> 
+
+      <!-- Input for titel -->
         <div class="form-group mb-3">
           <label for="title" class="form-label">Recipe Title</label>
           <input type="text" id="title" class="form-control" name="title" [(ngModel)]="recipeToAdd.title" required  minlength="3" placeholder="Enter recipe title" 
@@ -10,19 +11,19 @@
           <div  *ngIf="title.invalid && title.dirty" class="invalid-feedback">
               <small *ngIf="title.errors?.['required']">Title is required.</small>
               <small *ngIf="title.errors?.['minlength']">Title must be at least 3 characters long.</small>
-      
           </div>
-          
         </div>
-      </div>
-  
+
+      <!-- Input for description -->
       <div class="form-group mb-3">
         <label for="description" class="form-label">Description</label>
-        <textarea id="description" class="form-control" name="description" [(ngModel)]="recipeToAdd.description" required rows="3" 
-                  placeholder="Enter recipe description" [class.is-invalid]="recipeForm.submitted && !description.valid" #description="ngModel">
+        <textarea id="description" class="form-control" name="description" [(ngModel)]="recipeToAdd.description" required rows="3" minlength="20"
+                  placeholder="Enter recipe description"  [class.is-invalid]="description.invalid && (description.dirty || description.touched)" #description="ngModel">
         </textarea>
-        <div *ngIf="recipeForm.submitted && !description.valid" class="invalid-feedback">
-          Recipe description is required.
+        <div *ngIf="description.invalid && description.dirty" class="invalid-feedback">
+          <small *ngIf="description.errors?.['required']">Description is required.</small>
+          <small *ngIf="description.errors?.['minlength']">A description must be at least 20 characters long.</small>
+     
       </div>
       </div>
   
