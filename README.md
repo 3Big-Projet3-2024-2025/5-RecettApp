@@ -53,12 +53,18 @@ Check that port 5432 is not already in use (by a local postgresql, for example)
   - **Username:** `admin`
   - **Password:** `admin`
 
-### 6. Configure a New Realm
+### 6. Configure mail for admin in the Master realm to send email
+
+- In the Master realm go to "Users" in the left menu.
+- Click on admin user and scroll down to see Email.
+- Put "ceref.groupe1.projetphp.helha@gmail.com" in the field and click on the save button below.
+
+### 7. Configure a New Realm
 
 - Create a new realm.
 - Import the configuration file located in the backend's `keycloak_export` folder under `main resources`.
 
-### 7. Check Frontend Keycloak Versions
+### 8. Check Frontend Keycloak Versions
 
 - Open the `package.json` file in the frontend and verify the following dependencies:
   - **keycloak-js:** Ensure it is version `25.0.6`. If not, run:

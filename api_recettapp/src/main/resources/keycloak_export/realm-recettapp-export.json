@@ -1594,7 +1594,20 @@
     "xXSSProtection": "1; mode=block",
     "strictTransportSecurity": "max-age=31536000; includeSubDomains"
   },
-  "smtpServer": {},
+  "smtpServer": {
+    "password": "**********",
+    "replyToDisplayName": "",
+    "starttls": "true",
+    "auth": "true",
+    "port": "587",
+    "host": "smtp.gmail.com",
+    "replyTo": "",
+    "from": "no_reply@recettapp.be",
+    "fromDisplayName": "no_reply@recettapp.be",
+    "envelopeFrom": "",
+    "ssl": "false",
+    "user": "ceref.groupe1.projetphp.helha@gmail.com "
+  },
   "loginTheme": "custom",
   "accountTheme": "keycloak.v3",
   "adminTheme": "keycloak.v2",
