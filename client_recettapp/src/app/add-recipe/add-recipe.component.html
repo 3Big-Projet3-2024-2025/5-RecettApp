@@ -62,7 +62,7 @@
           <small *ngIf="cooking_time.errors?.['min']">cooking time must be greater than 0.</small>
         </div>
       </div>
-      
+
       <!-- Input for servings -->
       <div class="col-md-4 mb-3">
         <label for="servings" class="form-label">Servings</label> 
@@ -75,35 +75,38 @@
         </div>
       </div>
     </div>
-  
-      <div class="form-group mb-3">
-        <label for="difficulty_level" class="form-label">Difficulty Level</label>
-        <select id="difficulty_level" class="form-select" name="difficulty_level" [(ngModel)]="recipeToAdd.difficulty_level" required
-                [class.is-invalid]="recipeForm.submitted && !difficulty_level.valid" #difficulty_level="ngModel"
-        >
-          <option value="" disabled selected>Select difficulty</option>
-          <option value="Easy">Easy</option> 
-          <option value="Medium">Medium</option>
-          <option value="Hard">Hard</option>
-        </select>
-        <div *ngIf="recipeForm.submitted && !difficulty_level.valid" class="invalid-feedback">
-          Difficulty level is required.
-        </div>
+
+    <!-- difficulty_level -->
+    <div class="form-group mb-3">
+      <label for="difficulty_level" class="form-label">Difficulty Level</label>
+      <select id="difficulty_level" class="form-select" name="difficulty_level" [(ngModel)]="recipeToAdd.difficulty_level" required
+        [class.is-invalid]="difficulty_level.invalid && (difficulty_level.dirty || difficulty_level.touched)" #difficulty_level="ngModel"
+      >
+        <option value="" disabled selected>Select difficulty</option>
+        <option value="Easy">Easy</option> 
+        <option value="Medium">Medium</option>
+        <option value="Hard">Hard</option>
+      </select>
+      <div *ngIf="difficulty_level.invalid && difficulty_level.dirty" class="invalid-feedback">
+        <small *ngIf="difficulty_level.errors?.['required']">difficulty level is required.</small>
       </div>
-  
-      <div class="form-group mb-3">
-        <label for="instructions" class="form-label">Instructions</label>
-        <textarea id="instructions" class="form-control" name="instructions" [(ngModel)]="recipeToAdd.instructions" required rows="5" placeholder="Enter recipe instructions"
-                  [class.is-invalid]="recipeForm.submitted && !instructions.valid" #instructions="ngModel"
-        ></textarea>
-        <div *ngIf="recipeForm.submitted && !instructions.valid" class="invalid-feedback">
-          Recipe instructions are required.
-        </div>
+    </div>
+
+    <!-- Instructions -->
+    <div class="form-group mb-3">
+      <label for="instructions" class="form-label">Instructions</label>
+      <textarea id="instructions" class="form-control" name="instructions" [(ngModel)]="recipeToAdd.instructions" required rows="5" placeholder="Enter recipe instructions"
+                minlength="20"  [class.is-invalid]="instructions.invalid && (instructions.dirty || instructions.touched)" #instructions="ngModel">
+      </textarea>
+      <div *ngIf="instructions.invalid && instructions.dirty" class="invalid-feedback">
+        <small *ngIf="instructions.errors?.['required']">instructions time is required.</small>
+        <small *ngIf="instructions.errors?.['minlength']">instructions must be at least 20 characters long.</small>
       </div>
+    </div>
   
       <div class="form-group mb-3">
         <label for="photo_url" class="form-label">Photo URL</label> <!-- temporary no required -->
-        <input required type="url" id="photo_url" class="form-control" name="photo_url" [(ngModel)]="recipeToAdd.photo_url" placeholder="Enter a valid URL for the recipe photo"
+        <input type="url" id="photo_url" class="form-control" name="photo_url" [(ngModel)]="recipeToAdd.photo_url" placeholder="Enter a valid URL for the recipe photo"
         />
       </div>
       <div>  
