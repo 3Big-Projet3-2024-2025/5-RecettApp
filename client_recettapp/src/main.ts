@@ -34,8 +34,7 @@ export function initializeKeycloak(authKeycloakService: AuthKeycloakService) {
     try {
       await authKeycloakService.init();
     } catch (err) {
-      console.error('Erreur lors de l\'initialisation de Keycloak:', err);
-      // Optionnel : Redirigez l'utilisateur vers une page d'erreur ou affichez un message.
+      console.error('Error with the Keycloak initialization:', err);
     }
   };
 }
