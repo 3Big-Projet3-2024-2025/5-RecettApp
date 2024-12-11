@@ -23,17 +23,18 @@
         <div *ngIf="description.invalid && description.dirty" class="invalid-feedback">
           <small *ngIf="description.errors?.['required']">Description is required.</small>
           <small *ngIf="description.errors?.['minlength']">A description must be at least 20 characters long.</small>
-     
-      </div>
+        </div>
       </div>
   
+      <!-- Category -->
       <div class="form-group mb-3">
         <label for="category" class="form-label">Category</label>
         <input required type="text" id="category" class="form-control" name="category" [(ngModel)]="recipeToAdd.category" required placeholder="Enter category (e.g., Dessert, Main Course)"
-               [class.is-invalid]="recipeForm.submitted && !category.valid" #category="ngModel"
+        minlength="3" [class.is-invalid]="category.invalid && (category.dirty || category.touched)" #category="ngModel"
         />
-        <div *ngIf="recipeForm.submitted && !category.valid" class="invalid-feedback">
-          Recipe category is required.
+        <div *ngIf="category.invalid && category.dirty" class="invalid-feedback">
+          <small *ngIf="category.errors?.['required']">Category is required.</small>
+          <small *ngIf="category.errors?.['minlength']">A category must be at least 3 characters long.</small>
         </div>
       </div>
   
