@@ -37,27 +37,30 @@
           <small *ngIf="category.errors?.['minlength']">A category must be at least 3 characters long.</small>
         </div>
       </div>
-  
+      
+      <!-- preparation time -->
       <div class="row">
         <div class="col-md-4 mb-3"> 
           <label for="preparation_time" class="form-label">Preparation Time (minutes)</label> 
           <input required   type="number"   id="preparation_time"   class="form-control"   name="preparation_time" [(ngModel)]="recipeToAdd.preparation_time"
-             required   placeholder="0"  [class.is-invalid]="recipeForm.submitted && !preparation_time.valid" #preparation_time="ngModel"
+                 min="1"  required   placeholder="0"  [class.is-invalid]="preparation_time.invalid && (preparation_time.dirty || preparation_time.touched)" #preparation_time="ngModel"
          />
-         <div *ngIf="recipeForm.submitted && !preparation_time.valid" class="invalid-feedback">
-             Preparation time is required.
-         </div>
+        <div *ngIf="preparation_time.invalid && preparation_time.dirty" class="invalid-feedback">
+          <small *ngIf="preparation_time.errors?.['required']">Preparation time is required.</small>
+          <small *ngIf="preparation_time.errors?.['min']">Preparation time must be greater than 0.</small>
         </div>
+      </div>
 
-        <div class="col-md-4 mb-3"> 
-          <label for="cooking_time" class="form-label">Cooking Time (minutes)</label>
-          <input type="number"   id="cooking_time"   class="form-control"   name="cooking_time"   [(ngModel)]="recipeToAdd.cooking_time"
-                 required   placeholder="0"  [class.is-invalid]="recipeForm.submitted && !cooking_time.valid" #cooking_time="ngModel"
-             />
-             <div *ngIf="recipeForm.submitted && !cooking_time.valid" class="invalid-feedback">
-                 Cooking time is required.
-             </div>
-        </div>
+      <div class="col-md-4 mb-3"> 
+        <label for="cooking_time" class="form-label">Cooking Time (minutes)</label>
+        <input type="number"   id="cooking_time"   class="form-control"   name="cooking_time"   [(ngModel)]="recipeToAdd.cooking_time"
+                required   placeholder="0"  [class.is-invalid]="recipeForm.submitted && !cooking_time.valid" #cooking_time="ngModel"
+            />
+            <div *ngIf="recipeForm.submitted && !cooking_time.valid" class="invalid-feedback">
+                Cooking time is required.
+            </div>
+      </div>
+
         <div class="col-md-4 mb-3">
           <label for="servings" class="form-label">Servings</label> 
           <input type="number"   id="servings"   class="form-control"   name="servings"   [(ngModel)]="recipeToAdd.servings"
