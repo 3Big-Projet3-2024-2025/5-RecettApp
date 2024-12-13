@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import java.io.IOException;
@@ -24,6 +27,15 @@ public class ImageDataService implements  IImageDataService{
      */
     @Override
     public boolean addImageData(MultipartFile file) throws IOException {
+        if (file.isEmpty()) {
+            throw new IllegalArgumentException("File is empty");
+        }
+        //Image type valid: png, jpeg, svg, webp
+        List<String> validContentTypes = Arrays.asList("image/jpeg", "image/png", "image/svg", "image/webp");
+
+        if (!validContentTypes.contains(file.getContentType())) {
+            throw new IllegalArgumentException("Invalid file type. Supported types: image/jpeg, image/png, image/svg, image/webp");
+        }
         ImageData imageData = imageDataRepository.save(ImageData.builder()
                 .name(file.getOriginalFilename())
                 .type(file.getContentType())
@@ -41,6 +53,7 @@ public class ImageDataService implements  IImageDataService{
     @Override
     @Transactional
     public byte[] getImageData(String nameImage) {
+
         Optional<ImageData> dbImageData = imageDataRepository.findByName(nameImage);
         if (dbImageData.isEmpty()) {
             throw new RuntimeException("Image " + nameImage +" not found");
