@@ -4,6 +4,8 @@ package be.helha.api_recettapp.services;
 import be.helha.api_recettapp.models.ImageData;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 
 /**
  * Interface for managing ImageData.
@@ -16,7 +18,7 @@ public interface IImageDataService {
      * @param file the {@link ImageData} object to add.
      * @return {@code boolean}
      */
-    public boolean  addImageData(MultipartFile file);
+    public boolean  addImageData(MultipartFile file) throws IOException;
 
     /**
      * Retrieves an image.
