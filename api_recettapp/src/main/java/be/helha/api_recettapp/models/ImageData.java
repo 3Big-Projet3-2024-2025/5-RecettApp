@@ -28,14 +28,18 @@ public class ImageData {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String Name;
+    @Column(nullable = false)
+    private String name;
+
+    private String type;
 
     /**
      * The binary data of the image.
      * Stored as a Large Object (LOB) in the database.
      */
     @Lob
-    @Column(name = "imagedata")
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "imagedata",length = 1000)
     private byte[] imageData;
 
 }
