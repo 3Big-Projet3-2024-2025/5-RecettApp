@@ -36,6 +36,6 @@ public class ImageData {
      */
     @Lob
     @Column(name = "imagedata")
-    private byte imageData;
+    private byte[] imageData;
 
 }

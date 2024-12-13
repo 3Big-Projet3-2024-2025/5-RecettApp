@@ -2,6 +2,7 @@ package be.helha.api_recettapp.services;
 
 import be.helha.api_recettapp.models.ImageData;
 import be.helha.api_recettapp.repositories.jpa.ImageDataRepository;
+import be.helha.api_recettapp.utils.ImageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
