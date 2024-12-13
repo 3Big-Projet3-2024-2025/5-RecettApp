@@ -1,5 +1,7 @@
 package be.helha.api_recettapp.controllers;
 
+import be.helha.api_recettapp.models.ImageData;
+import be.helha.api_recettapp.repositories.jpa.ImageDataRepository;
 import be.helha.api_recettapp.services.ImageDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,8 @@ public class ImageDataController {
 
     @Autowired
     private ImageDataService imageDataService;
+    @Autowired
+    private ImageDataRepository repository;
 
 
     /**
@@ -39,4 +43,19 @@ public class ImageDataController {
                 .body("Image added successfully");
     }
 
+    /**
+     * Retrieves an image by its name.
+     *
+     * @param fileName the name of the image to retrieve.
+     * @return a {@link ResponseEntity} containing the image data and the appropriate content type.
+     * @throws RuntimeException if the image is not found or the type is invalid.
+     */
+    @GetMapping("/{fileName}")
+    public ResponseEntity<?> getImage(@PathVariable String fileName) {
+        byte[] imageData = imageDataService.getImageData(fileName);
+        ImageData image = repository.findByName(fileName).get();
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.valueOf(image.getType()))
+                .body(imageData);
+    }
 }
