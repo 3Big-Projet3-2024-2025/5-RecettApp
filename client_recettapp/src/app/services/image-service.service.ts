@@ -10,7 +10,7 @@ export class ImageServiceService {
 
 
   constructor(private http: HttpClient) { }
-  private Url = "http://localhost:8080/recipe";
+  private Url = "http://localhost:8080/image";
 
   /**
    * Uploads an image to the server.

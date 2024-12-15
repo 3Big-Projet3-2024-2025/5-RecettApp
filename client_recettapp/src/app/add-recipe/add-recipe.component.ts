@@ -9,6 +9,7 @@ import { Contest } from '../models/contest';
 import { IngredientComponent } from "../ingredient/ingredient.component";
 import { RecipeComponentService } from '../services/recipe_Service/recipe-component.service';
 import { RecipeComponent } from '../models/recipe-component';
+import { ImageServiceService } from '../services/image-service.service';
 
 @Component({
   selector: 'app-add-recipe',
@@ -19,7 +20,8 @@ import { RecipeComponent } from '../models/recipe-component';
 })
 export class AddRecipeComponent {
 
-  constructor(private route: ActivatedRoute,private recipeService: RecipeService, private componentService: RecipeComponentService,private router: Router){}
+  constructor(private route: ActivatedRoute,private recipeService: RecipeService, private componentService: RecipeComponentService,
+              private router: Router,private imService: ImageServiceService){}
   ngOnInit(): void {
     const contestId = this.route.snapshot.paramMap.get('idConstest');
     if (contestId != null) {
@@ -35,6 +37,7 @@ export class AddRecipeComponent {
   }
   imageFile: File | null = null; 
   imageError: string | null = null;
+  previewImage: string | null = null;
   recipeToAdd: Recipe = {
     id: 0, 
     title: '',
@@ -52,13 +55,17 @@ export class AddRecipeComponent {
     recipe_type: undefined
   };
   recipeComponentError = "";
+
   onSubmit(): void {
     if (this.checkValidRecipeToAdd(this.recipeToAdd)) {
+      
+      this.recipeToAdd.photo_url = this.imageFile?.name
         this.recipeService.addRecipe(this.recipeToAdd).subscribe(
           {
             next: (value: Recipe) => {
               this.recipeToAdd.id = value.id; // Recovery of the recipe updated with its new id
               this.addRecipeComponent();
+              this.addImage();
               this.router.navigate(['/recipe']);
             },
             error: (err) => {
@@ -73,6 +80,16 @@ export class AddRecipeComponent {
     this.recipeToAdd.components = components;
   }
 
+  addImage(){
+    if(this.imageFile){
+    this.imService.addImage(this.imageFile).subscribe( // add image before the recipe
+      {
+        error: (err) => {
+          console.log(err.error.message)
+        }
+      })
+    }
+  }
   addRecipeComponent(){
     this.recipeToAdd.components.forEach(element => {
       
@@ -121,9 +138,12 @@ export class AddRecipeComponent {
       } else {
         this.imageError = null;
         this.imageFile = file;
+        this.previewImage = URL.createObjectURL(file); 
       }
     } else {
       this.imageError = 'No file selected. Please upload an image.';
+      this.previewImage = null; // Réinitialise l'aperçu si aucun fichier n'est sélectionné
+
     }
   }
 }
