@@ -23,4 +23,8 @@ export class ImageServiceService {
 
     return this.http.post<string>(this.Url, formData);
   }
+
+  getImage(fileName: string): Observable<Blob> {
+    return this.http.get(`${this.Url}/${fileName}`, { responseType: 'blob' });
+  }
 }
