@@ -33,7 +33,8 @@ export class AddRecipeComponent {
     max_participants: 0,
     status: ''
   }
-
+  imageFile: File | null = null; 
+  imageError: string | null = null;
   recipeToAdd: Recipe = {
     id: 0, 
     title: '',
@@ -102,5 +103,27 @@ export class AddRecipeComponent {
       return false;
     }
     return true;
+  }
+
+  
+  validateImage(event: Event) {
+    
+    const input = event.target as HTMLInputElement;
+
+    if (input && input.files && input.files.length > 0) {
+      const file: File = input.files[0];
+      const validTypes = ['image/jpeg', 'image/png', 'image/svg+xml', 'image/webp'];
+  
+      if (!validTypes.includes(file.type)) {
+        this.imageError = 'Invalid file type. Please upload an image (JPEG, PNG, SVG, or WEBP).';
+        this.imageFile = null; 
+        input.value = ''; 
+      } else {
+        this.imageError = null;
+        this.imageFile = file;
+      }
+    } else {
+      this.imageError = 'No file selected. Please upload an image.';
+    }
   }
 }

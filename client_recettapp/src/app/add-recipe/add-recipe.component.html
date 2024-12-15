@@ -93,9 +93,14 @@
       </div>
   
       <div class="form-group mb-3">
-        <label for="photo_url" class="form-label">Photo URL</label> <!-- temporary no required -->
-        <input required type="url" id="photo_url" class="form-control" name="photo_url" [(ngModel)]="recipeToAdd.photo_url" placeholder="Enter a valid URL for the recipe photo"
+        <label for="photo_url" class="form-label">Photo URL</label> 
+        <input required type="file" id="photo_url" class="form-control" name="photo_url" [(ngModel)]="imageFile"
+                   placeholder="Upload a valid image for the recipe photo"  accept="image/jpeg, image/png, image/svg+xml, image/webp"
+                   (change)="validateImage($event)"
         />
+        <div *ngIf="imageError" class="text-danger">
+          {{ imageError }}
+        </div>
       </div>
       <div>  
         <app-ingredient (recipeComponentsChange)="onRecipeComponentsChange($event)"></app-ingredient>
