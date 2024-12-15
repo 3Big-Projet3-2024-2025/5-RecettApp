@@ -58,7 +58,7 @@ export class AddRecipeComponent {
 
   onSubmit(): void {
     if (this.checkValidRecipeToAdd(this.recipeToAdd)) {
-      
+      this.creatImageName();
       this.recipeToAdd.photo_url = this.imageFile?.name
         this.recipeService.addRecipe(this.recipeToAdd).subscribe(
           {
@@ -75,7 +75,18 @@ export class AddRecipeComponent {
         )//console.log(this.recipeToAdd)
       } 
   }
+  
+  creatImageName(){
+    if (this.imageFile) {
+      const newFileName = `${this.recipeToAdd.title.replace(/[\s:]+/g, '_')}_${Date.now()}.${this.imageFile.type.split('/')[1]}`;
 
+      // Create a new File object with the modified name
+      const modifiedFile = new File([this.imageFile], newFileName, { type: this.imageFile.type });
+  
+      // Set the new file
+      this.imageFile = modifiedFile;
+    }
+  }
   onRecipeComponentsChange(components: any[]) {
     this.recipeToAdd.components = components;
   }
@@ -106,9 +117,9 @@ export class AddRecipeComponent {
     const componentToAdd: RecipeComponent = {
       id: element.id,
       recipe: this.recipeToAdd,
-    quantity: element.quantity,
-    ingredient: element.ingredient, 
-    unit: element.unit
+      quantity: element.quantity,
+      ingredient: element.ingredient, 
+      unit: element.unit
     }
 
     return componentToAdd
@@ -142,7 +153,7 @@ export class AddRecipeComponent {
       }
     } else {
       this.imageError = 'No file selected. Please upload an image.';
-      this.previewImage = null; // Réinitialise l'aperçu si aucun fichier n'est sélectionné
+      this.previewImage = null; 
 
     }
   }
