@@ -9,7 +9,7 @@
         <div class="card recipe-card shadow-sm">
           <div (click)="detailRecipe(recipe.id)">
             <div class="recipe-image-container">
-              <img *ngIf="recipe.photo_url" [src]="recipe.photo_url" [alt]="recipe.title" class="card-img-top recipe-photo" />
+              <img *ngIf="imageRecipe" [src]="imageRecipe" [alt]="recipe.title" class="card-img-top recipe-photo"/>
             </div>
             <div class="card-body">
               <h5 class="card-title text-success">{{ recipe.title }}</h5>

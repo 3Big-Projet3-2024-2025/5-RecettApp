@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule, AsyncPipe, NgFor } from '@angular/common';
 import { Router } from '@angular/router';
+import { ImageServiceService } from '../services/image-service.service';
 
 @Component({
   selector: 'app-recipe',
@@ -17,7 +18,8 @@ import { Router } from '@angular/router';
 
 export class RecipeComponent {
   recipes!: Observable<Recipe[]> ;
-  constructor(private service: RecipeService,private router:Router) {}
+  imageRecipe!: null | string;
+  constructor(private service: RecipeService,private router:Router, private imaService: ImageServiceService) {}
 
 
    ngOnInit(): void {
@@ -47,5 +49,17 @@ export class RecipeComponent {
     if (confirmed) {
       this.deleteRecipe(id);
     }
+  }
+
+  getImage(imageName: string){
+    this.imaService.getImage(imageName).subscribe(
+      (next: Blob) => {
+       
+        this.imageRecipe = URL.createObjectURL(next);
+      },
+      (err) => {
+       console.log(err.error.message)
+      }
+    );
   }
 }
