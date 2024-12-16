@@ -37,7 +37,7 @@ export class AddRecipeComponent {
   }
   imageFile: File | null = null; 
   imageError: string | null = null;
-  previewImage: string | null = null;
+  previewImage = "./assets/No_Image.png";
   recipeToAdd: Recipe = {
     id: 0, 
     title: '',
@@ -158,7 +158,7 @@ export class AddRecipeComponent {
       }
     } else {
       this.imageError = 'No file selected. Please upload an image.';
-      this.previewImage = null; 
+
 
     }
   }
