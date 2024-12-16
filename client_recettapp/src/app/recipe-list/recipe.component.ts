@@ -17,13 +17,27 @@ import { ImageServiceService } from '../services/image-service.service';
 
 
 export class RecipeComponent {
-  recipes!: Observable<Recipe[]> ;
-  imageRecipe!: null | string;
+  recipes: Recipe[] = [];
   constructor(private service: RecipeService,private router:Router, private imaService: ImageServiceService) {}
 
 
    ngOnInit(): void {
-    this.recipes = this.service.getAllRecipe() as Observable<Recipe[]>;
+    this.service.getAllRecipe().subscribe((data: Recipe[]) => {
+      this.recipes = data;
+
+      this.recipes.forEach(recipe => {
+        if (recipe.photo_url) {
+        this.imaService.getImage(recipe.photo_url).subscribe(
+          (next: Blob) => {
+            recipe.photo_url = URL.createObjectURL(next);
+          },
+          (err) => {
+           console.log(err.error.message)
+          }
+        );
+        }
+      });
+    });
   }
 
   detailRecipe(id: number) : void {
@@ -51,15 +65,4 @@ export class RecipeComponent {
     }
   }
 
-  getImage(imageName: string){
-    this.imaService.getImage(imageName).subscribe(
-      (next: Blob) => {
-       
-        this.imageRecipe = URL.createObjectURL(next);
-      },
-      (err) => {
-       console.log(err.error.message)
-      }
-    );
-  }
 }

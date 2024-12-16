@@ -59,7 +59,9 @@ export class AddRecipeComponent {
   onSubmit(): void {
     if (this.checkValidRecipeToAdd(this.recipeToAdd)) {
       this.creatImageName();
-      this.recipeToAdd.photo_url = this.imageFile?.name
+      if (this.imageFile) {
+      this.recipeToAdd.photo_url = this.imageFile.name
+      }
         this.recipeService.addRecipe(this.recipeToAdd).subscribe(
           {
             next: (value: Recipe) => {
