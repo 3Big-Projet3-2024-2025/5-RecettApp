@@ -40,7 +40,7 @@ public class ImageDataController {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
         return ResponseEntity.status(HttpStatus.OK)
-                .body("Image added successfully");
+                .build();
     }
 
     /**

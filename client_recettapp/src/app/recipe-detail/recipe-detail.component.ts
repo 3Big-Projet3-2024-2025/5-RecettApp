@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Recipe } from '../models/recipe';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RecipeService } from '../services/recipe_Service/recipe.service';
@@ -25,17 +25,19 @@ export class RecipeDetailComponent implements OnInit {
     if (id) {
       this.service.getRecipeById(+id).subscribe(
         (data) => {
-        this.recipe = data;
+          console.log('la photoo :' + data.photo_url)
         if (data.photo_url) {
           this.getImage(data.photo_url);
         }
-        this.getRecipeComponent(+id)
+        this.getRecipeComponent(+id);
+        this.recipe = data;
         },(err) => {
           console.log(err.error.message)
         }
+        
       );}
   }
-  
+
   getImage(imageName: string){
     this.imaService.getImage(imageName).subscribe(
       (next: Blob) => {

@@ -67,8 +67,18 @@ export class AddRecipeComponent {
             next: (value: Recipe) => {
               this.recipeToAdd.id = value.id; // Recovery of the recipe updated with its new id
               this.addRecipeComponent();
-              this.addImage();
-              this.router.navigate(['/recipe']);
+              
+              if(this.imageFile){ //added image
+                this.imService.addImage(this.imageFile).subscribe( // add image before the recipe
+                  { next: () =>{
+                    this.router.navigate(['/recipe', value.id]);
+                  },
+                    error: (err) => {
+                      console.log(err)
+                    }
+                  })
+                }
+              
             },
             error: (err) => {
               console.log(err.error.message)
@@ -94,14 +104,7 @@ export class AddRecipeComponent {
   }
 
   addImage(){
-    if(this.imageFile){
-    this.imService.addImage(this.imageFile).subscribe( // add image before the recipe
-      {
-        error: (err) => {
-          console.log(err.error.message)
-        }
-      })
-    }
+   
   }
   addRecipeComponent(){
     this.recipeToAdd.components.forEach(element => {
