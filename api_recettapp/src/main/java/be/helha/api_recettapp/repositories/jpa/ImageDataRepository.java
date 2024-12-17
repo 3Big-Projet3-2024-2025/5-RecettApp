@@ -14,5 +14,7 @@ import java.util.Optional;
 @Repository
 public interface ImageDataRepository  extends JpaRepository<ImageData, Integer>, PagingAndSortingRepository<ImageData, Integer> {
     Optional <ImageData> findByName(String Name);
+
+    public void deleteImageDataByName(String Name);
 }
 

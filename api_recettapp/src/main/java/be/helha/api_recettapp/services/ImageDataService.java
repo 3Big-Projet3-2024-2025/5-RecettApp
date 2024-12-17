@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import java.io.IOException;
@@ -20,7 +21,7 @@ public class ImageDataService implements  IImageDataService{
     @Autowired
     private ImageDataRepository imageDataRepository;
     /**
-     * Adds a new ingredient to the system.
+     * Adds a new image to the system.
      *
      * @param file the {@link ImageData} object to add.
      * @return {@code boolean}
@@ -59,6 +60,22 @@ public class ImageDataService implements  IImageDataService{
             throw new RuntimeException("Image " + nameImage +" not found");
         }
         return ImageUtils.decompressImage(dbImageData.get().getImageData());
+    }
+
+    /**
+     * deletes an image by its name.
+     *
+     * @param nameImage the name of the image to delete
+     * @throws NoSuchElementException
+     */
+    @Override
+    @Transactional
+    public void deleteImageData(String nameImage) {
+        try {
+            this.imageDataRepository.deleteImageDataByName(nameImage);
+        }catch (Exception e) {
+            throw new NoSuchElementException("Image " + nameImage +" not found" +  "\n Trace : " + e.getMessage());
+        }
     }
 
 }

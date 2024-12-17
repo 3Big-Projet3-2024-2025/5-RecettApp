@@ -5,6 +5,7 @@ import be.helha.api_recettapp.models.ImageData;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.NoSuchElementException;
 
 
 /**
@@ -13,7 +14,7 @@ import java.io.IOException;
  */
 public interface IImageDataService {
     /**
-     * Adds a new ingredient to the system.
+     * Adds a new image to the system.
      *
      * @param file the {@link ImageData} object to add.
      * @return {@code boolean}
@@ -27,4 +28,12 @@ public interface IImageDataService {
      * @return {@code byte[] }
      */
     public byte[] getImageData(String nameImage);
+
+    /**
+     * deletes an image by its name.
+     *
+     * @param nameImage the name of the image to delete
+     * @throws NoSuchElementException
+     */
+    public void deleteImageData(String nameImage) throws NoSuchElementException;
 }
