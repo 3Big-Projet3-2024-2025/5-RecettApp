@@ -1,1 +1,81 @@
-<p>home-page works!</p>
+<header class="bg-success text-white py-3">
+    <div class="container d-flex justify-content-between align-items-center">
+        <h1 class="logo mb-0">Recipe App</h1>
+        <nav>
+            <ul class="nav">
+                <li class="nav-item"><a href="#home" class="nav-link text-white">Home</a></li>
+                <li class="nav-item"><a href="#recipes" class="nav-link text-white">Competition</a></li>
+                <li class="nav-item"><a href="#submit" class="nav-link text-white">Register</a></li>
+                <li class="nav-item"><a href="#about" class="nav-link text-white">Login</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<body class="d-flex flex-column" style="background-image: url('./assets/bgHome.png'); background-size: cover; background-repeat: no-repeat; background-position: center; min-height: 100vh;">
+    <section id="home" class="py-3 text-center">
+        <div class="container">
+            <h2 class="text-center text-success">Join the recipe contest and become the best chef!</h2>
+        </div>
+    </section>
+
+    <section id="recipes" class="recipes py-5">
+        <div class="container">
+            <h2 class="text-center mb-4 text-success display-4">Latest Winning Recipes</h2>
+            <div class="row">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="recipe-image-container" style="height: 200px; overflow: hidden;">
+                        <img src="./assets/recipe1.png" 
+                            class="w-100 h-100" 
+                            style="object-fit: cover;" 
+                            alt="Recipe 1">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">Apple Pie</h3>
+                        <p class="card-text">A delicious and easy-to-make recipe.</p>
+                        <a href="#" class="btn btn-outline-success">See the recipe</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="recipe-image-container" style="height: 200px; overflow: hidden;">
+                        <img src="./assets/recipe2.png" 
+                            class="w-100 h-100" 
+                            style="object-fit: cover;" 
+                            alt="Recipe 2">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">Chicken Breast</h3>
+                        <p class="card-text">A flavorful and healthy dish.</p>
+                        <a href="#" class="btn btn-outline-success">See the recipe</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="recipe-image-container" style="height: 200px; overflow: hidden;">
+                        <img src="./assets/recipe3.png" 
+                            class="w-100 h-100" 
+                            style="object-fit: cover;" 
+                            alt="Recipe 3">
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">Vegan Recipe</h3>
+                        <p class="card-text">A plant-based recipe full of flavors.</p>
+                        <a href="#" class="btn btn-outline-success">See the recipe</a>
+                    </div>
+                </div>
+            </div>
+     
+            </div>
+        </div>
+    </section>
+</body>
+
+<footer class="bg-success text-white py-3">
+    <div class="container text-center">
+        <p class="mb-0">&copy; 2024 Recipe Contest. All rights reserved.</p>
+    </div>
+</footer>
