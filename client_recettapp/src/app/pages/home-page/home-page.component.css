@@ -3,7 +3,6 @@
     background-size: cover;
     background-repeat:repeat;
     background-position: center;
-    position: sticky;
     min-height: 100vh;
     filter: blur(3px);
 }
@@ -25,4 +24,5 @@
     .content-homepage{
         transform: translate(-50%,-20%);
     }
+
   }
