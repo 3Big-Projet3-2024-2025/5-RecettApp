@@ -4,6 +4,10 @@ import be.helha.api_recettapp.models.Evaluation;
 
 import java.util.List;
 
+/**
+ * Service interface for managing evaluations.
+ * Provides methods to add, delete, and retrieve evaluations.
+ */
 public interface IEvaluationService {
     /**
      * Adds a new review.
@@ -28,8 +32,20 @@ public interface IEvaluationService {
      */
     List<Evaluation> getAllEvaluations();
 
+    /**
+     * Retrieves all evaluations linked to a specific entry.
+     *
+     * @param entryId The ID of the entry for which evaluations are to be retrieved.
+     * @return A list of evaluations associated with the specified entry ID.
+     */
     List<Evaluation> getEvaluationsByEntry(Long entryId);
 
+    /**
+     * Retrieves all evaluations linked to a specific recipe.
+     *
+     * @param recipeId The ID of the recipe for which evaluations are to be retrieved.
+     * @return A list of evaluations associated with the specified recipe ID.
+     */
     List<Evaluation> getEvaluationsByRecipe(Long recipeId);
 
 }

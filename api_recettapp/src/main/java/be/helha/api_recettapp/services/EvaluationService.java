@@ -21,11 +21,26 @@ public class EvaluationService implements IEvaluationService{
     @Autowired
     private EvaluationRepository evaluationRepository;
 
+    /**
+     * Adds a new evaluation to the system.
+     *
+     * @param evaluation The evaluation entity to save.
+     * @return The saved evaluation.
+     */
     @Override
     public Evaluation addEvaluation(Evaluation evaluation) {
         return evaluationRepository.save(evaluation);
     }
 
+
+    /**
+     * Deletes an evaluation by its ID.
+     * This action is restricted to administrators.
+     *
+     * @param id      The ID of the evaluation to delete.
+     * @param isAdmin A flag indicating whether the user is an administrator.
+     * @throws SecurityException if the user is not an administrator.
+     */
     @Override
     public void deleteEvaluation(Long id, boolean isAdmin) {
         if (!isAdmin) {
@@ -34,15 +49,33 @@ public class EvaluationService implements IEvaluationService{
         evaluationRepository.deleteById(id);
     }
 
+
+    /**
+     * Retrieves all evaluations in the system.
+     *
+     * @return A list of all evaluations.
+     */
     @Override
     public List<Evaluation> getAllEvaluations() {
         return evaluationRepository.findAll();
     }
 
+    /**
+     * Retrieves all evaluations linked to a specific entry.
+     *
+     * @param entryId The ID of the entry.
+     * @return A list of evaluations for the specified entry.
+     */
     public List<Evaluation> getEvaluationsByEntry(Long entryId) {
         return evaluationRepository.findByEntryId(entryId);
     }
 
+    /**
+     * Retrieves all evaluations linked to a specific recipe.
+     *
+     * @param recipeId The ID of the recipe.
+     * @return A list of evaluations for the specified recipe.
+     */
     public List<Evaluation> getEvaluationsByRecipe(Long recipeId) {
         return evaluationRepository.findByRecipeId(recipeId);
     }
