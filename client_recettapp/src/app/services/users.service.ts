@@ -22,6 +22,10 @@ export class UsersService {
     return this.http.get<User>(`${this.baseUrl}/${id}`);
   }
 
+  findByEmail(email: string): Observable<User> {
+    return this.http.get<User>(`${this.baseUrl}/email/${email}`);
+  }
+
   save(user: User): Observable<User> {
     if (user.id) {
       return this.http.put<User>(`${this.baseUrl}/${user.id}`, user);
