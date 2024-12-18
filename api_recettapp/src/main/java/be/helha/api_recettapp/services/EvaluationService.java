@@ -36,6 +36,6 @@ public class EvaluationService implements IEvaluationService{
 
     @Override
     public List<Evaluation> getAllEvaluations() {
-        return null;
+        return evaluationRepository.findAll();
     }
 }

@@ -12,6 +12,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -32,14 +35,12 @@ public class TestCrudEvaluationService {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        // Création des objets Entry et Recipe
         entry = new Entry();
         entry.setId(1);
 
         recipe = new Recipe();
         recipe.setId(10);
 
-        // Création des évaluations
         evaluation1 = new Evaluation();
         evaluation1.setId(1L);
         evaluation1.setRate(5);
@@ -80,5 +81,16 @@ public class TestCrudEvaluationService {
 
         assertEquals("Only an administrator can delete a review.", exception.getMessage());
         verify(evaluationRepository, never()).deleteById(anyLong());
+    }
+
+    @Test
+    void testGetAllEvaluations() {
+        when(evaluationRepository.findAll()).thenReturn(Arrays.asList(evaluation1, evaluation2));
+
+        List<Evaluation> evaluations = evaluationService.getAllEvaluations();
+
+        assertNotNull(evaluations);
+        assertEquals(2, evaluations.size());
+        verify(evaluationRepository, times(1)).findAll();
     }
 }
