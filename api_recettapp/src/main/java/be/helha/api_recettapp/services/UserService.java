@@ -25,7 +25,9 @@ import java.util.List;
  * load user-specific data during authentication.
  */
 @Service
-public class UserService implements UserDetailsService {
+
+public class UserService implements IUserService{
+
 
     /**
      * Repository for accessing user data from the database.
@@ -111,5 +113,10 @@ public class UserService implements UserDetailsService {
     public void delete(Long id) {
         userRepository.deleteById((long) Math.toIntExact(id));
     }
+
+    public Users findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
 
 }
