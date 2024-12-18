@@ -38,4 +38,8 @@ public class EvaluationService implements IEvaluationService{
     public List<Evaluation> getAllEvaluations() {
         return evaluationRepository.findAll();
     }
+
+    public List<Evaluation> getEvaluationsByEntry(Long entryId) {
+        return evaluationRepository.findByEntryId(entryId);
+    }
 }

@@ -93,4 +93,15 @@ public class TestCrudEvaluationService {
         assertEquals(2, evaluations.size());
         verify(evaluationRepository, times(1)).findAll();
     }
+
+    @Test
+    void testGetEvaluationsByEntry() {
+        when(evaluationRepository.findByEntryId(1L)).thenReturn(Arrays.asList(evaluation1, evaluation2));
+
+        List<Evaluation> evaluations = evaluationService.getEvaluationsByEntry(1L);
+
+        assertNotNull(evaluations);
+        assertEquals(2, evaluations.size());
+        verify(evaluationRepository, times(1)).findByEntryId(1L);
+    }
 }
