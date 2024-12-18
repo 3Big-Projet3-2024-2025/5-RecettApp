@@ -2,6 +2,7 @@ package be.helha.api_recettapp.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -110,8 +111,9 @@ public class Recipe {
      * List of components (ingredients) used in the recipe.
      * Mapped by the "recipe" field in the {@link RecipeComponent} class.
      */
-    @OneToMany(mappedBy = "recipe")
-    //@JsonIgnore
+
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<RecipeComponent> components;
 
 

@@ -1,8 +1,9 @@
 package be.helha.api_recettapp.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
-
 
 /**
  * Represents a contest category.
@@ -24,13 +25,18 @@ public class ContestCategory {
 
     /**
      * Title of the category.
+     * Must not be blank and cannot exceed 255 characters.
      */
+    @NotBlank(message = "Title is mandatory.")
+    @Size(max = 255, message = "Title cannot exceed 255 characters.")
     private String title;
 
     /**
      * Optional description of the category.
      * Provides additional details about the category.
+     * Cannot exceed 255 characters.
      */
+    @Size(max = 255, message = "Description cannot exceed 255 characters.")
     private String description;
 
     /**

@@ -2,9 +2,11 @@ package be.helha.api_recettapp.controllers;
 
 import be.helha.api_recettapp.models.Evaluation;
 import be.helha.api_recettapp.services.IEvaluationService;
+import be.helha.api_recettapp.services.EvaluationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 
@@ -55,6 +57,28 @@ public class EvaluationController {
     @GetMapping
     public ResponseEntity<List<Evaluation>> getAllEvaluations() {
         return ResponseEntity.ok(evaluationService.getAllEvaluations());
+    }
+
+    /**
+     * Retrieves all evaluations linked to a specific entry.
+     *
+     * @param entryId The ID of the entry.
+     * @return A list of evaluations for the entry.
+     */
+    @GetMapping("/entry/{entryId}")
+    public ResponseEntity<List<Evaluation>> getEvaluationsByEntry(@PathVariable Long entryId) {
+        return ResponseEntity.ok(evaluationService.getEvaluationsByEntry(entryId));
+    }
+
+    /**
+     * Retrieves all evaluations linked to a specific recipe.
+     *
+     * @param recipeId The ID of the recipe.
+     * @return A list of evaluations for the recipe.
+     */
+    @GetMapping("/recipe/{recipeId}")
+    public ResponseEntity<List<Evaluation>> getEvaluationsByRecipe(@PathVariable Long recipeId) {
+        return ResponseEntity.ok(evaluationService.getEvaluationsByRecipe(recipeId));
     }
 
 }

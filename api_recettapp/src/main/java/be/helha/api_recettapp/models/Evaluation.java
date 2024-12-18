@@ -23,26 +23,17 @@ public class Evaluation {
     private Long id;
 
     /**
-     * The contest entry associated with this evaluation.
-     * Each evaluation corresponds to a single entry.
-     */
-    @OneToOne
-    private Entry entry;
-
-    /**
      * The rating given by the user for the recipe.
      * This value should be between 0 and 5.
      */
     private int rate;
 
     /**
-     * The user who provided the evaluation.
-     * This is a mandatory field in the evaluation.
+     * The contest entry associated with this evaluation.
      */
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private Users user;
-
+    @OneToOne
+    @JoinColumn(name = "entry_id", nullable = false)
+    private Entry entry;
     /**
      * The recipe that is being evaluated.
      * This is a mandatory field in the evaluation.

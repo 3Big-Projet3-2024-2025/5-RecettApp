@@ -1,5 +1,6 @@
 package be.helha.api_recettapp.controllers;
 
+import be.helha.api_recettapp.models.AppError;
 import be.helha.api_recettapp.models.RecipeType;
 import be.helha.api_recettapp.services.RecipeTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class RecipeTypeController {
     public ResponseEntity<?> getAllRecipeTypes() {
         List<RecipeType> recipeTypes = service.findAll();
         if (recipeTypes.isEmpty()) {
-            return ResponseEntity.ok("No recipe types found.");
+            return ResponseEntity.ok(new AppError("No recipe types found."));
         }
         return ResponseEntity.ok(recipeTypes);
     }
@@ -44,7 +45,7 @@ public class RecipeTypeController {
     public ResponseEntity<Object> getRecipeTypeById(@PathVariable int id) {
         // Check if the RecipeType exists
         Optional<RecipeType> recipeType = service.findById(id);
-        return recipeType.<ResponseEntity<Object>>map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(404).body("Recipe type with ID " + id + " not found."));
+        return recipeType.<ResponseEntity<Object>>map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.status(404).body(new AppError("Recipe type with ID " + id + " not found.")));
     }
 
 
@@ -58,7 +59,7 @@ public class RecipeTypeController {
     public ResponseEntity<?> searchByName(@RequestParam String name) {
         List<RecipeType> recipeTypes = service.findByName(name);
         if (recipeTypes.isEmpty()) {
-            return ResponseEntity.status(404).body("No recipe types found with name: " + name);
+            return ResponseEntity.status(404).body(new AppError("No recipe types found with name: " + name));
         }
         return ResponseEntity.ok(recipeTypes);
     }
@@ -72,12 +73,18 @@ public class RecipeTypeController {
     @PostMapping
     public ResponseEntity<?> createRecipeType(@RequestBody RecipeType recipeType) {
         try {
+            List<RecipeType> existingRecipeTypes = service.findByName(recipeType.getName());
+            if (!existingRecipeTypes.isEmpty()) {
+                return ResponseEntity.status(400).body(new AppError("A RecipeType with the same name already exists."));
+            }
+
             RecipeType savedRecipeType = service.save(recipeType);
-            return ResponseEntity.ok("Recipe type created successfully with ID: " + savedRecipeType.getId());
+            return ResponseEntity.ok(new AppError("Recipe type created successfully with ID: " + savedRecipeType.getId()));
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("Failed to create recipe type: " + e.getMessage());
+            return ResponseEntity.status(500).body(new AppError("Failed to create recipe type: " + e.getMessage()));
         }
     }
+
 
     /**
      * Update an existing recipe type.
@@ -92,9 +99,9 @@ public class RecipeTypeController {
                 .map(existingRecipeType -> {
                     existingRecipeType.setName(updatedRecipeType.getName());
                     service.save(existingRecipeType);
-                    return ResponseEntity.ok("Recipe type with ID " + id + " updated successfully.");
+                    return ResponseEntity.ok(new AppError("Recipe type with ID " + id + " updated successfully."));
                 })
-                .orElse(ResponseEntity.status(404).body("Recipe type with ID " + id + " not found."));
+                .orElse(ResponseEntity.status(404).body(new AppError("Recipe type with ID " + id + " not found.")));
     }
 
     /**
@@ -107,8 +114,8 @@ public class RecipeTypeController {
     public ResponseEntity<?> deleteRecipeType(@PathVariable int id) {
         if (service.findById(id).isPresent()) {
             service.deleteById(id);
-            return ResponseEntity.ok("Recipe type with ID " + id + " deleted successfully.");
+            return ResponseEntity.ok(new AppError("Recipe type with ID " + id + " deleted successfully."));
         }
-        return ResponseEntity.status(404).body("Recipe type with ID " + id + " not found. Deletion failed.");
+        return ResponseEntity.status(404).body(new AppError("Recipe type with ID " + id + " not found. Deletion failed."));
     }
 }

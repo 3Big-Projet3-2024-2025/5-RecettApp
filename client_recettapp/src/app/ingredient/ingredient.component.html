@@ -1,0 +1,63 @@
+<div class="container mt-4">
+    <h1 class="text-center text-success mb-4">Add Ingredients</h1>
+  
+    <form  #recipeForm="ngForm">
+
+      <!-- ingredient Search -->
+      <div class="mb-3"> 
+        <label for="ingredientSearch" class="form-label">Search for Ingredients</label>
+        <input   type="text"   id="ingredientSearch"   class="form-control"   [(ngModel)]="searchTerm" name="ingredientSearch"   
+                 (input)="onSearch()"   placeholder="Type an ingredient name..."   autocomplete="off"/>
+        <ul *ngIf="suggestions.length > 0" class="list-group mt-2">
+            <li class="list-group-item list-group-item-action" *ngFor="let suggestion of suggestions"    
+                (click)="fillSearchInput(suggestion)" (dblclick)="fillSearchInput(suggestion)" style="cursor: pointer">  
+              {{ suggestion.alimentName }} ({{ suggestion.alimentSpecifyGroupName }})
+           </li> 
+        </ul>
+      </div>
+
+      <!-- Input for quantity -->
+      <div class="row g-3 align-items-center mt-3">
+        <div class="col-md-6">   
+            <label for="quantity" class="form-label">Quantity</label>   
+            <input type="number" min="1" id="quantity" class="form-control" [(ngModel)]="currentIngredient.quantity" name="quantity"
+                   placeholder="Enter quantity"   [class.is-invalid]="recipeForm.submitted && !quantity.valid"  required  #quantity="ngModel" 
+            />
+            <div *ngIf="recipeForm.submitted && !quantity.valid" class="invalid-feedback">
+              <small *ngIf="quantity.errors?.['required']">quantity is required.</small>
+              <small *ngIf="quantity.errors?.['min']">quantity must be greater than 0.</small>
+            </div>
+        </div> 
+
+        <!-- Input for unit -->
+        <div class="col-md-6">
+            <label for="unit" class="form-label">Unit</label>
+            <input type="text" id="unit" class="form-control" [(ngModel)]="currentIngredient.unit"  name="unit" placeholder="Enter unit (e.g., g, pcs)"
+                [class.is-invalid]="recipeForm.submitted && !unit.valid"   required  #unit="ngModel" 
+            /> 
+            <div *ngIf="recipeForm.submitted && !unit.valid" class="invalid-feedback">
+              <small *ngIf="unit.errors?.['required']">unit is required.</small>
+            </div>
+        </div>
+      </div>
+  
+      <button type="button" class="btn btn-primary mt-3"
+              [disabled]="!currentIngredient.ingredient || !currentIngredient.quantity 
+              || !currentIngredient.unit"  (click)="addIngredient()"> Add Ingredient
+      </button>
+
+    </form>
+    <div class="mt-4">
+        <h3 class="text-success">Ingredients Added</h3>
+        <ul class="list-group">
+          <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let ingredient of recipeComponents">
+            <div>
+              <strong>{{ ingredient.ingredient.alimentName }}</strong> - 
+              {{ ingredient.quantity }} {{ ingredient.unit }}
+            </div>
+            <button class="btn btn-danger btn-sm" (click)="removeIngredient(ingredient)">Remove</button>
+          </li>
+        </ul>
+    </div>
+</div>
+  

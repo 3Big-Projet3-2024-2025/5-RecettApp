@@ -64,4 +64,12 @@ public interface IRecipeComponent {
      * @return the requested {@link RecipeComponent}.
      */
     public RecipeComponent getRecipeComponentById(int id);
+
+    /**
+     * Retrieves a list of recipe components that contain the specified recipe.
+     *
+     * @param recipeId the ID of the recipe for which the components need to be retrieved.
+     * @return a list of {@link RecipeComponent} associated with the specified recipe.
+     */
+    public  List<RecipeComponent> findRecipeComponentsByRecipeId( int recipeId);
 }
