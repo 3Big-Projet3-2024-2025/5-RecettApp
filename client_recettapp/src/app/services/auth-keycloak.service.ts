@@ -57,4 +57,14 @@ export class AuthKeycloakService {
   getToken() {
     return this.keycloakService.getToken();
   }
+
+  /**
+   * Redirects the user to the Keycloak login page.
+   *
+   * <p>This method uses the {@code KeycloakService} to initiate the login process by redirecting the user
+   * to the Keycloak authentication page. This is typically called when the user needs to authenticate.</p>
+   */
+  redirectToLogin() {
+    this.keycloakService.login();
+  }
 }

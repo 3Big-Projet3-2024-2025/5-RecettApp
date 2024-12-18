@@ -29,7 +29,7 @@
       </tr>
     </thead>
     <tbody>
-      <!-- Affichage dynamique avec Angular -->
+
       <tr *ngFor="let user of filteredUsers">
         <td>{{ user.id }}</td>
         <td>{{ user.firstName }}</td>
@@ -42,15 +42,14 @@
           <button class="action-btn delete-btn" (click)="onDelete(user.id)">Supprimer</button>
         </td>
       </tr>
-      <!-- Si la liste est vide -->
+
       <tr *ngIf="filteredUsers.length === 0">
         <td colspan="8" class="no-data">Aucun utilisateur trouvé.</td>
       </tr>
     </tbody>
   </table>
 
-   <!-- Pagination -->
-   <!-- Pagination -->
+
   <div class="pagination-container">
     <button *ngIf="currentPage > 1" class="pagination-btn prev" (click)="onPageChange(currentPage - 1)">Précédent</button>
 
