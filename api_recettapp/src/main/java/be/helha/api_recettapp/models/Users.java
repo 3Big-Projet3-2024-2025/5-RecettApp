@@ -1,4 +1,5 @@
 package be.helha.api_recettapp.models;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -51,6 +52,7 @@ public class Users {
      * This field cannot be null.
      * For security, passwords should be encrypted.
      */
+    @JsonIgnore
     @Column(nullable = false)
     private String password;
 
@@ -76,7 +78,7 @@ public class Users {
      * List of entries (inscriptions) associated with the user.
      * One user can have multiple entries.
      */
-
+    @JsonIgnore
     @OneToMany(mappedBy = "users")
     private List<Entry> registrations;
 
