@@ -92,6 +92,23 @@ class TestCrudUser {
     }
 
     /**
+     * Test for the getUserByEmail method.
+     * Verifies that a user is retrieved correctly if their email exists.
+     */
+    @Test
+    void testGetUserByEmail() {
+        when(userService.findByEmail("abdel@gmail.com")).thenReturn(user);
+
+        ResponseEntity<Users> response = usersController.getUserByEmail("abdel@gmail.com");
+
+        assertNotNull(response);
+        assertEquals("Abdel", response.getBody().getFirstName());
+        assertEquals("abdel@gmail.com", response.getBody().getEmail());
+
+        verify(userService, times(1)).findByEmail("abdel@gmail.com");
+    }
+
+    /**
      * Test for the updateUser method.
      * Verifies that a user is updated correctly if they exist.
      */
@@ -123,5 +140,7 @@ class TestCrudUser {
 
         verify(userService, times(1)).delete(1L);
     }
+
+
 
 }

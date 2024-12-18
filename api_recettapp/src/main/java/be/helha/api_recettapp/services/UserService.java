@@ -12,7 +12,7 @@ import java.util.List;
  * Provides methods for CRUD operations (Create, Read, Update, Delete).
  */
 @Service
-public class UserService {
+public class UserService implements IUserService{
 
     private final UserRepository userRepository;
 
@@ -58,5 +58,10 @@ public class UserService {
     public void delete(Long id) {
         userRepository.deleteById((long) Math.toIntExact(id));
     }
+
+    public Users findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
 
 }
