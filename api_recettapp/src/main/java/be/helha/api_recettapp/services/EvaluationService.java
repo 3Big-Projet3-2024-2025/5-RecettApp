@@ -28,7 +28,10 @@ public class EvaluationService implements IEvaluationService{
 
     @Override
     public void deleteEvaluation(Long id, boolean isAdmin) {
-
+        if (!isAdmin) {
+            throw new SecurityException("Only an administrator can delete a review.");
+        }
+        evaluationRepository.deleteById(id);
     }
 
     @Override

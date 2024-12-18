@@ -63,4 +63,22 @@ public class TestCrudEvaluationService {
         assertEquals(evaluation1, savedEvaluation);
         verify(evaluationRepository, times(1)).save(evaluation1);
     }
+
+    @Test
+    void testDeleteEvaluationAsAdmin() {
+        doNothing().when(evaluationRepository).deleteById(1L);
+
+        assertDoesNotThrow(() -> evaluationService.deleteEvaluation(1L, true));
+        verify(evaluationRepository, times(1)).deleteById(1L);
+    }
+
+    @Test
+    void testDeleteEvaluationAsNonAdmin() {
+        Exception exception = assertThrows(SecurityException.class, () -> {
+            evaluationService.deleteEvaluation(1L, false);
+        });
+
+        assertEquals("Only an administrator can delete a review.", exception.getMessage());
+        verify(evaluationRepository, never()).deleteById(anyLong());
+    }
 }
