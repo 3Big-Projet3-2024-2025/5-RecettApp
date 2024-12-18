@@ -1,6 +1,7 @@
-<div>
+<div class="container">
+    <h1 class="my-5 text-success">Available Contests</h1>
     @for(contest of contests; track contest){
-        <div class="card" style="width: 18rem;">
+        <div class="card mb-3 shadow-sm" style="width: 80vw;">
             <div class="card-body">
               <h5 class="card-title">{{contest.title}}</h5>
               <div>
@@ -9,9 +10,9 @@
                         <p class="card-text">{{contest.category?.description}}</p>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-6"></div>
-                    <div class="col-6">
+                <div class="row justify-content-end">
+                    <div class="col-8"></div>
+                    <div class="col-3 ">
                         <a href="#" class="btn btn-primary">Sign up</a>
                     </div>
                 </div>
