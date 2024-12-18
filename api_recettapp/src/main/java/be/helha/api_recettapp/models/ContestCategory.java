@@ -1,65 +1,62 @@
 package be.helha.api_recettapp.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
-
 /**
- * Classe représentant une catégorie de concours.
- * Cette classe contient les informations de base
- * nécessaires pour définir une catégorie de concours.
- * Elle utilise Lombok pour générer automatiquement
- * les getters, setters, et méthodes utilitaires.
+ * Represents a contest category.
+ * This class contains the basic information
+ * needed to define a contest category.
+ * It uses Lombok to automatically generate
+ * getters, setters, and utility methods.
  */
 @Data
 @Entity
 public class ContestCategory {
 
     /**
-     * Identifiant unique de la catégorie.
+     * Unique identifier for the category.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     /**
-     * Titre de la catégorie.
+     * Title of the category.
+     * Must not be blank and cannot exceed 255 characters.
      */
+    @NotBlank(message = "Title is mandatory.")
+    @Size(max = 255, message = "Title cannot exceed 255 characters.")
     private String title;
 
     /**
-     * Description de la catégorie (facultatif).
-     * Permet de fournir plus de détails sur la catégorie.
+     * Optional description of the category.
+     * Provides additional details about the category.
+     * Cannot exceed 255 characters.
      */
+    @Size(max = 255, message = "Description cannot exceed 255 characters.")
     private String description;
 
     /**
-     * Statut de la catégorie (actif ou inactif).
-     */
-    private boolean status;
-
-    /**
-     * Constructeur sans arguments.
-     * Requis par JPA ou pour créer une instance vide.
+     * No-arguments constructor.
+     * Required by JPA or to create an empty instance.
      */
     public ContestCategory() {
-        // Constructeur par défaut, vide
     }
 
     /**
-     * Constructeur avec tous les arguments.
-     * Permet d'initialiser tous les attributs de la classe.
+     * All-arguments constructor.
+     * Initializes all attributes of the class.
      *
-     * @param id    Identifiant unique de la catégorie.
-     * @param title Titre de la catégorie.
-     * @param description  Description de la catégorie.
-     * @param status  Statut de la catégorie.
+     * @param id          Unique identifier for the category.
+     * @param title       Title of the category.
+     * @param description Description of the category.
      */
-    public ContestCategory(Long id, String title,
-                           String description, boolean status) {
+    public ContestCategory(Long id, String title, String description) {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.status = status;
     }
 }

@@ -1,0 +1,44 @@
+package be.helha.api_recettapp.services;
+
+import be.helha.api_recettapp.models.Entry;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+/**
+ * Interface with all the methods implemented in EntryService
+ */
+public interface IEntryService {
+    /**
+     * Get all the entries
+     * @return @type List<> of entries
+     */
+    public List<Entry> getEntries();
+
+    /**
+     * Get a specific entry
+     * @param id the identifier of the entry
+     * @return @type List<> of contests matching the title
+     */
+    public Entry getEntryById(int id);
+
+    /**
+     * Add an entry
+     * @param entry the entry to add
+     * @return @type Entry the entry added
+     */
+    public Entry addEntry(Entry entry);
+
+    /**
+     * Update an entry
+     * @param entry the entry to update
+     * @return @type Entry updated
+     */
+    public Entry updateEntry(Entry entry);
+
+    /**
+     * Delete an entry
+     * @param id the identifier of the entry to delete
+     */
+    public void deleteEntry(int id);
+}
