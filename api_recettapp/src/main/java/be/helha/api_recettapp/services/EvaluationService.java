@@ -42,4 +42,10 @@ public class EvaluationService implements IEvaluationService{
     public List<Evaluation> getEvaluationsByEntry(Long entryId) {
         return evaluationRepository.findByEntryId(entryId);
     }
+
+    public List<Evaluation> getEvaluationsByRecipe(Long recipeId) {
+        return evaluationRepository.findByRecipeId(recipeId);
+    }
+
+
 }

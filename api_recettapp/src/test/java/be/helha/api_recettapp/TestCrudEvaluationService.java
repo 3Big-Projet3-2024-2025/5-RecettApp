@@ -104,4 +104,16 @@ public class TestCrudEvaluationService {
         assertEquals(2, evaluations.size());
         verify(evaluationRepository, times(1)).findByEntryId(1L);
     }
+
+    @Test
+    void testGetEvaluationsByRecipe() {
+        when(evaluationRepository.findByRecipeId(10L)).thenReturn(Arrays.asList(evaluation1));
+
+        List<Evaluation> evaluations = evaluationService.getEvaluationsByRecipe(10L);
+
+        assertNotNull(evaluations);
+        assertEquals(1, evaluations.size());
+        assertEquals(10L, evaluations.get(0).getRecipe().getId());
+        verify(evaluationRepository, times(1)).findByRecipeId(10L);
+    }
 }
