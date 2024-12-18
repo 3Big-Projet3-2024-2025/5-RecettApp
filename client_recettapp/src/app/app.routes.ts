@@ -16,14 +16,14 @@ import { HomePageComponent } from './pages/home-page/home-page.component';
 export const routes: Routes = [
 
         { path: '', redirectTo: 'home', pathMatch: 'full' },
-        { path: 'recipe', component: RecipeComponent },
-        { path: 'recipe/:id', component: RecipeDetailComponent },
-        { path: 'recipe/add/:idConstest', component: AddRecipeComponent },
-        { path: 'ContestCategory', component: ContestCategoryComponent , canActivate: [KeycloakGuard]},  
-        { path:'RecipeType',component:RecipeTypeComponent},
-        { path: 'users', component : UsersComponent},
-        { path: 'contests', component: ContestTableComponent},
-        { path: 'entries', component: EntriesTableComponent},
+        { path: 'recipe', component: RecipeComponent , canActivate: [KeycloakGuard]},
+        { path: 'recipe/:id', component: RecipeDetailComponent , canActivate: [KeycloakGuard]},
+        { path: 'recipe/add/:idConstest', component: AddRecipeComponent , canActivate: [KeycloakGuard]},
+        { path: 'ContestCategory', component: ContestCategoryComponent , canActivate: [KeycloakGuard]},
+        { path:'RecipeType',component:RecipeTypeComponent , canActivate: [KeycloakGuard]},
+        { path: 'users', component : UsersComponent , canActivate: [KeycloakGuard]},
+        { path: 'contests', component: ContestTableComponent , canActivate: [KeycloakGuard]},
+        { path: 'entries', component: EntriesTableComponent , canActivate: [KeycloakGuard]},
         { path: 'home', component: HomePageComponent}
 
 
