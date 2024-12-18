@@ -14,11 +14,12 @@ import { ContestTableComponent } from './contest-table/contest-table.component';
 import { RecipeTypeComponent } from './recipe-type/recipe-type.component';
 
 import { UsersComponent } from './users/users.component';
+import { HomePageComponent } from './home-page/home-page.component';
 
 
 export const routes: Routes = [
 
-        { path: '', redirectTo: 'Contest', pathMatch: 'full' },
+        { path: '', redirectTo: 'home', pathMatch: 'full' },
         { path: 'recipe', component: RecipeComponent },
         { path: 'recipe/:id', component: RecipeDetailComponent },
         { path: 'recipe/add/:idConstest', component: AddRecipeComponent },
@@ -26,6 +27,7 @@ export const routes: Routes = [
         { path:'RecipeType',component:RecipeTypeComponent},
         { path: 'users', component : UsersComponent},
         { path: 'contests', component: ContestTableComponent},
+        { path: 'home', component: HomePageComponent}
 
 
 ];
