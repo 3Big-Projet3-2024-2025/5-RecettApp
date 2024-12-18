@@ -1,11 +1,11 @@
 <div class="container mt-4">
   <h1 class="text-center text-success mb-4">Recipe List</h1>
-  <div *ngIf="recipes | async as recipeList; else loading">
+  <div *ngIf="recipes; else loading">
       <div class="card-footer bg-light text-center">
         <button class="btn btn-dark" (click)="addRecipe(1)">Add Recipe</button>
       </div>
     <div class="row">
-      <div class="col-md-4 mb-4" *ngFor="let recipe of recipeList">
+      <div class="col-md-4 mb-4" *ngFor="let recipe of recipes">
         <div class="card recipe-card shadow-sm">
           <div (click)="detailRecipe(recipe.id)">
             <div class="recipe-image-container">
@@ -13,8 +13,6 @@
             </div>
             <div class="card-body">
               <h5 class="card-title text-success">{{ recipe.title }}</h5>
-              <p class="card-text"><strong>Description:</strong> {{ recipe.description }}</p>
-              <p class="card-text"><strong>Category:</strong> {{ recipe.category }}</p>
               <p class="card-text"><strong>Preparation Time:</strong> {{ recipe.preparation_time }} minutes</p>
               <p class="card-text"><strong>Servings:</strong> {{ recipe.servings }}</p>
               <p class="card-text"><strong>Difficulty:</strong> {{ recipe.difficulty_level }}</p>

@@ -27,7 +27,7 @@ public interface IIngredientService {
      */
     public List<Ingredient> getIngredients();
     /**
-     * Retrieves a list of all ingredients.
+     * Retrieves a ingredient.
      * @param id the ID of the {@link Ingredient} to get.
      * @return a {@link Ingredient} objects.
      */

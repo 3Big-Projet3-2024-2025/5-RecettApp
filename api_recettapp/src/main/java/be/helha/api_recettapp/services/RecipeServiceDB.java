@@ -17,11 +17,9 @@ public class RecipeServiceDB implements IRecipeService{
     @Autowired
     private RecipeRepository recipeRepository;
     @Autowired
-    private ContestService contestService;
-    @Autowired
-    private ContestCategoryService contestCategoryService;
-    @Autowired
     private ContestRepository contestRepository;
+    @Autowired
+    private ImageDataService imageDataService;
 
     /**
      * Retrieves a paginated list of recipes.
@@ -107,6 +105,7 @@ public class RecipeServiceDB implements IRecipeService{
             throw new NoSuchElementException("Recipe with ID " + id + " not found");
         }
         try {
+            imageDataService.deleteImageData(getRecipeById(id).getPhoto_url());
             recipeRepository.deleteById(id);
         } catch (Exception e) {
             throw new RuntimeException("Error deleting recipe: " + e.getMessage(), e);
