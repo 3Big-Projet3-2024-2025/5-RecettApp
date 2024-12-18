@@ -53,6 +53,18 @@ public class TestCrudEvaluationController {
         evaluation2.setRecipe(recipe);
     }
 
+    @Test
+    void testAddEvaluation() {
+        when(evaluationService.addEvaluation(evaluation1)).thenReturn(evaluation1);
 
-    
+        ResponseEntity<Evaluation> response = evaluationController.addEvaluation(evaluation1);
+
+        assertNotNull(response);
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(evaluation1, response.getBody());
+        verify(evaluationService, times(1)).addEvaluation(evaluation1);
+    }
+
+
+
 }
