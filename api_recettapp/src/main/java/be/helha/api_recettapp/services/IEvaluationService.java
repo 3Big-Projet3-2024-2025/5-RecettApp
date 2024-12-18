@@ -28,4 +28,8 @@ public interface IEvaluationService {
      */
     List<Evaluation> getAllEvaluations();
 
+    List<Evaluation> getEvaluationsByEntry(Long entryId);
+
+    List<Evaluation> getEvaluationsByRecipe(Long recipeId);
+
 }
