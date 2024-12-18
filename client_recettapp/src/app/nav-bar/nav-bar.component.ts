@@ -18,8 +18,11 @@ export class NavBarComponent {
        this.isAuhtentificated = this.authService.isAuthenticated()
   }
 
-  logOut(int : number){
+  logOut(){
     this.authService.logout();
-    console.log("bien loguer")
+  }
+
+  logIn(){
+    this.keycloakService.login()
   }
 }

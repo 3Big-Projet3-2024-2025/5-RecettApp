@@ -1,9 +1,13 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-success">
     <a class="navbar-brand text-white h1 " href="#">Recipe App</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+      <span class="navbar-toggler-icon">
+      </span>
     </button>
+       
+   
     <div class="collapse navbar-collapse justify-content-end " id="navbarNav">
+        
       <ul class="navbar-nav h5">
         <li class="nav-item active">
           <a class="nav-link" href="#">Home</a>
@@ -18,9 +22,10 @@
           <a class="nav-link" href="contests">contests</a>
         </li>
         <li>
-            <button *ngIf="!isAuhtentificated"  class="btn bg-white">log in</button>
-            <button *ngIf="isAuhtentificated" (click)="logOut(1)" class="btn bg-white">log out</button>
+            <button *ngIf="!isAuhtentificated" (click)="logIn()" class="btn bg-white">log in</button>
+            <button *ngIf="isAuhtentificated" (click)="logOut()" class="btn bg-white">log out</button>
         </li>
       </ul>
     </div>
+    
   </nav>

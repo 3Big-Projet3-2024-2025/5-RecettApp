@@ -22,7 +22,7 @@ export class AuthKeycloakService {
         clientId: 'frontend_recettapp'
       },
       initOptions: {
-        onLoad: 'login-required', // To ensure that the user is correctly authenticate
+        onLoad: 'check-sso', // To ensure that the user is correctly authenticate
         checkLoginIframe: false,
         enableLogging: true,
         pkceMethod: 'S256',
