@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 /**
  * Service class for managing {@link RecipeComponent} entities, providing CRUD operations and database interactions.
@@ -136,5 +137,18 @@ public class RecipeComponentServiceDB implements IRecipeComponent {
     public RecipeComponent getRecipeComponentById(int id) {
         return recipeComponentRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("RecipeComponent with id " + id + " not found"));
+    }
+
+    /**
+     * Retrieves a list of recipe components that contain the specified recipe.
+     *
+     * @param recipeId the ID of the recipe for which the components need to be retrieved.
+     * @return a list of {@link RecipeComponent} associated with the specified recipe.
+     */
+    @Override
+    public List<RecipeComponent> findRecipeComponentsByRecipeId(int recipeId) {
+        return this.recipeComponentRepository.findAll().stream()
+                .filter(recipeComponent -> recipeComponent.getRecipe().getId() == recipeId) // Filtrer les composants par recipeId
+                .collect(Collectors.toList());
     }
 }

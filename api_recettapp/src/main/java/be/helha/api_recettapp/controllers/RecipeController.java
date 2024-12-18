@@ -59,6 +59,7 @@ public class RecipeController {
      */
     @PostMapping
     public Recipe addRecipe(@RequestBody Recipe recipe) {
+        recipe.setId(0);
         return recipeService.addRecipe(recipe);
     }
 

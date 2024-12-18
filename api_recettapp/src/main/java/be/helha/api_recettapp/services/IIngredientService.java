@@ -27,7 +27,7 @@ public interface IIngredientService {
      */
     public List<Ingredient> getIngredients();
     /**
-     * Retrieves a list of all ingredients.
+     * Retrieves a ingredient.
      * @param id the ID of the {@link Ingredient} to get.
      * @return a {@link Ingredient} objects.
      */
@@ -56,4 +56,12 @@ public interface IIngredientService {
      *
      */
     public void deleteIngredient(int id);
+
+    /**
+     * Searches ingredients dynamically based on a search term.
+     *
+     * @param searchTerm the term to search for in ingredient names.
+     * @return a list of ingredients matching the search term.
+     */
+    public List<Ingredient> searchIngredients(String searchTerm);
 }
