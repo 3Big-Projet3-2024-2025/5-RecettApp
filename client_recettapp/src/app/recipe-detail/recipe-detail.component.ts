@@ -5,6 +5,7 @@ import { RecipeService } from '../services/recipe_Service/recipe.service';
 import { CommonModule } from '@angular/common';
 import { RecipeComponentService } from '../services/recipe_Service/recipe-component.service';
 import { ImageServiceService } from '../services/image-service.service';
+import { NavBarComponent } from "../nav-bar/nav-bar.component";
 
 @Component({
   selector: 'app-recipe-detail',
