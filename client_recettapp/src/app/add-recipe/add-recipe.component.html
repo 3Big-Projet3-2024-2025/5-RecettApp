@@ -1,68 +1,56 @@
 <div class="container mt-4">
     <h1 class="text-center text-success mb-4">Add a New Recipe</h1>
     <form #recipeForm="ngForm">
-      <div class="form-group mb-3"> 
-        <div class="form-group mb-3">
-          <label for="title" class="form-label">Recipe Title</label>
-          <input type="text" id="title" class="form-control" name="title" [(ngModel)]="recipeToAdd.title" required  minlength="3" placeholder="Enter recipe title" 
-          minlength="3"  [class.is-invalid]="title.invalid && (title.dirty || title.touched)" #title="ngModel"
-          />
-          <div  *ngIf="title.invalid && title.dirty" class="invalid-feedback">
-              <small *ngIf="title.errors?.['required']">Title is required.</small>
-              <small *ngIf="title.errors?.['minlength']">Title must be at least 3 characters long.</small>
-      
-          </div>
-          
-        </div>
-      </div>
-  
+
+      <!-- Input for titel -->
       <div class="form-group mb-3">
-        <label for="description" class="form-label">Description</label>
-        <textarea id="description" class="form-control" name="description" [(ngModel)]="recipeToAdd.description" required rows="3" 
-                  placeholder="Enter recipe description" [class.is-invalid]="recipeForm.submitted && !description.valid" #description="ngModel">
-        </textarea>
-        <div *ngIf="recipeForm.submitted && !description.valid" class="invalid-feedback">
-          Recipe description is required.
-      </div>
-      </div>
-  
-      <div class="form-group mb-3">
-        <label for="category" class="form-label">Category</label>
-        <input required type="text" id="category" class="form-control" name="category" [(ngModel)]="recipeToAdd.category" required placeholder="Enter category (e.g., Dessert, Main Course)"
-               [class.is-invalid]="recipeForm.submitted && !category.valid" #category="ngModel"
+        <label for="title" class="form-label">Recipe Title</label>
+        <input type="text" id="title" class="form-control" name="title" [(ngModel)]="recipeToAdd.title" required  minlength="3" placeholder="Enter recipe title" 
+        minlength="3"  [class.is-invalid]="title.invalid && (title.dirty || title.touched)" #title="ngModel"
         />
-        <div *ngIf="recipeForm.submitted && !category.valid" class="invalid-feedback">
-          Recipe category is required.
-        </div>
-      </div>
-  
-      
-  
-      <div class="form-group mb-3">
-        <label for="difficulty_level" class="form-label">Difficulty Level</label>
-        <select id="difficulty_level" class="form-select" name="difficulty_level" [(ngModel)]="recipeToAdd.difficulty_level" required
-                [class.is-invalid]="recipeForm.submitted && !difficulty_level.valid" #difficulty_level="ngModel"
-        >
-          <option value="" disabled selected>Select difficulty</option>
-          <option value="Easy">Easy</option> 
-          <option value="Medium">Medium</option>
-          <option value="Hard">Hard</option>
-        </select>
-        <div *ngIf="recipeForm.submitted && !difficulty_level.valid" class="invalid-feedback">
-          Difficulty level is required.
-        </div>
-      </div>
-  
-      <div class="form-group mb-3">
-        <label for="instructions" class="form-label">Instructions</label>
-        <textarea id="instructions" class="form-control" name="instructions" [(ngModel)]="recipeToAdd.instructions" required rows="5" placeholder="Enter recipe instructions"
-                  [class.is-invalid]="recipeForm.submitted && !instructions.valid" #instructions="ngModel"
-        ></textarea>
-        <div *ngIf="recipeForm.submitted && !instructions.valid" class="invalid-feedback">
-          Recipe instructions are required.
+        <div  *ngIf="title.invalid && title.dirty" class="invalid-feedback">
+            <small *ngIf="title.errors?.['required']">Title is required.</small>
+            <small *ngIf="title.errors?.['minlength']">Title must be at least 3 characters long.</small>
         </div>
       </div>
 
+      <!-- Input for description -->
+      <div class="form-group mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea id="description" class="form-control" name="description" [(ngModel)]="recipeToAdd.description" required rows="3" minlength="20"
+                  placeholder="Enter recipe description"  [class.is-invalid]="description.invalid && (description.dirty || description.touched)" #description="ngModel">
+        </textarea>
+        <div *ngIf="description.invalid && description.dirty" class="invalid-feedback">
+          <small *ngIf="description.errors?.['required']">Description is required.</small>
+          <small *ngIf="description.errors?.['minlength']">A description must be at least 20 characters long.</small>
+        </div>
+      </div>
+  
+      <!--Input for Category -->
+      <div class="form-group mb-3">
+        <label for="category" class="form-label">Category</label>
+        <input required type="text" id="category" class="form-control" name="category" [(ngModel)]="recipeToAdd.category" required placeholder="Enter category (e.g., Dessert, Main Course)"
+        minlength="3" [class.is-invalid]="category.invalid && (category.dirty || category.touched)" #category="ngModel"
+        />
+        <div *ngIf="category.invalid && category.dirty" class="invalid-feedback">
+          <small *ngIf="category.errors?.['required']">Category is required.</small>
+          <small *ngIf="category.errors?.['minlength']">A category must be at least 3 characters long.</small>
+        </div>
+      </div>
+
+
+
+    <!-- Instructions -->
+    <div class="form-group mb-3">
+      <label for="instructions" class="form-label">Instructions</label>
+      <textarea id="instructions" class="form-control" name="instructions" [(ngModel)]="recipeToAdd.instructions" required rows="5" placeholder="Enter recipe instructions"
+                minlength="20"  [class.is-invalid]="instructions.invalid && (instructions.dirty || instructions.touched)" #instructions="ngModel">
+      </textarea>
+      <div *ngIf="instructions.invalid && instructions.dirty" class="invalid-feedback">
+        <small *ngIf="instructions.errors?.['required']">instructions time is required.</small>
+        <small *ngIf="instructions.errors?.['minlength']">instructions must be at least 20 characters long.</small>
+      </div>
+      
       <div class="row g-3 align-items-center mt-3">
         <!-- Image upload section -->
         <div class="col-md-3">
@@ -81,31 +69,44 @@
             <!-- Preparation Time -->
             <div class="col-md-4 mb-3">
               <label for="preparation_time" class="form-label">Preparation Time (minutes)</label>
-              <input required type="number" id="preparation_time" class="form-control" name="preparation_time" [(ngModel)]="recipeToAdd.preparation_time" placeholder="0" [class.is-invalid]="recipeForm.submitted && !preparation_time.valid" #preparation_time="ngModel" />
-              <div *ngIf="recipeForm.submitted && !preparation_time.valid" class="invalid-feedback">
+                 <input required   type="number"   id="preparation_time"   class="form-control"   name="preparation_time" [(ngModel)]="recipeToAdd.preparation_time"
+                 min="1"  required   placeholder="0"  [class.is-invalid]="preparation_time.invalid && (preparation_time.dirty || preparation_time.touched)" #preparation_time="ngModel"
+         />              <div *ngIf="recipeForm.submitted && !preparation_time.valid" class="invalid-feedback">
                 Preparation time is required.
               </div>
+               <div *ngIf="preparation_time.invalid && preparation_time.dirty" class="invalid-feedback">
+          <small *ngIf="preparation_time.errors?.['required']">Preparation time is required.</small>
+          <small *ngIf="preparation_time.errors?.['min']">Preparation time must be greater than 0.</small>          
+        </div>
+      </div>
             </div>
       
             <!-- Cooking Time -->
             <div class="col-md-4 mb-3">
               <label for="cooking_time" class="form-label">Cooking Time (minutes)</label>
-              <input type="number" id="cooking_time" class="form-control" name="cooking_time" [(ngModel)]="recipeToAdd.cooking_time" placeholder="0" [class.is-invalid]="recipeForm.submitted && !cooking_time.valid" #cooking_time="ngModel" />
-              <div *ngIf="recipeForm.submitted && !cooking_time.valid" class="invalid-feedback">
-                Cooking time is required.
-              </div>
+                 <input type="number"   id="cooking_time"   class="form-control"   name="cooking_time"   [(ngModel)]="recipeToAdd.cooking_time"
+                required min="1"  placeholder="0"  [class.is-invalid]="cooking_time.invalid && (cooking_time.dirty || cooking_time.touched)" #cooking_time="ngModel"
+                 />
+              <div *ngIf="cooking_time.invalid && cooking_time.dirty" class="invalid-feedback">
+                <small *ngIf="cooking_time.errors?.['required']">cooking time is required.</small>
+                <small *ngIf="cooking_time.errors?.['min']">cooking time must be greater than 0.</small>
+             </div>
             </div>
       
             <!-- Servings -->
             <div class="col-md-4 mb-3">
               <label for="servings" class="form-label">Servings</label>
-              <input type="number" id="servings" class="form-control" name="servings" [(ngModel)]="recipeToAdd.servings" placeholder="0" [class.is-invalid]="recipeForm.submitted && !servings.valid" #servings="ngModel" />
-              <div *ngIf="recipeForm.submitted && !servings.valid" class="invalid-feedback">
-                Servings is required.
+              <input type="number"   id="servings"   class="form-control"   name="servings"   [(ngModel)]="recipeToAdd.servings"
+                required  min="1"  placeholder="0"  [class.is-invalid]="servings.invalid && (servings.dirty || servings.touched)" #servings="ngModel"
+               />
+               <div *ngIf="servings.invalid && servings.dirty" class="invalid-feedback">
+                   <small *ngIf="servings.errors?.['required']">servings time is required.</small>
+                   <small *ngIf="servings.errors?.['min']">servings must be greater than 0.</small>
               </div>
             </div>
           </div>
         </div>
+
       </div>
       
       <div>  
