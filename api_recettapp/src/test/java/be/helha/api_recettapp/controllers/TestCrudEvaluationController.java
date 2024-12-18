@@ -117,5 +117,19 @@ public class TestCrudEvaluationController {
         verify(evaluationService, times(1)).getEvaluationsByEntry(1L);
     }
 
+    @Test
+    void testGetEvaluationsByRecipe() {
+        List<Evaluation> evaluations = Arrays.asList(evaluation1);
+
+        when(evaluationService.getEvaluationsByRecipe(10L)).thenReturn(evaluations);
+
+        ResponseEntity<List<Evaluation>> response = evaluationController.getEvaluationsByRecipe(10L);
+
+        assertNotNull(response);
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(evaluations, response.getBody());
+        verify(evaluationService, times(1)).getEvaluationsByRecipe(10L);
+    }
+
 
 }
