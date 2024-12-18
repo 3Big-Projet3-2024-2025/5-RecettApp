@@ -21,12 +21,11 @@ public class EvaluationService implements IEvaluationService{
     @Autowired
     private EvaluationRepository evaluationRepository;
 
-
     /**
-     * Adds a new evaluation to the database.
+     * Adds a new evaluation to the system.
      *
-     * @param evaluation the evaluation to be added
-     * @return the added evaluation
+     * @param evaluation The evaluation entity to save.
+     * @return The saved evaluation.
      */
     @Override
     public Evaluation addEvaluation(Evaluation evaluation) {
@@ -36,11 +35,11 @@ public class EvaluationService implements IEvaluationService{
 
     /**
      * Deletes an evaluation by its ID.
-     * Only administrators are allowed to delete evaluations.
+     * This action is restricted to administrators.
      *
-     * @param id      the ID of the evaluation to delete
-     * @param isAdmin a flag indicating whether the user is an administrator
-     * @throws SecurityException if the user is not an administrator
+     * @param id      The ID of the evaluation to delete.
+     * @param isAdmin A flag indicating whether the user is an administrator.
+     * @throws SecurityException if the user is not an administrator.
      */
     @Override
     public void deleteEvaluation(Long id, boolean isAdmin) {
@@ -50,10 +49,11 @@ public class EvaluationService implements IEvaluationService{
         evaluationRepository.deleteById(id);
     }
 
+
     /**
-     * Retrieves all evaluations from the database.
+     * Retrieves all evaluations in the system.
      *
-     * @return a list of all evaluations
+     * @return A list of all evaluations.
      */
     @Override
     public List<Evaluation> getAllEvaluations() {
@@ -61,14 +61,24 @@ public class EvaluationService implements IEvaluationService{
     }
 
     /**
-     * Saves a user to the database.
-     * Can be used to create a new user or update an existing user.
-     * @param evaluation the user to save
-     * @return the saved user
+     * Retrieves all evaluations linked to a specific entry.
+     *
+     * @param entryId The ID of the entry.
+     * @return A list of evaluations for the specified entry.
      */
-    public Evaluation save(Evaluation evaluation) {
-
-        return evaluationRepository.save(evaluation);
+    public List<Evaluation> getEvaluationsByEntry(Long entryId) {
+        return evaluationRepository.findByEntryId(entryId);
     }
+
+    /**
+     * Retrieves all evaluations linked to a specific recipe.
+     *
+     * @param recipeId The ID of the recipe.
+     * @return A list of evaluations for the specified recipe.
+     */
+    public List<Evaluation> getEvaluationsByRecipe(Long recipeId) {
+        return evaluationRepository.findByRecipeId(recipeId);
+    }
+
 
 }
