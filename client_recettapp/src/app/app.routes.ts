@@ -14,7 +14,7 @@ import { ContestTableComponent } from './contest-table/contest-table.component';
 import { RecipeTypeComponent } from './recipe-type/recipe-type.component';
 
 import { UsersComponent } from './users/users.component';
-import { HomePageComponent } from './home-page/home-page.component';
+import { HomePageComponent } from './pages/home-page/home-page.component';
 
 
 export const routes: Routes = [
