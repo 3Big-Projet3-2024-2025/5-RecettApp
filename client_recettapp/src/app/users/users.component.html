@@ -1,5 +1,9 @@
 <div class="container users-container mt-5">
-  
+  @if(this.err){
+    <div class="alert alert-danger" role="alert">
+      {{this.errMessage}}
+    </div>
+  } 
 
 <!-- Barre de recherche
 <div class="search-container">
