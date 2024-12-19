@@ -1,5 +1,5 @@
-<div class="users-container">
-  <h1 class="title">Liste des utilisateurs</h1>
+<div class="container users-container mt-5">
+  
 
 <!-- Barre de recherche
 <div class="search-container">
@@ -12,26 +12,30 @@
   />
 </div>
 -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="text-success">Users</h1>
+  </div>
 
   <table class="users-table">
 
 
     <thead>
       <tr>
-        <th>ID</th>
-        <th>Prénom</th>
-        <th>Nom</th>
+        <!--<th>ID</th> -->
+        
+        <th>First Name</th>
+        <th>Last Name</th>
         <th>Email</th>
         <th>Status</th>
-        <th>Date d'inscription</th>
-        <th>Téléphone</th>
+        <th>Registration Date</th>
+        <th>Phone</th>
         <th>Actions</th>
       </tr>
     </thead>
     <tbody>
 
       <tr *ngFor="let user of filteredUsers">
-        <td>{{ user.id }}</td>
+        <!-- <td>{{ user.id }}</td> -->
         <td>{{ user.firstName }}</td>
         <td>{{ user.lastName }}</td>
         <td>{{ user.email }}</td>
@@ -39,7 +43,7 @@
         <td>{{ user.date_registration | date: 'dd/MM/yyyy' }}</td>
         <td>{{ user.phone_number }}</td>
         <td>
-          <button class="action-btn delete-btn" (click)="onDelete(user.id)">Supprimer</button>
+          <button class="action-btn delete-btn" (click)="onDelete(user.id)">Delete</button>
         </td>
       </tr>
 
@@ -51,13 +55,13 @@
 
 
   <div class="pagination-container">
-    <button *ngIf="currentPage > 1" class="pagination-btn prev" (click)="onPageChange(currentPage - 1)">Précédent</button>
+    <button *ngIf="currentPage > 1" class="pagination-btn prev" (click)="onPageChange(currentPage - 1)">Previous</button>
 
     <button *ngFor="let page of [].constructor(totalPages); let i = index" class="pagination-btn"
       (click)="onPageChange(i + 1)" [class.active]="currentPage === (i + 1)">
       {{ i + 1 }}
     </button>
 
-    <button *ngIf="currentPage < totalPages" class="pagination-btn next" (click)="onPageChange(currentPage + 1)">Suivant</button>
+    <button *ngIf="currentPage < totalPages" class="pagination-btn next" (click)="onPageChange(currentPage + 1)">Next</button>
   </div>
 </div>
