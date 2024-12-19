@@ -9,7 +9,7 @@ import { RecipeTypeComponent } from './recipe-type/recipe-type.component';
 import { UsersComponent } from './users/users.component';
 import { EntriesTableComponent } from './entries-table/entries-table.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
-
+import { AvailableContestComponent } from './available-contest/available-contest.component';
 
 
 
@@ -24,6 +24,7 @@ export const routes: Routes = [
         { path: 'users', component : UsersComponent , canActivate: [KeycloakGuard]},
         { path: 'contests', component: ContestTableComponent , canActivate: [KeycloakGuard]},
         { path: 'entries', component: EntriesTableComponent , canActivate: [KeycloakGuard]},
+        { path: 'available-contests', component: AvailableContestComponent, canActivate: [KeycloakGuard]},
         { path: 'home', component: HomePageComponent}
 
 
