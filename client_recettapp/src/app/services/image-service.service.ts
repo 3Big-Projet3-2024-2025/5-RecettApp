@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MultiplyArray } from 'socket.io/dist/typed-events';
-import { ImageData } from '../models/image-data';
+import { Recipe } from '../models/recipe';
 
 @Injectable({
   providedIn: 'root'
@@ -16,12 +16,17 @@ export class ImageServiceService {
   /**
    * Uploads an image to the server.
    * @param image - The image file to upload.
-   * @returns An Observable of the server response.
-   */
-  addImage(image: ImageData): Observable<string> {
-    return this.http.post<string>(this.Url, image);
+    * @param recipe the  Recipe associated with the image
+    * @return {@code boolean}
+    */
+  addImage(image: File, recipeToAdd: Recipe): Observable<string> {
+    const formData = new FormData();
+    formData.append('image', image);
+    formData.append('recipe', String(recipeToAdd.id));
+  
+    return this.http.post<string>(this.Url, formData);
   }
-
+  
   getImage(fileName: string): Observable<Blob> {
     return this.http.get(`${this.Url}/${fileName}`, { responseType: 'blob' });
   }
