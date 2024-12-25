@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.awt.*;
 import java.util.Collection;
 import java.util.List;
 /**
@@ -116,7 +117,12 @@ public class Recipe {
     @JsonIgnore
     private List<RecipeComponent> components;
 
-
+    /**
+     * List of images associated with the recipe.
+     * Mapped by the "recipe" field in the {@link ImageData} class.
+     */
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
+    private List<ImageData> images;
 
 
 }
