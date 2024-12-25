@@ -19,7 +19,7 @@ public interface IImageDataService {
      * @param file the {@link ImageData} object to add.
      * @return {@code boolean}
      */
-    public boolean  addImageData(MultipartFile file) throws IOException;
+    public boolean  addImageData(ImageData file) throws IOException;
 
     /**
      * Retrieves an image.
