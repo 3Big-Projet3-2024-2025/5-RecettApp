@@ -45,7 +45,7 @@ public class RecipeComponent {
      */
 
     /**
-     * One-to-Many relationship with ingredients.
+     * Many-to-One relationship with ingredients.
      * A RecipeComponent can have multiple Ingredients.
      */
     @ManyToOne

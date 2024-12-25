@@ -42,4 +42,11 @@ public class ImageData {
     @Column(name = "imagedata",length = 1000)
     private byte[] imageData;
 
+    /**
+     * Represents the recipe associated with this image.
+     */
+    @ManyToOne
+    @JoinColumn(name = "id_recipe", nullable = false)
+    private Recipe recipe;
+
 }
