@@ -122,6 +122,7 @@ public class Recipe {
      * Mapped by the "recipe" field in the {@link ImageData} class.
      */
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<ImageData> images;
 
 
