@@ -25,7 +25,7 @@ public class ImageDataService implements  IImageDataService{
      *
      * @param file the {@link ImageData} object to add.
      * @return {@code boolean}
-
+**/
     @Override
     public boolean addImageData(MultipartFile file) throws IOException {
         if (file.isEmpty()) {
@@ -44,24 +44,7 @@ public class ImageDataService implements  IImageDataService{
                 .build());
         return imageData.getId() != null;
     }
-*/
 
-
-    /**
-     * Adds a new image to the system.
-     *
-     * @param file the {@link ImageData} object to add.
-     * @return {@code boolean}
-     */
-    @Override
-    public boolean addImageData(ImageData file) throws IOException {
-        try {
-            this.imageDataRepository.save(file);
-            return true;
-        }catch (Exception e) {
-            throw new IOException(e.getMessage());
-        }
-    }
 
     /**
      * Retrieves an image.

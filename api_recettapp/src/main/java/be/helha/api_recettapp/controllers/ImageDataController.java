@@ -32,24 +32,10 @@ public class ImageDataController {
      * @param image the image file to upload, provided as a {@link MultipartFile}.
      * @return a {@link ResponseEntity} indicating the success or failure of the upload operation.
      * @throws IOException if an error occurs during file processing.
-
+     */
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> addImage(@RequestParam("image") MultipartFile image ) throws IOException {
         boolean uploadImage = imageDataService.addImageData(image);
-        if (!uploadImage) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }
-        return ResponseEntity.status(HttpStatus.OK)
-                .build();
-    }
-*/
-    /**
-     * Uploads a new image to the server.
-     * */
-    @PostMapping
-    public ResponseEntity<?> saveImageData(@RequestBody ImageData imageData) throws IOException {
-        imageData.setId(0l);
-        boolean uploadImage = imageDataService.addImageData(imageData);
         if (!uploadImage) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
