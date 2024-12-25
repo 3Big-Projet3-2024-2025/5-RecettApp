@@ -22,6 +22,7 @@ export class AddRecipeComponent {
 
   constructor(private route: ActivatedRoute,private recipeService: RecipeService, private componentService: RecipeComponentService,
               private router: Router,private imService: ImageServiceService){}
+              
   ngOnInit(): void {
     const contestId = this.route.snapshot.paramMap.get('idConstest');
     if (contestId != null) {
@@ -66,20 +67,7 @@ export class AddRecipeComponent {
         this.recipeService.addRecipe(this.recipeToAdd).subscribe(
           {
             next: (value: Recipe) => {
-              this.recipeToAdd.id = value.id; // Recovery of the recipe updated with its new id
-              this.addRecipeComponent();
-              console.log("try to add the image")
-              if(this.imageFile){ //added image
-                this.imService.addImage(this.creatImageData()).subscribe( // add image before the recipe
-                  { next: () =>{
-                    this.router.navigate(['/recipe', value.id]);
-                  },
-                    error: (err) => {
-                      console.log(err)
-                    }
-                  })
-                }
-              
+              this.addImage(value);
             },
             error: (err) => {
               console.log(err)
@@ -89,26 +77,34 @@ export class AddRecipeComponent {
       } 
   }
   
-  creatImageData():any{
+  creatImageData(){
     if (this.imageFile) {
       const newFileName = `${this.recipeToAdd.title.replace(/[\s:]+/g, '_')}_${Date.now()}.${this.imageFile.type.split('/')[1]}`;
       this.recipeToAdd.photo_url= newFileName;
-      let image: ImageData ={
-        id: 0,
-        name: newFileName,
-        type: '',
-        imageData: '',
-        recipe: this.recipeToAdd
-      }
-      return image
+
+      // Set the new file
+      this.imageFile = new File([this.imageFile], newFileName, { type: this.imageFile.type });
+      ;
     }
   }
   onRecipeComponentsChange(components: any[]) {
     this.recipeToAdd.components = components;
   }
 
-  addImage(){
-   
+  addImage(recipe: Recipe){
+    this.recipeToAdd.id = recipe.id; // Recovery of the recipe updated with its new id
+    this.addRecipeComponent();
+    console.log("try to add the image")
+    if(this.imageFile){ //added image
+      this.imService.addImage(this.imageFile,this.recipeToAdd).subscribe( // add image before the recipe
+        { next: () =>{
+          this.router.navigate(['/recipe', recipe.id]);
+        },
+          error: (err) => {
+            console.log(err)
+          }
+        })
+      }
   }
   addRecipeComponent(){
     this.recipeToAdd.components.forEach(element => {
