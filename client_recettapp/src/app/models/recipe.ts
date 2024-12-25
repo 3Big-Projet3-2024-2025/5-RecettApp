@@ -17,4 +17,5 @@ export interface Recipe {
     recipe_type?: RecipeType; 
     contest?: Contest; 
     components: RecipeComponent[];
+    image: ImageData[];
 }
