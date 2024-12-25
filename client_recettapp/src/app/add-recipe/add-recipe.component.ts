@@ -9,6 +9,7 @@ import { IngredientComponent } from "../ingredient/ingredient.component";
 import { RecipeComponentService } from '../services/recipe_Service/recipe-component.service';
 import { RecipeComponent } from '../models/recipe-component';
 import { ImageServiceService } from '../services/image-service.service';
+import { ImageData } from '../models/image-data';
 
 @Component({
   selector: 'app-add-recipe',
@@ -58,18 +59,18 @@ export class AddRecipeComponent {
 
   onSubmit(): void {
     if (this.checkValidRecipeToAdd(this.recipeToAdd)) {
-      this.creatImageName();
+      
       if (this.imageFile) {
-      this.recipeToAdd.photo_url = this.imageFile.name
+        this.creatImageData()
       }
         this.recipeService.addRecipe(this.recipeToAdd).subscribe(
           {
             next: (value: Recipe) => {
               this.recipeToAdd.id = value.id; // Recovery of the recipe updated with its new id
               this.addRecipeComponent();
-              
+              console.log("try to add the image")
               if(this.imageFile){ //added image
-                this.imService.addImage(this.imageFile).subscribe( // add image before the recipe
+                this.imService.addImage(this.creatImageData()).subscribe( // add image before the recipe
                   { next: () =>{
                     this.router.navigate(['/recipe', value.id]);
                   },
@@ -81,22 +82,25 @@ export class AddRecipeComponent {
               
             },
             error: (err) => {
-              console.log(err.error.message)
+              console.log(err)
             },
           }
         )//console.log(this.recipeToAdd)
       } 
   }
   
-  creatImageName(){
+  creatImageData():any{
     if (this.imageFile) {
       const newFileName = `${this.recipeToAdd.title.replace(/[\s:]+/g, '_')}_${Date.now()}.${this.imageFile.type.split('/')[1]}`;
-
-      // Create a new File object with the modified name
-      const modifiedFile = new File([this.imageFile], newFileName, { type: this.imageFile.type });
-  
-      // Set the new file
-      this.imageFile = modifiedFile;
+      this.recipeToAdd.photo_url= newFileName;
+      let image: ImageData ={
+        id: 0,
+        name: newFileName,
+        type: '',
+        imageData: '',
+        recipe: this.recipeToAdd
+      }
+      return image
     }
   }
   onRecipeComponentsChange(components: any[]) {
