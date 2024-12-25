@@ -38,7 +38,7 @@ export class AddRecipeComponent {
   imageError: string | null = null;
   previewImage = "./assets/No_Image.png";
   recipeToAdd: Recipe = {
-    id: 0, 
+    id: 0,
     title: '',
     description: '',
     category: '',
@@ -51,7 +51,8 @@ export class AddRecipeComponent {
     photo_url: '',
     contest: undefined,
     components: [],
-    recipe_type: undefined
+    recipe_type: undefined,
+    image: []
   };
   recipeComponentError = "";
 
