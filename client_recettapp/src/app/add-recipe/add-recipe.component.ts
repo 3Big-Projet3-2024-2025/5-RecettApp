@@ -4,12 +4,12 @@ import { Recipe } from '../models/recipe';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RecipeService } from '../services/recipe_Service/recipe.service';
-import { Contest } from '../models/contest';
 import { IngredientComponent } from "../ingredient/ingredient.component";
 import { RecipeComponentService } from '../services/recipe_Service/recipe-component.service';
 import { RecipeComponent } from '../models/recipe-component';
 import { ImageServiceService } from '../services/image-service.service';
-import { ImageData } from '../models/image-data';
+import { Entry } from '../models/entry';
+
 
 @Component({
   selector: 'app-add-recipe',
@@ -24,17 +24,14 @@ export class AddRecipeComponent {
               private router: Router,private imService: ImageServiceService){}
               
   ngOnInit(): void {
-    const contestId = this.route.snapshot.paramMap.get('idConstest');
-    if (contestId != null) {
-      this.contestRecupe.id = +contestId
-      this.recipeToAdd.contest =  this.contestRecupe
+    const entryId = this.route.snapshot.paramMap.get('idEntry');
+    if (entryId != null) {
+      this.entryRecupe.id = +entryId
+      this.recipeToAdd.entry =  this.entryRecupe
     }
   }
 
-  contestRecupe : Contest = {
-    title: '',
-    max_participants: 0,
-    status: ''
+  entryRecupe : Entry = {
   }
   imageFile: File | null = null; 
   imageError: string | null = null;
@@ -51,7 +48,7 @@ export class AddRecipeComponent {
     instructions: '',
     approved: false,
     photo_url: '',
-    contest: undefined,
+    entry: undefined,
     components: [],
     recipe_type: undefined,
     image: []
@@ -70,7 +67,7 @@ export class AddRecipeComponent {
               this.addImage(value);
             },
             error: (err) => {
-              console.log(err)
+              console.log(err.error.message)
             },
           }
         )//console.log(this.recipeToAdd)
