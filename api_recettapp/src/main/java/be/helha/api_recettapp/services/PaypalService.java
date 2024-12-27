@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -98,16 +99,16 @@ public class PaypalService {
         transaction.put("amount", amount);
         transaction.put("description", "Recipe contest");
 
-        paymentData.put("transactions", new Map[]{transaction});
+        paymentData.put("transactions", List.of(transaction));
 
         Map<String, String> redirectUrls = new HashMap<>();
         redirectUrls.put("cancel_url", cancelUrl);
         redirectUrls.put("return_url", successUrl);
         paymentData.put("redirect_urls", redirectUrls);
 
-        Map<String, String> pay = new HashMap<>();
-        pay.put("payment_method", "paypal");
-        paymentData.put("pay", pay);
+        Map<String, String> payer = new HashMap<>();
+        payer.put("payment_method", "paypal");
+        paymentData.put("payer", payer);
 
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(paymentData, headers);
 
