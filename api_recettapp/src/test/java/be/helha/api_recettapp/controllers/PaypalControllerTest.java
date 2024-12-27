@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -33,10 +35,12 @@ public class PaypalControllerTest {
                 .thenReturn(redirectUrl);
 
         // Call the controller method
-        String actualUrl = paypalController.pay(total);
+        ResponseEntity<Void> response = paypalController.pay(total);
 
         // Verify and assert
-        assertEquals(redirectUrl, actualUrl);
+        assertEquals(HttpStatus.FOUND, response.getStatusCode());
+        assertNotNull(response.getHeaders().getLocation());
+        assertEquals(redirectUrl, response.getHeaders().getLocation().toString());
         verify(paypalService, times(1)).createPayment(eq(total), eq("USD"), anyString(), anyString());
     }
 }

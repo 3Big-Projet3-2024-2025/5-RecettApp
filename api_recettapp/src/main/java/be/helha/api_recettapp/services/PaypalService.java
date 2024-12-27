@@ -6,8 +6,11 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -91,8 +94,11 @@ public class PaypalService {
         Map<String, Object> paymentData = new HashMap<>();
         paymentData.put("intent", "sale");
 
+        DecimalFormat df = new DecimalFormat("0.00", DecimalFormatSymbols.getInstance(Locale.US));
+        String formattedTotal = df.format(total);
+
         Map<String, String> amount = new HashMap<>();
-        amount.put("total", String.format("%.2f", total));
+        amount.put("total", formattedTotal);
         amount.put("currency", currency);
 
         Map<String, Object> transaction = new HashMap<>();
