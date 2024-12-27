@@ -47,6 +47,7 @@ public class PaypalConfig {
      *
      * @return The PayPal client ID.
      */
+    @Bean
     public String getClientId() {
         return clientId;
     }
@@ -56,6 +57,7 @@ public class PaypalConfig {
      *
      * @return The PayPal client secret.
      */
+    @Bean
     public String getClientSecret() {
         return clientSecret;
     }
@@ -65,6 +67,7 @@ public class PaypalConfig {
      *
      * @return The PayPal API base URL.
      */
+    @Bean
     public String getApiUrl() {
         return apiUrl;
     }
