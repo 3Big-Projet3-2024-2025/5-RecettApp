@@ -90,10 +90,10 @@ public class Recipe {
     private String photo_url;
 
     /**
-     * Indicates whether the recipe has been approved for publishing.
+     * Indicates whether the recipe is public or not.
      */
     @Column(nullable = false)
-    private boolean approved;
+    private boolean masked;
 
     /**
      * Identifier for the type of recipe.
@@ -102,11 +102,11 @@ public class Recipe {
     private RecipeType recipe_type;
 
     /**
-     * Identifier indicating whether the recipe is part of a contest.
+     * Identifier indicating whether the recipe is part of a entry.
      */
     @ManyToOne
-    @JoinColumn(name = "contest_id", nullable = false)
-    private Contest contest;
+    @JoinColumn(name = "entry_id", nullable = false)
+    private Entry entry;
 
     /**
      * List of components (ingredients) used in the recipe.
