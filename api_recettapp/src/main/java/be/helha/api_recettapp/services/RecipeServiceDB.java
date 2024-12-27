@@ -61,10 +61,14 @@ public class RecipeServiceDB implements IRecipeService{
     public Recipe addRecipe(Recipe recipe) {
 
         try {
-            if (recipe.getContest() == null) throw new RuntimeException("Contest is mandatory and cannot be null.");
-            int idContest = recipe.getContest().getId();
-            if (contestRepository.findById(idContest).isEmpty()) {
-                throw new RuntimeException("Contest with ID " + idContest + " does not exist.");
+            if (recipe.getEntry() == null) throw new RuntimeException("Entry is mandatory and cannot be null.");
+            int idEntry = recipe.getEntry().getId();
+            try {
+                if (contestRepository.findById(idEntry).isEmpty()) {
+                    throw new RuntimeException("Entry with ID " + idEntry + " does not exist.");
+                }
+            }catch (NoSuchElementException e) {
+                throw new NoSuchElementException("Entry with ID " + idEntry + " does not exist.");
             }
             return recipeRepository.save(recipe);
         } catch (Exception e) {
