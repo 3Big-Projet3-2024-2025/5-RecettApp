@@ -18,3 +18,9 @@
   overflow: hidden; /* Hide overflow for smooth zoom effect */
   border-radius: 8px 8px 0 0;
 }
+
+.icon-plus {
+  font-size: larger;
+  font-weight: bold;
+  
+}

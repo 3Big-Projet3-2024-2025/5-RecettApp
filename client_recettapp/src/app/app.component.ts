@@ -5,12 +5,13 @@ import { ContestCategoryComponent } from './contest-category/contest-category.co
 import { RecipeTypeComponent } from './recipe-type/recipe-type.component';
 
 import { UsersComponent } from './users/users.component';
+import { NavBarComponent } from "./nav-bar/nav-bar.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
 
-  imports: [RouterOutlet,ContestCategoryComponent,RecipeTypeComponent,UsersComponent],
+  imports: [RouterOutlet, NavBarComponent],
 
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'

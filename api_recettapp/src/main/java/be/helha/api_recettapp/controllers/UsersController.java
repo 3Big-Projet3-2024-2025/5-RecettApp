@@ -95,4 +95,20 @@ public class UsersController {
         userService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    /**
+     * Retrieves a user by their email.
+     *
+     * @param email the email of the user to retrieve
+     * @return a ResponseEntity containing the user if found, or a 404 (Not Found) status if the user does not exist
+     */
+    @GetMapping("/email/{email}")
+    public ResponseEntity<Users> getUserByEmail(@PathVariable String email) {
+        Users user = userService.findByEmail(email);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(user);
+    }
+
 }

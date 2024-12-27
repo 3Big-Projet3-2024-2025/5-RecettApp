@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UsersService } from '../Services/users.service';
+import { UsersService } from '../services/users.service';
 import { CommonModule } from '@angular/common';
 import { User } from '../models/users';
 import { FormsModule } from '@angular/forms';
@@ -18,6 +18,10 @@ export class UsersComponent implements OnInit {
   currentPage: number = 1;
   pageSize: number = 5;
   totalUsers: number = 0;
+  searchEmail: string = '';
+  searchedUser: User | null = null;
+  errMessage: String = "";
+  err: boolean = false;
 
   constructor(private usersService: UsersService) {}
 
@@ -34,7 +38,7 @@ export class UsersComponent implements OnInit {
         this.paginateUsers();
       },
       (error: any) => {
-        console.error('Erreur lors du chargement des utilisateurs :', error);
+        console.error('Error loading users :', error);
       }
     );
   }
@@ -54,7 +58,6 @@ export class UsersComponent implements OnInit {
     return Math.ceil(this.totalUsers / this.pageSize);
   }
 
- // Fonction de recherche dynamique
  onSearch(): void {
   if (this.searchTerm.trim()) {
     this.filteredUsers = this.users.filter(user =>
@@ -69,12 +72,34 @@ export class UsersComponent implements OnInit {
   this.paginateUsers();
 }
 
+onSearchByEmail(): void {
+  if (this.searchEmail.trim()) {
+    this.usersService.findByEmail(this.searchEmail).subscribe(
+      (user: User) => {
+        this.searchedUser = user;
+      },
+      (error: any) => {
+        console.error('User not found or search error :', error);
+        this.searchedUser = null;
+      }
+    );
+  }
+}
+
 
   onDelete(id: number): void {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
-      this.usersService.delete(id).subscribe(() => {
-        this.loadUsers(); // Recharger la liste après suppression
-      });
+    if (confirm('Are you sure you want to delete this user?')) {
+      const sub = this.usersService.delete(id).subscribe(({
+        next: () => {
+          this.err = false;
+          this.loadUsers();
+        }, error: (err) => {
+          this.err = true;
+          this.errMessage = `Error during the process : ${err.error.error}`;
+          console.log(this.errMessage);
+        }
+        
+      }));
     }
   }
 

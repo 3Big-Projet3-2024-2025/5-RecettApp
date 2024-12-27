@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ContestCategory } from '../models/contest-category';
 import { ContestCategoryService } from '../services/contest-category.service';
 import { CommonModule } from '@angular/common';
+import { NavBarComponent } from "../nav-bar/nav-bar.component";
 
 @Component({
   selector: 'app-contest-category',
