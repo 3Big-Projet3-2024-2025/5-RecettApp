@@ -12,8 +12,16 @@ export class EvaluationService {
   private baseUrl = 'http://localhost:8080/api/evaluations';
   constructor(private http: HttpClient) { }
 
-   getAllEvaluations(): Observable<Evaluation[]> {
+  getAllEvaluations(): Observable<Evaluation[]> {
     return this.http.get<Evaluation[]>(this.baseUrl);
+  }
+
+  getEvaluationsByEntry(entryId: number): Observable<Evaluation[]> {
+    return this.http.get<Evaluation[]>(`${this.baseUrl}/entry/${entryId}`);
+  }
+
+  getEvaluationsByRecipe(recipeId: number): Observable<Evaluation[]> {
+    return this.http.get<Evaluation[]>(`${this.baseUrl}/recipe/${recipeId}`);
   }
 
   addEvaluation(evaluation: Evaluation): Observable<Evaluation> {
