@@ -11,6 +11,9 @@ import { ImageServiceService } from '../services/image-service.service';
 import { Entry } from '../models/entry';
 import { KeycloakService } from 'keycloak-angular';
 import { EntriesService } from '../services/entries.service';
+import { User } from '../models/users';
+import { UsersService } from '../services/users.service';
+import {jwtDecode} from 'jwt-decode';
 
 
 @Component({
@@ -23,26 +26,17 @@ import { EntriesService } from '../services/entries.service';
 export class AddRecipeComponent {
 
   constructor(private route: ActivatedRoute,private recipeService: RecipeService, private componentService: RecipeComponentService,
-              private router: Router,private imService: ImageServiceService,private userService: KeycloakService,private entryService: EntriesService){}
-              
-  ngOnInit(): void {
-    const entryId = this.route.snapshot.paramMap.get('idEntry');
-    if (entryId != null) {
-      this.entryService.getEntry(+entryId).subscribe({
-        next: (entry) => {
-          this.recipeToAdd.entry = entry;
-        },
-        error: (error) => {
-            console.log(error.error.message);
-            this.router.navigate(['/recipe'])
-        }
-      });
-    }
-  }
-
+              private router: Router,private imService: ImageServiceService,private authService: KeycloakService,private entryService: EntriesService,
+              private userService: UsersService){}
+      
+  //Init image variables
   imageFile: File | null = null; 
   imageError: string | null = null;
+
+  // Default preview image when no image is uploaded
   previewImage = "./assets/No_Image.png";
+
+  // Object representing the recipe being created or added
   recipeToAdd: Recipe = {
     id: 0,
     title: '',
@@ -61,7 +55,55 @@ export class AddRecipeComponent {
     image: []
   };
   recipeComponentError = "";
+            
+  ngOnInit(): void {
+    const entryId = this.route.snapshot.paramMap.get('idEntry');
+    if (entryId != null) {
+      this.entryService.getEntry(+entryId).subscribe({
+        next: (entry) => {
+          this.recipeToAdd.entry = entry;
+          if (entry.users) {
+            this.checkUserIdentity(entry.users);
+          }else{
+            console.log("User in entry can't be null");
+            this.router.navigate(['/recipe']);
+          }
+        },
+        error: (error) => {
+            console.log(error.error.message);
+            this.router.navigate(['/recipe']);
+        }
+      });
+    }
+  }
 
+  async checkUserIdentity(user: User) {
+    try {
+      const token = await this.authService.getToken();
+      const decodedToken: any = jwtDecode(token);
+  
+      // Ensure the necessary fields exist in the decoded token
+      if (!decodedToken || !decodedToken.email || !decodedToken.given_name || !decodedToken.family_name) {
+        console.log("Invalid token structure. Missing necessary user information.");
+        return;
+      }
+
+      // Check if the user from the entry matches the authenticated user
+      const isAuthorized =
+        user.email === decodedToken.email &&
+        user.firstName === decodedToken.given_name &&
+        user.lastName === decodedToken.family_name;
+      if (!isAuthorized) {
+        console.log("You do not have access to this contest.");
+        this.router.navigate(['/recipe']); 
+      }
+
+    } catch (error) {
+      console.error("Error decoding the token:", error);
+      this.router.navigate(['/recipe']); 
+    }
+  }
+  
   onSubmit(): void {
     if (this.checkValidRecipeToAdd(this.recipeToAdd)) {
      
@@ -98,7 +140,7 @@ export class AddRecipeComponent {
   addImage(recipe: Recipe){
     this.recipeToAdd.id = recipe.id; // Recovery of the recipe updated with its new id
     this.addRecipeComponent();
-    console.log("try to add the image")
+
     if(this.imageFile){ //added image
       this.imService.addImage(this.imageFile,this.recipeToAdd).subscribe( // add image before the recipe
         { next: () =>{
