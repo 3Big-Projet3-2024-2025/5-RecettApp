@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RecipeService } from '../services/recipe_Service/recipe.service';
 import { Recipe } from '../models/recipe';
-import { forkJoin, map } from 'rxjs';
+import { forkJoin, map, of } from 'rxjs';
 import { FormsModule} from '@angular/forms';
 import { CommonModule} from '@angular/common';
 import { Router } from '@angular/router';
@@ -71,8 +71,5 @@ export class RecipeComponent {
     }
   }
 
-}
-function of(recipe: Recipe): any {
-  throw new Error('Function not implemented.');
 }
 
