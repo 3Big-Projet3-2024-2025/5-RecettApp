@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ContestService } from '../services/contest.service';
 import { Contest } from '../models/contest';
+import { KeycloakService } from 'keycloak-angular';
 
 @Component({
   selector: 'app-available-contest',
@@ -17,10 +18,14 @@ export class AvailableContestComponent {
     return { title: "", max_participants: 0, start_date: "", end_date: "", status: "" };
   }
 
-  constructor(private contestService: ContestService) {}
+  constructor(
+    private contestService: ContestService,
+    private keycloakService : KeycloakService
+  ) {}
 
   ngOnInit(): void {
     this.getAllContests();
+    //console.log(this.keycloakService.getToken());
   }
 
   getAllContests(): void {
@@ -39,3 +44,5 @@ export class AvailableContestComponent {
 
   
 }
+
+
