@@ -9,6 +9,8 @@ import { RecipeComponentService } from '../services/recipe_Service/recipe-compon
 import { RecipeComponent } from '../models/recipe-component';
 import { ImageServiceService } from '../services/image-service.service';
 import { Entry } from '../models/entry';
+import { KeycloakService } from 'keycloak-angular';
+import { EntriesService } from '../services/entries.service';
 
 
 @Component({
@@ -21,18 +23,23 @@ import { Entry } from '../models/entry';
 export class AddRecipeComponent {
 
   constructor(private route: ActivatedRoute,private recipeService: RecipeService, private componentService: RecipeComponentService,
-              private router: Router,private imService: ImageServiceService){}
+              private router: Router,private imService: ImageServiceService,private userService: KeycloakService,private entryService: EntriesService){}
               
   ngOnInit(): void {
     const entryId = this.route.snapshot.paramMap.get('idEntry');
     if (entryId != null) {
-      this.entryRecupe.id = +entryId
-      this.recipeToAdd.entry =  this.entryRecupe
+      this.entryService.getEntry(+entryId).subscribe({
+        next: (entry) => {
+          this.recipeToAdd.entry = entry;
+        },
+        error: (error) => {
+            console.log(error.error.message);
+            this.router.navigate(['/recipe'])
+        }
+      });
     }
   }
 
-  entryRecupe : Entry = {
-  }
   imageFile: File | null = null; 
   imageError: string | null = null;
   previewImage = "./assets/No_Image.png";
@@ -57,7 +64,7 @@ export class AddRecipeComponent {
 
   onSubmit(): void {
     if (this.checkValidRecipeToAdd(this.recipeToAdd)) {
-      
+     
       if (this.imageFile) {
         this.creatImageData()
       }
@@ -73,7 +80,7 @@ export class AddRecipeComponent {
         )//console.log(this.recipeToAdd)
       } 
   }
-  
+
   creatImageData(){
     if (this.imageFile) {
       const newFileName = `${this.recipeToAdd.title.replace(/[\s:]+/g, '_')}_${Date.now()}.${this.imageFile.type.split('/')[1]}`;
