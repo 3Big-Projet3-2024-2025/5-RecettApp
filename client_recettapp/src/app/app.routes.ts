@@ -16,14 +16,6 @@ import { EvaluationComponent } from './evaluation/evaluation.component';
 
 export const routes: Routes = [
 
-<<<<<<< HEAD
-        { path: '', redirectTo: 'Contest', pathMatch: 'full' },
-        { path: 'ContestCategory', component: ContestCategoryComponent , canActivate: [KeycloakGuard]},
-        { path:'RecipeType',component:RecipeTypeComponent},
-        { path: 'users', component : UsersComponent},
-        { path: 'contests', component: ContestTableComponent},
-        {path : 'evaluation' , component: EvaluationComponent}
-=======
         { path: '', redirectTo: 'home', pathMatch: 'full' },
         { path: 'recipe', component: RecipeComponent },
         { path: 'recipe/:id', component: RecipeDetailComponent },
@@ -33,8 +25,7 @@ export const routes: Routes = [
         { path: 'users', component : UsersComponent},
         { path: 'contests', component: ContestTableComponent},
         { path: 'entries', component: EntriesTableComponent},
-        { path: 'home', component: HomePageComponent}
-
->>>>>>> develop
+        { path: 'home', component: HomePageComponent},
+        {path : 'evaluation' , component: EvaluationComponent}
 
 ];
