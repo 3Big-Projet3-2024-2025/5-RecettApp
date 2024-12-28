@@ -198,9 +198,14 @@ export class AddRecipeComponent {
     if (input && input.files && input.files.length > 0) {
       const file: File = input.files[0];
       const validTypes = ['image/jpeg', 'image/png', 'image/svg+xml', 'image/webp'];
-  
+      const maxSize = 5 * 1024 * 1024; //image maxSize
+
       if (!validTypes.includes(file.type)) {
         this.imageError = 'Invalid file type. Please upload an image (JPEG, PNG, SVG, or WEBP).';
+        this.imageFile = null; 
+        input.value = ''; 
+      } else if (file.size > maxSize) {
+        this.imageError = `File size exceeds the limit of 5 MB. Please upload a smaller file.`;
         this.imageFile = null; 
         input.value = ''; 
       } else {
