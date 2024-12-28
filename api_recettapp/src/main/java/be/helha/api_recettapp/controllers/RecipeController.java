@@ -50,6 +50,17 @@ public class RecipeController {
     public Recipe getRecipeById(@PathVariable int id) {
         return recipeService.getRecipeById(id);
     }
+    /**
+     * Retrieves a recipe by its ID.
+     *
+     * @param idContest the ID of the contest.
+     * @return a {@link List} of {@link Recipe}.
+     * @throws NoSuchElementException if the recipe with the given ID is not found.
+     */
+    @GetMapping("contest/{idContest}")
+    public List<Recipe> getRecipeByIdContest(@PathVariable int idContest) {
+        return recipeService.getRecipeByIdContest(idContest);
+    }
 
     /**
      * Adds a new recipe.
