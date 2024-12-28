@@ -3,17 +3,21 @@ import { ContestService } from '../services/contest.service';
 import { Contest } from '../models/contest';
 import { KeycloakService } from 'keycloak-angular';
 import { Router } from '@angular/router';
+import { RegistrationComponent } from '../registration/registration.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-available-contest',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, RegistrationComponent],
   templateUrl: './available-contest.component.html',
   styleUrl: './available-contest.component.css'
 })
 export class AvailableContestComponent {
   contests: Contest[] = [];
   currentContest: Contest = this.initContest();
+  selectedContest?: Contest;
+  showRegistration = false;
   
   initContest(): Contest {
     return { title: "", max_participants: 0, start_date: "", end_date: "", status: "" };
@@ -44,7 +48,13 @@ export class AvailableContestComponent {
   }
 
   detailContest(id: number): void{
-    this.router.navigate(['/available-contests', id]);
+    //this.router.navigate(['/available-contests', id]);
+
+    const contest = this.contests.find(c => c.id === id);
+    if(contest){
+      this.selectedContest = contest;
+      this.showRegistration = true;
+    }
   }
   
 }

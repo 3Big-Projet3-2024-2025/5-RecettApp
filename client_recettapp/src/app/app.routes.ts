@@ -25,7 +25,6 @@ export const routes: Routes = [
         { path: 'contests', component: ContestTableComponent , canActivate: [KeycloakGuard]},
         { path: 'entries', component: EntriesTableComponent , canActivate: [KeycloakGuard]},
         { path: 'available-contests', component: AvailableContestComponent, canActivate: [KeycloakGuard]},
-        { path: 'available-contests/:id', component: RegistrationComponent},
         { path: 'home', component: HomePageComponent}
 
 
