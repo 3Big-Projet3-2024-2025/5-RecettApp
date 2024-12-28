@@ -1,5 +1,3 @@
-
-
 spring:
   application:
     name: api_recettapp
@@ -23,3 +21,12 @@ jwt:
   secret: fjkdfngdbjzebnhubvshubsgdvgbjhn435345fsdnbvxhcbghxcbvxcvxfjkdfngdbjzebnhubvshubsgdvgbjhn435345fsdnbvxhcbghxcbvxcvx
   expirationTokenMs: 3600000
   expirationRefreshTokenMs: 604800000
+
+keycloak:
+  auth-server-url: https://localhost:8081/auth
+  realm: recettapp
+  client-id: backend_recettapp
+  client-secret: "**********"
+  admin-username: admin
+  admin-password: admin
+
