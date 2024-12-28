@@ -13,7 +13,9 @@
                 <div class="row justify-content-end">
                     <div class="col-8"></div>
                     <div class="col-3 ">
-                        <a href="#" class="btn btn-success">Sign up</a>
+                        @if(contest.id){
+                            <a (click)="detailContest(contest.id)" class="btn btn-success">Sign up</a>
+                        }
                     </div>
                 </div>
               </div>

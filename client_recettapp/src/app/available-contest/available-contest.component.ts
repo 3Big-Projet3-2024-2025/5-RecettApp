@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ContestService } from '../services/contest.service';
 import { Contest } from '../models/contest';
 import { KeycloakService } from 'keycloak-angular';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-available-contest',
@@ -20,7 +21,8 @@ export class AvailableContestComponent {
 
   constructor(
     private contestService: ContestService,
-    private keycloakService : KeycloakService
+    private keycloakService : KeycloakService,
+    private router : Router
   ) {}
 
   ngOnInit(): void {
@@ -41,7 +43,9 @@ export class AvailableContestComponent {
     })
   }
 
-
+  detailContest(id: number): void{
+    this.router.navigate(['/available-contests', id]);
+  }
   
 }
 
