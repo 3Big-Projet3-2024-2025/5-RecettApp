@@ -1,8 +1,12 @@
 package be.helha.api_recettapp.controllers;
 
 import be.helha.api_recettapp.models.ImageData;
+import be.helha.api_recettapp.models.Recipe;
 import be.helha.api_recettapp.repositories.jpa.ImageDataRepository;
+import be.helha.api_recettapp.repositories.jpa.RecipeRepository;
 import be.helha.api_recettapp.services.ImageDataService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,23 +28,28 @@ public class ImageDataController {
     private ImageDataService imageDataService;
     @Autowired
     private ImageDataRepository repository;
+    @Autowired
+    private RecipeRepository recipeRepository;
 
 
     /**
      * Uploads a new image to the server.
      *
-     * @param image the image file to upload, provided as a {@link MultipartFile}.
+     * @param image the image file to upload and the {@code Recipe ID} , provided as a {@link MultipartFile}.
      * @return a {@link ResponseEntity} indicating the success or failure of the upload operation.
      * @throws IOException if an error occurs during file processing.
      */
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> addImage(@RequestParam("image") MultipartFile image ) throws IOException {
-        boolean uploadImage = imageDataService.addImageData(image);
+    public ResponseEntity<?> addImage(@RequestParam("image") MultipartFile image, @RequestParam("recipe") Long recipeId) throws IOException {
+
+        Recipe recipe = recipeRepository.findById(Math.toIntExact(recipeId))
+                .orElseThrow(() -> new IllegalArgumentException("Recipe not found with ID: " + recipeId));
+
+        boolean uploadImage = imageDataService.addImageData(image, recipe);
         if (!uploadImage) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
-        return ResponseEntity.status(HttpStatus.OK)
-                .build();
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     /**

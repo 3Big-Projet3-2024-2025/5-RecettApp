@@ -1,7 +1,9 @@
 package be.helha.api_recettapp.services;
 
+import be.helha.api_recettapp.models.Entry;
 import be.helha.api_recettapp.models.Recipe;
 import be.helha.api_recettapp.repositories.jpa.ContestRepository;
+import be.helha.api_recettapp.repositories.jpa.EntryRepository;
 import be.helha.api_recettapp.repositories.jpa.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,7 +19,7 @@ public class RecipeServiceDB implements IRecipeService{
     @Autowired
     private RecipeRepository recipeRepository;
     @Autowired
-    private ContestRepository contestRepository;
+    private EntryRepository entryRepository;
     @Autowired
     private ImageDataService imageDataService;
 
@@ -61,10 +63,14 @@ public class RecipeServiceDB implements IRecipeService{
     public Recipe addRecipe(Recipe recipe) {
 
         try {
-            if (recipe.getContest() == null) throw new RuntimeException("Contest is mandatory and cannot be null.");
-            int idContest = recipe.getContest().getId();
-            if (contestRepository.findById(idContest).isEmpty()) {
-                throw new RuntimeException("Contest with ID " + idContest + " does not exist.");
+            if (recipe.getEntry() == null) throw new RuntimeException("Entry is mandatory and cannot be null.");
+            int idEntry = recipe.getEntry().getId();
+            try {
+                if (entryRepository.findById(idEntry).isEmpty()) {
+                    throw new RuntimeException("Entry with ID " + idEntry + " does not exist.");
+                }
+            }catch (NoSuchElementException e) {
+                throw new NoSuchElementException("Entry with ID " + idEntry + " does not exist.");
             }
             return recipeRepository.save(recipe);
         } catch (Exception e) {

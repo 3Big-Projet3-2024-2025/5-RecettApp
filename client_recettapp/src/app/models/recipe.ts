@@ -1,5 +1,7 @@
 import { RecipeComponent } from "../models/recipe-component";
 import { Contest } from "./contest";
+import { Entry } from "./entry";
+import { ImageData } from "./image-data";
 import { RecipeType } from "./recipe-type";
 
 export interface Recipe {
@@ -15,6 +17,7 @@ export interface Recipe {
     photo_url?: string;
     approved: boolean; 
     recipe_type?: RecipeType; 
-    contest?: Contest; 
+    entry?: Entry; 
     components: RecipeComponent[];
+    image: ImageData[];
 }

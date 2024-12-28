@@ -2,6 +2,7 @@ package be.helha.api_recettapp.services;
 
 
 import be.helha.api_recettapp.models.ImageData;
+import be.helha.api_recettapp.models.Recipe;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -17,9 +18,10 @@ public interface IImageDataService {
      * Adds a new image to the system.
      *
      * @param file the {@link ImageData} object to add.
+     * @param recipe the {@link Recipe} associated with the image
      * @return {@code boolean}
      */
-    public boolean  addImageData(MultipartFile file) throws IOException;
+    public boolean  addImageData(MultipartFile file, Recipe recipe) throws IOException;
 
     /**
      * Retrieves an image.
