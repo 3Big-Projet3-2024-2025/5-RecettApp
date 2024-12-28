@@ -54,6 +54,18 @@ constructor(private service: RecipeService,private router:Router, private imaSer
     );
   }
 
+  sortRecipesByDifficulty(difficulty: string): void {
+    this.filteredRecipes = this.recipes.filter(recipe => recipe.difficulty_level === difficulty);
+  }
+  
+  resetFilters(): void {
+    this.filteredRecipes = [...this.recipes];
+    this.searchTerm = ''; // Clear the search term
+  }
+  // Sort recipes alphabetically by title
+  sortRecipesByTitle(): void {
+    this.filteredRecipes = [...this.filteredRecipes].sort((a, b) => a.title.localeCompare(b.title));
+  }
 detailRecipe(arg0: any) {
 throw new Error('Method not implemented.');
 }
