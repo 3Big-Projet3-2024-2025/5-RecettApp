@@ -2,40 +2,67 @@
 <div class="container mt-4">
     <h1 class="text-center text-success mb-4">Contest Recipe </h1>
 
-     <!-- Search Bar -->
-     <div class="mb-4">
-        <input 
-          type="text" 
-          class="form-control" 
-          placeholder="Search for a recipe..." 
-          [(ngModel)]="searchTerm" 
-          (input)="searchRecipes()" />
-      </div>
-      <div *ngIf="filteredRecipes.length > 0; else loading">
-                <div class="card-footer bg-light text-center">
-          <button class="btn btn-dark" (click)="addRecipe()">Add Recipe</button>
+    <!-- Search Bar -->
+    <div class="mb-4">
+    <input 
+        type="text" 
+        class="form-control" 
+        placeholder="Search for a recipe..." 
+        [(ngModel)]="searchTerm" 
+        (input)="searchRecipes()" />
+    </div>
+    
+    <!-- Dropdown for Filters -->
+    <div class="mb-4">
+        <div class="dropdown">
+        <button 
+            class="btn btn-success dropdown-toggle" 
+            type="button" 
+            id="filterDropdown" 
+            data-bs-toggle="dropdown" 
+            aria-expanded="false">
+            Filter & Sort Options
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+            <li><button class="dropdown-item" (click)="sortRecipesByDifficulty('Easy')">Filter by Easy</button></li>
+            <li><button class="dropdown-item" (click)="sortRecipesByDifficulty('Medium')">Filter by Medium</button></li>
+            <li><button class="dropdown-item" (click)="sortRecipesByDifficulty('Hard')">Filter by Hard</button></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><button class="dropdown-item" (click)="sortRecipesByTitle()">Sort by Title</button></li>
+            <li><button class="dropdown-item" (click)="resetFilters()">Reset Filters</button></li>
+        </ul>
         </div>
-      <div class="row">
-        <div class="col-md-4 mb-3" *ngFor="let recipe of filteredRecipes">
-            <div class="card recipe-card shadow-sm">
-            <div (click)="detailRecipe(recipe.id)">
-              <div class="recipe-image-container">
-                <img *ngIf="recipe.photo_url" [src]="recipe.photo_url" [alt]="recipe.title" class="card-img-top recipe-photo" />
-              </div>
-              <div class="card-body">
-                <h5 class="card-title text-success">{{ recipe.title }}</h5>
-                <p class="card-text"><strong>Preparation Time:</strong> {{ recipe.preparation_time }} minutes</p>
-                <p class="card-text"><strong>Servings:</strong> {{ recipe.servings }}</p>
-                <p class="card-text"><strong>Difficulty:</strong> {{ recipe.difficulty_level }}</p>
+    </div>
+    <div *ngIf="recipes; else loading">
+        <div *ngIf="filteredRecipes.length > 0; else noData">
+            <div class="card-footer bg-light text-center">
+                <button class="btn btn-dark" (click)="addRecipe()">Add Recipe</button>
             </div>
+            <div class="row">
+                <div class="col-md-4 mb-3" *ngFor="let recipe of filteredRecipes">
+                    <div class="card recipe-card shadow-sm">
+                        <div (click)="detailRecipe(recipe.id)">
+                            <div class="recipe-image-container">
+                            <img *ngIf="recipe.photo_url" [src]="recipe.photo_url" [alt]="recipe.title" class="card-img-top recipe-photo" />
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title text-success">{{ recipe.title }}</h5>
+                                <p class="card-text"><strong>Preparation Time:</strong> {{ recipe.preparation_time }} minutes</p>
+                                <p class="card-text"><strong>Servings:</strong> {{ recipe.servings }}</p>
+                                <p class="card-text"><strong>Difficulty:</strong> {{ recipe.difficulty_level }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
+        <ng-template #noData>
+            <p class="text-center text-danger">No recipes available.</p>
+          </ng-template>
     </div>
   
     <ng-template #loading>
       <p class="text-center text-primary">Loading recipes...</p>
     </ng-template>
-  </div>
+</div>
   
