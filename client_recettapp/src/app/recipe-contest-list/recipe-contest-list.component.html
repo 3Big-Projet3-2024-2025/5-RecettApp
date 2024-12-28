@@ -1,13 +1,23 @@
 
 <div class="container mt-4">
-    <h1 class="text-center text-success mb-4">Recipe List</h1>
-    <div *ngIf="recipes ; else loading">
-        <div class="card-footer bg-light text-center">
+    <h1 class="text-center text-success mb-4">Contest Recipe </h1>
+
+     <!-- Search Bar -->
+     <div class="mb-4">
+        <input 
+          type="text" 
+          class="form-control" 
+          placeholder="Search for a recipe..." 
+          [(ngModel)]="searchTerm" 
+          (input)="searchRecipes()" />
+      </div>
+      <div *ngIf="filteredRecipes.length > 0; else loading">
+                <div class="card-footer bg-light text-center">
           <button class="btn btn-dark" (click)="addRecipe()">Add Recipe</button>
         </div>
       <div class="row">
-        <div class="col-md-4 mb-3" *ngFor="let recipe of recipes">
-          <div class="card recipe-card shadow-sm">
+        <div class="col-md-4 mb-3" *ngFor="let recipe of filteredRecipes">
+            <div class="card recipe-card shadow-sm">
             <div (click)="detailRecipe(recipe.id)">
               <div class="recipe-image-container">
                 <img *ngIf="recipe.photo_url" [src]="recipe.photo_url" [alt]="recipe.title" class="card-img-top recipe-photo" />
@@ -19,16 +29,9 @@
                 <p class="card-text"><strong>Difficulty:</strong> {{ recipe.difficulty_level }}</p>
             </div>
             </div>
-            <div class="card-footer text-center">
-              <button class="btn btn-danger btn-sm" (click)="confirmDelete(recipe.id, recipe.title)">Delete Recipe </button>
-            </div>
           </div>
         </div>
       </div>
-  
-      <ng-template #noData>
-        <p class="text-center text-danger">No recipes available.</p>
-      </ng-template>
     </div>
   
     <ng-template #loading>
