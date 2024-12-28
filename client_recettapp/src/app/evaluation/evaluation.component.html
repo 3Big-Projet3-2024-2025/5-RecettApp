@@ -1,0 +1,81 @@
+<div class="container mt-5">
+  <h1 class="text-center">Evaluations</h1>
+
+  <!-- Toggle for displaying form -->
+  <button class="btn btn-success my-3" (click)="toggleForm()">
+    {{ showForm ? 'Cancel' : 'Add New Evaluation' }}
+  </button>
+
+  <!-- Add Evaluation Form -->
+  <form #evaluations="ngForm" *ngIf="showForm" (ngSubmit)="saveEvaluation()">
+    <div class="form-group">
+      <label for="rate">Rate (0-5)</label>
+      <input
+        type="number"
+        id="rate"
+        class="form-control"
+        [(ngModel)]="currentEvaluation.rate"
+        name="rate"
+        min="0"
+        max="5"
+        required
+      />
+    </div>
+
+    <!-- Entry Selection -->
+    <div class="form-group">
+      <label for="entry">Select Entry</label>
+      <select
+        id="entry"
+        class="form-control"
+        [(ngModel)]="currentEvaluation.entry.id"
+        name="entry"
+        required
+      >
+        <option *ngFor="let entry of entries" [value]="entry.id">{{ entry.name }}</option>
+      </select>
+    </div>
+
+    <!-- Recipe Selection -->
+    <div class="form-group">
+      <label for="recipe">Select Recipe</label>
+      <select
+        id="recipe"
+        class="form-control"
+        [(ngModel)]="currentEvaluation.recipe.id"
+        name="recipe"
+        required
+      >
+        <option *ngFor="let recipe of recipes" [value]="recipe.id">{{ recipe.title }}</option>
+      </select>
+    </div>
+
+    <!-- Save Button -->
+    <button class="btn btn-primary" type="submit" [disabled]="evaluations.valid">Save Evaluation</button>
+  </form>
+
+  <!-- Evaluations Table -->
+  <table class="table table-bordered mt-4">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Rate</th>
+        <th>Entry</th>
+        <th>Recipe</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let eval of evaluations">
+        <div *ngIf="eval"></div>
+        <td>{{ eval.id }}</td>
+        <td>{{ eval.rate }}</td>
+        <td>{{ eval.entry?.name }}</td>
+        <td>{{ eval.recipe?.title }}</td>
+        <td>
+          <button class="btn btn-danger" (click)="deleteEvaluation(eval.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
