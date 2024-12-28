@@ -17,7 +17,9 @@ import { RecipeService } from '../services/recipe_Service/recipe.service';
 export class RecipeContestListComponent {
 
 recipes: Recipe[] = [];
-constructor(private service: RecipeService, private imaService: ImageServiceService) {}
+filteredRecipes: Recipe[] = [];
+  searchTerm: string = '';
+constructor(private service: RecipeService,private router:Router, private imaService: ImageServiceService) {}
 
 
    ngOnInit(): void {
@@ -37,13 +39,21 @@ constructor(private service: RecipeService, private imaService: ImageServiceServ
       
       forkJoin(imageRequests).subscribe((updatedRecipes) => {
         this.recipes = updatedRecipes;
+        this.filteredRecipes = updatedRecipes;
+
       });
     });
   }
 
-confirmDelete(arg0: any,arg1: any) {
-throw new Error('Method not implemented.');
-}
+  searchRecipes(): void {
+    const term = this.searchTerm.toLowerCase();
+    this.filteredRecipes = this.recipes.filter(recipe =>
+      recipe.title.toLowerCase().includes(term) || 
+      recipe.description.toLowerCase().includes(term) || 
+      recipe.category.toLowerCase().includes(term)
+    );
+  }
+
 detailRecipe(arg0: any) {
 throw new Error('Method not implemented.');
 }
