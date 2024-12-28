@@ -52,7 +52,7 @@ public class Users {
      * This field cannot be null.
      * For security, passwords should be encrypted.
      */
-    @JsonIgnore
+
     @Column(nullable = false)
     private String password;
 
