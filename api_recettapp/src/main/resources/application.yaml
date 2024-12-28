@@ -1,5 +1,3 @@
-
-
 spring:
   application:
     name: api_recettapp
@@ -23,3 +21,8 @@ jwt:
   secret: fjkdfngdbjzebnhubvshubsgdvgbjhn435345fsdnbvxhcbghxcbvxcvxfjkdfngdbjzebnhubvshubsgdvgbjhn435345fsdnbvxhcbghxcbvxcvx
   expirationTokenMs: 3600000
   expirationRefreshTokenMs: 604800000
+
+paypal:
+  client-id : AYNrryhL8K4n1OuZnepGl_L-qo82AYvcKgPNbYrYi7cZKpQsWBDIyxU8_yXlD4PwcxXGR_6zR5CvU2Sq
+  client-secret: EELGBaiizFScSj-vA8_AiVQXsjtBHH-rTpQ85cow1zwF0LYcF2jwcXTLKJ3586Krw_HZ0dk2oDJiALut
+  api-url: https://api-m.sandbox.paypal.com
