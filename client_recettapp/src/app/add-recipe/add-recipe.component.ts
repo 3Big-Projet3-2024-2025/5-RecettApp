@@ -179,6 +179,12 @@ export class AddRecipeComponent {
   checkValidRecipeToAdd(recipe: Recipe): boolean {
     if (!recipe.components || recipe.components.length === 0) {
       this.recipeComponentError = "Recipe must have at least one ingredient";
+      this.imageError ="";
+      return false;
+    }
+    if (!this.imageFile) {
+      this.imageError = 'No file selected. Please upload an image.';
+      this.recipeComponentError = '';
       return false;
     }
     return true;
