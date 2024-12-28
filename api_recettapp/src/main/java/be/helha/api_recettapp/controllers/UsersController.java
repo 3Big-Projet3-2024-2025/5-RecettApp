@@ -2,6 +2,7 @@ package be.helha.api_recettapp.controllers;
 
 import be.helha.api_recettapp.models.Users;
 import be.helha.api_recettapp.services.IUserService;
+import be.helha.api_recettapp.services.KeycloakUserService;
 import be.helha.api_recettapp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,9 @@ public class UsersController {
 
     @Autowired
     private final UserService userService;
+
+    @Autowired
+    private KeycloakUserService keycloakUserService;
 
     /**
      * Constructor for UsersController.
@@ -109,6 +113,18 @@ public class UsersController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(user);
+    }
+
+    @PostMapping("/{id}/block")
+    public ResponseEntity<String> blockUser(@PathVariable String id) {
+        keycloakUserService.blockUser(id);
+        return ResponseEntity.ok("User blocked successfully");
+    }
+
+    @PostMapping("/{id}/unblock")
+    public ResponseEntity<String> unblockUser(@PathVariable String id) {
+        keycloakUserService.unblockUser(id);
+        return ResponseEntity.ok("User unblocked successfully");
     }
 
 }
