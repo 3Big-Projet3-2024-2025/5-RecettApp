@@ -47,7 +47,12 @@ export class AvailableContestComponent {
     })
   }
 
-  detailContest(id: number): void{
+  onCancelRegistration(): void {
+    this.showRegistration = false;
+    this.selectedContest = undefined;
+  }
+
+  getDetailContest(id: number): void{
     //this.router.navigate(['/available-contests', id]);
 
     const contest = this.contests.find(c => c.id === id);

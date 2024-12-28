@@ -16,7 +16,7 @@
                     <div class="col-8"></div>
                     <div class="col-3">
                         @if(contest.id) {
-                        <a (click)="detailContest(contest.id)" class="btn btn-success">Sign up</a>
+                        <a (click)="getDetailContest(contest.id)" class="btn btn-success">Sign up</a>
                         }
                     </div>
                 </div>
@@ -30,6 +30,9 @@
 
     <!-- Show registration component when a contest is selected -->
     @if(showRegistration && selectedContest) {
-    <app-registration [contest]="selectedContest"></app-registration>
+    <app-registration
+        [contest]="selectedContest"
+        (cancelRegistration)="onCancelRegistration()">
+    </app-registration>
     }
 </div>

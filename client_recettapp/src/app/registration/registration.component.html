@@ -6,8 +6,14 @@
             <p><strong>End Date:</strong> {{contest.end_date}}</p>
             <p><strong>Maximum Participants:</strong> {{contest.max_participants}}</p>
             <p><strong>Status:</strong> {{contest.status}}</p>
-
-            <!-- Add your registration form here -->
         </div>
+        
     </div>
+    <div class="row mt-3">
+        <div class="col">
+          <button class="btn btn-secondary" (click)="onCancel()">
+            Cancel Registration
+          </button>
+        </div>
+      </div>
 </div>
