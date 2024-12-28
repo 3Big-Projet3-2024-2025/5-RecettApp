@@ -2,7 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Recipe } from '../models/recipe';
-import { Router } from '@angular/router';
+import { Entry } from '../models/entry';
+import { ActivatedRoute, Router } from '@angular/router';
 import { map, of, forkJoin } from 'rxjs';
 import { ImageServiceService } from '../services/image-service.service';
 import { RecipeService } from '../services/recipe_Service/recipe.service';
@@ -19,12 +20,20 @@ export class RecipeContestListComponent {
 recipes: Recipe[] = [];
 filteredRecipes: Recipe[] = [];
   searchTerm: string = '';
-constructor(private service: RecipeService,private router:Router, private imaService: ImageServiceService) {}
+ contestID: number |undefined
+constructor(private service: RecipeService,private router:Router, private route: ActivatedRoute,private imaService: ImageServiceService) {}
 
 
    ngOnInit(): void {
-    
-    this.service.getRecipeByIdContest(32).subscribe(data => {
+    const contestId = this.route.snapshot.paramMap.get('idContest');
+    if (contestId != null) {
+      this.getRecipe(+contestId);
+    }
+
+  }
+
+  getRecipe(contestId: number){
+    this.service.getRecipeByIdContest(contestId).subscribe(data => {
       const imageRequests = data.map(recipe => {
         if (recipe.photo_url) {
           return this.imaService.getImage(recipe.photo_url).pipe(
@@ -44,7 +53,6 @@ constructor(private service: RecipeService,private router:Router, private imaSer
       });
     });
   }
-
   searchRecipes(): void {
     const term = this.searchTerm.toLowerCase();
     this.filteredRecipes = this.recipes.filter(recipe =>
@@ -57,7 +65,7 @@ constructor(private service: RecipeService,private router:Router, private imaSer
   sortRecipesByDifficulty(difficulty: string): void {
     this.filteredRecipes = this.recipes.filter(recipe => recipe.difficulty_level === difficulty);
   }
-  
+
   resetFilters(): void {
     this.filteredRecipes = [...this.recipes];
     this.searchTerm = ''; // Clear the search term
@@ -66,11 +74,11 @@ constructor(private service: RecipeService,private router:Router, private imaSer
   sortRecipesByTitle(): void {
     this.filteredRecipes = [...this.filteredRecipes].sort((a, b) => a.title.localeCompare(b.title));
   }
-detailRecipe(arg0: any) {
-throw new Error('Method not implemented.');
-}
-addRecipe() {
-throw new Error('Method not implemented.');
-}
+  detailRecipe(id: number) {
+    this.router.navigate(['/recipe', id]);
+  }
+  addRecipe() {
+   // this.router.navigate(['/recipe/add/', entry]);
+  }
 
 }

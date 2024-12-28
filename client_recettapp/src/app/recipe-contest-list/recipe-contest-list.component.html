@@ -11,7 +11,7 @@
         [(ngModel)]="searchTerm" 
         (input)="searchRecipes()" />
     </div>
-    
+
     <!-- Dropdown for Filters -->
     <div class="mb-4">
         <div class="dropdown">
@@ -34,10 +34,11 @@
         </div>
     </div>
     <div *ngIf="recipes; else loading">
-        <div *ngIf="filteredRecipes.length > 0; else noData">
-            <div class="card-footer bg-light text-center">
+        <div class="card-footer bg-light text-center">
                 <button class="btn btn-dark" (click)="addRecipe()">Add Recipe</button>
             </div>
+        <div *ngIf="filteredRecipes.length > 0; else noData">
+            
             <div class="row">
                 <div class="col-md-4 mb-3" *ngFor="let recipe of filteredRecipes">
                     <div class="card recipe-card shadow-sm">
