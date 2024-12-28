@@ -3,6 +3,7 @@ import { Contest } from '../models/contest';
 import { ContestService } from '../services/contest.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-contest-table',
@@ -17,7 +18,7 @@ export class ContestTableComponent {
   isEditing = false;
   showForm = false;
 
-  constructor(private contestService: ContestService) { }
+  constructor(private contestService: ContestService,private router: Router) { }
 
   ngOnInit(): void {
     this.getAllContests();
@@ -158,5 +159,7 @@ export class ContestTableComponent {
   initContest(): Contest {
     return { title: "", max_participants: 0, start_date: "", end_date: "", status: "" };
   }
-
+  getAllRecipe(idContest: any){
+    this.router.navigate(['recipe-contest/', idContest]);
+  }
 }
