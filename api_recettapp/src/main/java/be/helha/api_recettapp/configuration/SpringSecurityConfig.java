@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import be.helha.api_recettapp.security.KeycloakRoleConverter;
 
@@ -79,6 +80,16 @@ public class SpringSecurityConfig {
         return authenticationManagerBuiler.build();
     }
 
+    /**
+     * Configures a {@link JwtAuthenticationConverter} to include custom role mappings from Keycloak.
+     *
+     * <p>This method sets up a {@link JwtAuthenticationConverter} and assigns it a custom
+     * {@link JwtGrantedAuthoritiesConverter}, specifically the
+     * {@link KeycloakRoleConverter}. The custom converter ensures that roles extracted from the JWT are
+     * mapped to Spring Security granted authorities.</p>
+     *
+     * @return A configured {@link JwtAuthenticationConverter} instance.
+     */
     private JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
         converter.setJwtGrantedAuthoritiesConverter(new KeycloakRoleConverter());
