@@ -1,10 +1,13 @@
 package be.helha.api_recettapp.services;
 
+import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 /**
@@ -23,17 +26,11 @@ public class KeycloakUserService {
     @Value("${keycloak.realm}")
     private String realm;
 
-    @Value("${keycloak.client-id}")
+    @Value("${keycloak.resource}")
     private String clientId;
 
-    @Value("${keycloak.client-secret}")
+    @Value("${keycloak.credentials.secret}")
     private String clientSecret;
-
-    @Value("${keycloak.admin-username}")
-    private String adminUsername;
-
-    @Value("${keycloak.admin-password}")
-    private String adminPassword;
 
     /**
      * Creates and configures a {@link Keycloak} instance for interacting with the Keycloak Admin API.
@@ -46,40 +43,49 @@ public class KeycloakUserService {
     public Keycloak getKeycloakInstance() {
         return KeycloakBuilder.builder()
                 .serverUrl(serverUrl)
-                .realm("master") // The realm where the admin is configured
+                .realm(realm)
                 .clientId(clientId)
                 .clientSecret(clientSecret)
-                .username(adminUsername)
-                .password(adminPassword)
+                .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
                 .build();
     }
 
     /**
      * Disables (blocks) a user in Keycloak.
      *
-     * This method fetches the user by their ID from the specified realm and disables their account.
+     * This method fetches the user by his email from the specified realm and disables his account.
      *
-     * @param userId The ID of the user to block.
+     * @param email The email of the user to block.
      */
-    public void blockUser(String userId) {
+    public void blockUser(String email) {
         Keycloak keycloak = getKeycloakInstance();
-        UserRepresentation user = keycloak.realm(realm).users().get(userId).toRepresentation();
-        user.setEnabled(false);
-        keycloak.realm(realm).users().get(userId).update(user);
+        List<UserRepresentation> users = keycloak.realm(realm).users().search(null, null, null, email, null, null);
+        if (!users.isEmpty()) {
+            UserRepresentation user = users.get(0); // Email is unique in Keycloak Config so no problem
+            user.setEnabled(false);
+            keycloak.realm(realm).users().get(user.getId()).update(user);
+        } else {
+            throw new RuntimeException("User not found with email: " + email);
+        }
     }
 
     /**
      * Enables (unblocks) a user in Keycloak.
      *
-     * This method fetches the user by their ID from the specified realm and enables their account.
+     * This method fetches the user by his email from the specified realm and enables his account.
      *
-     * @param userId The ID of the user to unblock.
+     * @param email The email of the user to unblock.
      */
-    public void unblockUser(String userId) {
+    public void unblockUser(String email) {
         Keycloak keycloak = getKeycloakInstance();
-        UserRepresentation user = keycloak.realm(realm).users().get(userId).toRepresentation();
-        user.setEnabled(true);
-        keycloak.realm(realm).users().get(userId).update(user);
+        List<UserRepresentation> users = keycloak.realm(realm).users().search(null, null, null, email, null, null);
+        if (!users.isEmpty()) {
+            UserRepresentation user = users.get(0); // Email is unique in Keycloak Config so no problem
+            user.setEnabled(true);
+            keycloak.realm(realm).users().get(user.getId()).update(user);
+        } else {
+            throw new RuntimeException("User not found with email: " + email);
+        }
     }
 }
 

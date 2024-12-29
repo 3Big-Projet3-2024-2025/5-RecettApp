@@ -23,10 +23,10 @@ jwt:
   expirationRefreshTokenMs: 604800000
 
 keycloak:
-  auth-server-url: https://localhost:8081/auth
+  auth-server-url: http://localhost:8081/
   realm: recettapp
-  client-id: backend_recettapp
-  client-secret: "**********"
-  admin-username: admin
-  admin-password: admin
+  resource: backend_recettapp
+  credentials:
+    secret: VWdTknIOvlOEFDS2KZoSbmW5I0uF8PYG
+  public-client: false
 
