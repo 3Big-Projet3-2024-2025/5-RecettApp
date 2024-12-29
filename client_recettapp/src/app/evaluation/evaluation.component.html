@@ -1,16 +1,16 @@
 <div class="container">
   <h2>Gestion des Évaluations</h2>
 
-  <!-- Bouton pour afficher/masquer le formulaire -->
+  <!-- Button to show/hide the form -->
   <button class="btn btn-primary mt-3" (click)="showForm = !showForm">
     {{ showForm ? 'Annuler' : 'Ajouter une Évaluation' }}
   </button>
 
-  <!-- Formulaire pour ajouter une évaluation -->
+  <!-- Form to add a review -->
   <div *ngIf="showForm" class="mt-4">
     <h3>{{ currentEvaluation.id ? 'Modifier' : 'Ajouter' }} une Évaluation</h3>
     <form (ngSubmit)="saveEvaluation()">
-      <!-- Champ pour la note -->
+      <!-- Field for note -->
       <div class="form-group mb-3">
         <label for="rate">Note :</label>
         <input
@@ -25,7 +25,7 @@
         />
       </div>
 
-      <!-- Sélection d'une entrée -->
+      <!-- Selecting an entry -->
       <div class="form-group mb-3">
         <label for="entry">Entrée :</label>
         <select
@@ -41,7 +41,7 @@
         </select>
       </div>
 
-      <!-- Sélection d'une recette -->
+      <!-- Selecting a recipe -->
       <div class="form-group mb-3">
         <label for="recipe">Recette :</label>
         <select
@@ -61,7 +61,7 @@
     </form>
   </div>
 
-  <!-- Liste des évaluations -->
+  <!-- List of assessments -->
   <div class="mt-5">
     <h3>Liste des Évaluations</h3>
     <table class="table table-bordered mt-3">
