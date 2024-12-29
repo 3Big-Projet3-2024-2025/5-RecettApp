@@ -1,5 +1,5 @@
 <div class="container">
-    <!-- Show contest list if registration is not active -->
+    <!-- Show contest list  -->
     @if(!showRegistration) {
     <h1 class="my-5 text-success">Available Contests</h1>
     @for(contest of contests; track contest) {
@@ -28,7 +28,7 @@
     }
     }
 
-    <!-- Show registration component when a contest is selected -->
+    <!-- Show registration  -->
     @if(showRegistration && selectedContest) {
     <app-registration
         [contest]="selectedContest"
