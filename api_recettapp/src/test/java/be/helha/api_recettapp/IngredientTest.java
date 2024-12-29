@@ -37,7 +37,7 @@ class IngredientTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private IIngredientService ingredientService;
+    private IngredientServiceDB ingredientService;
 
     /**
      * Tests the getIngredients API endpoint by performing HTTP GET request
