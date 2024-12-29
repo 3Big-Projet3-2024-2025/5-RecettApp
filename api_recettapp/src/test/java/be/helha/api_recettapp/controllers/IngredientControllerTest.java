@@ -1,7 +1,6 @@
-package be.helha.api_recettapp;
+package be.helha.api_recettapp.controllers;
 
 import be.helha.api_recettapp.models.Ingredient;
-import be.helha.api_recettapp.controllers.IngredientController;
 import be.helha.api_recettapp.services.*;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -30,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 //@WebMvcTest(IngredientController.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-class IngredientTest {
+class IngredientControllerTest {
 
 
     @Autowired

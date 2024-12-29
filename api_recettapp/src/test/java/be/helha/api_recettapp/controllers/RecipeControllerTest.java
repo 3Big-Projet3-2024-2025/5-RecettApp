@@ -1,11 +1,8 @@
-package be.helha.api_recettapp;
+package be.helha.api_recettapp.controllers;
 
-import be.helha.api_recettapp.controllers.RecipeController;
-import be.helha.api_recettapp.models.Contest;
 import be.helha.api_recettapp.models.Entry;
 import be.helha.api_recettapp.models.Recipe;
 import be.helha.api_recettapp.models.RecipeType;
-import be.helha.api_recettapp.services.IRecipeService;
 import be.helha.api_recettapp.services.RecipeServiceDB;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.mockito.Mockito;
@@ -35,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 //@WebMvcTest(IngredientController.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class RecipeTest {
+public class RecipeControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
