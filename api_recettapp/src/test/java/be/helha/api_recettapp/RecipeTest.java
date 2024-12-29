@@ -62,11 +62,11 @@ public class RecipeTest {
         recipe.setServings(8);
         recipe.setDifficulty_level("Medium");
         recipe.setInstructions("Mix ingredients, bake for 45 minutes.");
-        recipe.setApproved(true);
+
 
         Contest contest = new Contest();
         contest.setId(1);
-        recipe.setContest(contest);
+
 
         RecipeType recipeType = new RecipeType();
         recipeType.setId(2);

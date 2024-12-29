@@ -6,6 +6,7 @@ import { User } from '../models/users';
 import { KeycloakService } from 'keycloak-angular';
 import {jwtDecode} from 'jwt-decode';
 import { UsersService } from '../services/users.service';
+import { PaypalService } from '../services/paypal.service';
 
 @Component({
   selector: 'app-registration',
@@ -25,7 +26,8 @@ export class RegistrationComponent {
 
   constructor(
     private keycloakService : KeycloakService,
-    private userService : UsersService
+    private userService : UsersService,
+    private paypalService : PaypalService
   ) {}
 
   ngOnInit() {
@@ -60,6 +62,20 @@ export class RegistrationComponent {
       }, error : (err) => {
         console.log('Error getting user informations');
         sub.unsubscribe();
+      }
+    });
+  }
+
+
+  pay():void{
+    const price = 20
+    this.paypalService.payToRegister(price).subscribe({
+      next: (approvalUrl) => {
+        console.log('Redirecting to PayPal URL:', approvalUrl);
+        window.location.href = approvalUrl;
+      },
+      error: (err) => {
+        console.error("PayPal Error:", err);
       }
     });
   }
