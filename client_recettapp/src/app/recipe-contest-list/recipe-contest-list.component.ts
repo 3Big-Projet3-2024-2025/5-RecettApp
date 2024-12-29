@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { map, of, forkJoin } from 'rxjs';
 import { ImageServiceService } from '../services/image-service.service';
 import { RecipeService } from '../services/recipe_Service/recipe.service';
+import { EntriesService } from '../services/entries.service';
 
 @Component({
   selector: 'app-recipe-contest-list',
@@ -20,18 +21,35 @@ export class RecipeContestListComponent {
 recipes: Recipe[] = [];
 filteredRecipes: Recipe[] = [];
   searchTerm: string = '';
- contestID: number |undefined
-constructor(private service: RecipeService,private router:Router, private route: ActivatedRoute,private imaService: ImageServiceService) {}
+ contestID: number |undefined;
+ entry: Entry = {}
+constructor(private service: RecipeService,private router:Router, private route: ActivatedRoute,private imaService: ImageServiceService,private entryService: EntriesService) {}
 
 
    ngOnInit(): void {
     const contestId = this.route.snapshot.paramMap.get('idContest');
+
     if (contestId != null) {
-      this.getRecipe(+contestId);
+      this.checkContestAccess(+contestId);
     }
 
   }
-
+  checkContestAccess(contestId: number): void {
+    this.entryService.getEntryByUserMailAndIdContest(contestId).subscribe({
+      next: (entry) => {
+        if (!entry) {
+          this.router.navigate(['/home']); // Redirection if entry is null
+        } else {
+          this.entry = entry;
+          this.getRecipe(contestId); 
+        }
+      },
+      error: (error) => {
+        console.log(error)
+        this.router.navigate(['/home']); 
+      },
+    });
+  }
   getRecipe(contestId: number){
     this.service.getRecipeByIdContest(contestId).subscribe(data => {
       const imageRequests = data.map(recipe => {
@@ -78,7 +96,7 @@ constructor(private service: RecipeService,private router:Router, private route:
     this.router.navigate(['/recipe', id]);
   }
   addRecipe() {
-   // this.router.navigate(['/recipe/add/', entry]);
+   this.router.navigate(['/recipe/add/', this.entry.id]);
   }
 
 }
