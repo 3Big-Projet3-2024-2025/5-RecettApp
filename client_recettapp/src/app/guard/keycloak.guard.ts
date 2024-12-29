@@ -38,7 +38,7 @@ export class KeycloakGuard extends KeycloakAuthGuard {
                   lastName: decodedToken.family_name,
                   email: decodedToken.email,
                   date_registration: "2024-01-01",
-                  isBlocked: false
+                  blocked: false
                 };
                 this.userService.save(user).subscribe( user => {},
                   error => {

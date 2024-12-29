@@ -4,7 +4,7 @@ export interface User {
   lastName: string;
   email: string;
   date_registration: string;
-  isBlocked: boolean;
+  blocked: boolean;
   //registrations?: Entry[];
   //roles?: Role[];
 }
