@@ -21,6 +21,7 @@ export class RegistrationComponent {
 
 
   user!: User;
+  userName!: string;
 
   constructor(
     private keycloakService : KeycloakService,
@@ -37,7 +38,7 @@ export class RegistrationComponent {
       .then(token => {
         const decodedToken:any = jwtDecode(token);
         const email = decodedToken.email;
-
+        this.userName = decodedToken.preferred_username;
         // get User info
         this.getUserByEmail(email);
       })
