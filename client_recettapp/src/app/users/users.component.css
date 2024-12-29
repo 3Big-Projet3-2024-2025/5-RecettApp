@@ -144,7 +144,7 @@
 }
 
 .pagination-btn:hover {
-  background-color: #1a73e8;
+  background-color: lightgreen;
   color: white;
   transform: scale(1.1);
 }
@@ -155,7 +155,7 @@
 }
 
 .pagination-btn.active {
-  background-color: #1a73e8;
+  background-color: rgb(25 135 84);
   color: white;
   font-weight: bold;
 }
@@ -164,12 +164,12 @@
 .pagination-btn.next {
   font-weight: bold;
   padding: 8px 20px;
-  background-color: #007bff;
+  background-color: lightgreen;
   color: white;
   border-radius: 5px;
 }
 
 .pagination-btn.prev:hover,
 .pagination-btn.next:hover {
-  background-color: #0056b3;
+  background-color: #28a745;
 }

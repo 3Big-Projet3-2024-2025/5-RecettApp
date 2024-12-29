@@ -5,6 +5,7 @@ import { RecipeService } from '../services/recipe_Service/recipe.service';
 import { CommonModule } from '@angular/common';
 import { RecipeComponentService } from '../services/recipe_Service/recipe-component.service';
 import { ImageServiceService } from '../services/image-service.service';
+import { NavBarComponent } from "../nav-bar/nav-bar.component";
 
 @Component({
   selector: 'app-recipe-detail',
@@ -25,7 +26,6 @@ export class RecipeDetailComponent implements OnInit {
     if (id) {
       this.service.getRecipeById(+id).subscribe(
         (data) => {
-          console.log('la photoo :' + data.photo_url)
         if (data.photo_url) {
           this.getImage(data.photo_url);
         }

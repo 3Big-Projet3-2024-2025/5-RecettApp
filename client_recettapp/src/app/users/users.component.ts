@@ -20,6 +20,8 @@ export class UsersComponent implements OnInit {
   totalUsers: number = 0;
   searchEmail: string = '';
   searchedUser: User | null = null;
+  errMessage: String = "";
+  err: boolean = false;
 
   constructor(private usersService: UsersService) {}
 
@@ -87,9 +89,17 @@ onSearchByEmail(): void {
 
   onDelete(id: number): void {
     if (confirm('Are you sure you want to delete this user?')) {
-      this.usersService.delete(id).subscribe(() => {
-        this.loadUsers();
-      });
+      const sub = this.usersService.delete(id).subscribe(({
+        next: () => {
+          this.err = false;
+          this.loadUsers();
+        }, error: (err) => {
+          this.err = true;
+          this.errMessage = `Error during the process : ${err.error.error}`;
+          console.log(this.errMessage);
+        }
+        
+      }));
     }
   }
 

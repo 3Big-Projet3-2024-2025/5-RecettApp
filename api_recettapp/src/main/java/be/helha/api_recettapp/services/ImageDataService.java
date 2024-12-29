@@ -1,7 +1,9 @@
 package be.helha.api_recettapp.services;
 
 import be.helha.api_recettapp.models.ImageData;
+import be.helha.api_recettapp.models.Recipe;
 import be.helha.api_recettapp.repositories.jpa.ImageDataRepository;
+import be.helha.api_recettapp.repositories.jpa.RecipeRepository;
 import be.helha.api_recettapp.utils.ImageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,14 +22,17 @@ public class ImageDataService implements  IImageDataService{
 
     @Autowired
     private ImageDataRepository imageDataRepository;
+    @Autowired
+    private RecipeRepository recipeRepository;
     /**
      * Adds a new image to the system.
      *
      * @param file the {@link ImageData} object to add.
+     * @param recipe the {@link Recipe} associated with the image
      * @return {@code boolean}
      */
     @Override
-    public boolean addImageData(MultipartFile file) throws IOException {
+    public boolean addImageData(MultipartFile file, Recipe recipe) throws IOException {
         if (file.isEmpty()) {
             throw new IllegalArgumentException("File is empty");
         }
@@ -41,9 +46,11 @@ public class ImageDataService implements  IImageDataService{
                 .name(file.getOriginalFilename())
                 .type(file.getContentType())
                 .imageData(ImageUtils.compressImage(file.getBytes()))
+                .recipe(recipeRepository.getOne(recipe.getId()))
                 .build());
         return imageData.getId() != null;
     }
+
 
     /**
      * Retrieves an image.
@@ -54,7 +61,6 @@ public class ImageDataService implements  IImageDataService{
     @Override
     @Transactional
     public byte[] getImageData(String nameImage) {
-
         Optional<ImageData> dbImageData = imageDataRepository.findByName(nameImage);
         if (dbImageData.isEmpty()) {
             throw new RuntimeException("Image " + nameImage +" not found");

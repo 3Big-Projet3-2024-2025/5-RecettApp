@@ -52,7 +52,10 @@ public class Users {
      * This field cannot be null.
      * For security, passwords should be encrypted.
      */
+<<<<<<< HEAD
 
+=======
+>>>>>>> e3c98322e8f20019692ebbd20d7fea722835754b
     @Column(nullable = false)
     private String password;
 
