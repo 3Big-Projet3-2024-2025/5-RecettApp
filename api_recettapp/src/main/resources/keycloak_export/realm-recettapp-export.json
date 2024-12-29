@@ -466,7 +466,11 @@
     "totpAppGoogleName",
     "totpAppMicrosoftAuthenticatorName"
   ],
-  "localizationTexts": {},
+  "localizationTexts": {
+    "en": {
+      "termsText": "    <p>Last updated: December 29, 2024</p>      <h3>1. Acceptance of Terms</h3>     <p>By using this platform, you agree to comply with and be bound by the following terms and conditions. Please read them carefully.</p>      <h3>2. User-Generated Content</h3>     <p>By uploading or submitting any images, you acknowledge and agree that the images you post will be publicly visible on the platform. You retain ownership of the images but grant us a worldwide, royalty-free, and non-exclusive license to use, display, and distribute the content in any medium, mode, or format now known or hereafter developed. You understand that these images may be seen by other users and the general public.</p>      <h3>3. Public Nature of Posted Content</h3>     <p>Any content you post, including images, is considered public. You understand that once your images are uploaded, they will be accessible to other users and potentially to anyone with internet access. It is your responsibility to ensure that you are comfortable with the public nature of your submissions.</p>      <h3>4. Restrictions on Use</h3>     <p>You agree not to upload or share any content that violates the rights of others, including but not limited to copyright infringement, harassment, or the sharing of explicit material.</p>      <h3>5. Modifications to the Terms</h3>     <p>We reserve the right to modify or update these terms at any time. Any changes will be posted on this page with an updated revision date. Continued use of the platform after any changes constitutes your acceptance of those changes.</p>      <h3>6. Contact Information</h3>     <p>If you have any questions or concerns about these terms and conditions, please contact us at ceref.groupe1.projetphp.helha@gmail.com.</p>      <p>By using this platform, you acknowledge that you have read, understood, and agree to these Terms and Conditions.</p>"
+    }
+  },
   "webAuthnPolicyRpEntityName": "keycloak",
   "webAuthnPolicySignatureAlgorithms": [
     "ES256",
@@ -2577,8 +2581,8 @@
       "alias": "TERMS_AND_CONDITIONS",
       "name": "Terms and Conditions",
       "providerId": "TERMS_AND_CONDITIONS",
-      "enabled": false,
-      "defaultAction": false,
+      "enabled": true,
+      "defaultAction": true,
       "priority": 20,
       "config": {}
     },
