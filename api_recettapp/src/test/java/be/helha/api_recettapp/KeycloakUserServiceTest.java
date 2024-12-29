@@ -10,9 +10,19 @@ import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.mockito.Mockito;
 
+import java.util.Collections;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+/**
+ * Test class for {@link KeycloakUserService}, focusing on the functionalities
+ * of blocking and unblocking Keycloak users.
+ *
+ * <p>This class uses Mockito to mock Keycloak interactions and to verify the
+ * behavior of the {@link KeycloakUserService#blockUser(String)} and
+ * {@link KeycloakUserService#unblockUser(String)} methods.</p>
+ */
 class KeycloakUserServiceTest {
 
     private KeycloakUserService keycloakUserService;
@@ -21,6 +31,14 @@ class KeycloakUserServiceTest {
     private UsersResource mockUsersResource;
     private UserResource mockUserResource;
 
+    /**
+     * Sets up the test environment by initializing and mocking the dependencies
+     * required for testing {@link KeycloakUserService}.
+     *
+     * <p>This method creates mocks for {@link Keycloak} and its related resources,
+     * establishes a hierarchy of mocked dependencies, and spies on the method that
+     * retrieves the Keycloak instance.</p>
+     */
     @BeforeEach
     void setUp() {
         // Initialize the service
@@ -41,27 +59,47 @@ class KeycloakUserServiceTest {
         doReturn(mockKeycloak).when(keycloakUserService).getKeycloakInstance();
     }
 
+    /**
+     * Tests the {@link KeycloakUserService#blockUser(String)} method.
+     *
+     * <p>This test verifies that a user retrieved via Keycloak API is updated to
+     * have the {@code enabled} field set to {@code false}, effectively blocking
+     * the user.</p>
+     */
     @Test
     void testBlockUser() {
         UserRepresentation user = new UserRepresentation();
+        user.setId("test-user-id");
         user.setEnabled(true);
 
-        when(mockUserResource.toRepresentation()).thenReturn(user);
+        when(mockUsersResource.search(isNull(), isNull(), isNull(), eq("test-email@example.com"), isNull(), isNull()))
+                .thenReturn(Collections.singletonList(user));
 
-        keycloakUserService.blockUser("test-user-id");
+        keycloakUserService.blockUser("test-email@example.com");
 
+        verify(mockUsersResource).search(isNull(), isNull(), isNull(), eq("test-email@example.com"), isNull(), isNull());
         verify(mockUserResource).update(argThat(argument -> !argument.isEnabled()));
     }
 
+    /**
+     * Tests the {@link KeycloakUserService#unblockUser(String)} method.
+     *
+     * <p>This test verifies that a user retrieved via Keycloak API is updated to
+     * have the {@code enabled} field set to {@code true}, effectively unblocking
+     * the user.</p>
+     */
     @Test
     void testUnblockUser() {
         UserRepresentation user = new UserRepresentation();
+        user.setId("test-user-id");
         user.setEnabled(false);
 
-        when(mockUserResource.toRepresentation()).thenReturn(user);
+        when(mockUsersResource.search(isNull(), isNull(), isNull(), eq("test-email@example.com"), isNull(), isNull()))
+                .thenReturn(Collections.singletonList(user));
 
-        keycloakUserService.unblockUser("test-user-id");
+        keycloakUserService.unblockUser("test-email@example.com");
 
+        verify(mockUsersResource).search(isNull(), isNull(), isNull(), eq("test-email@example.com"), isNull(), isNull());
         verify(mockUserResource).update(argThat(argument -> argument.isEnabled()));
     }
 }
