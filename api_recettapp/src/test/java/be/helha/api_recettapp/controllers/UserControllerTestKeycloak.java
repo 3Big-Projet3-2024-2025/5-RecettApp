@@ -1,5 +1,6 @@
 package be.helha.api_recettapp.controllers;
 
+import be.helha.api_recettapp.models.Users;
 import be.helha.api_recettapp.services.KeycloakUserService;
 import be.helha.api_recettapp.services.UserService;
 import org.junit.jupiter.api.Test;
@@ -9,12 +10,19 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.Mockito.doNothing;
+import java.time.LocalDate;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -76,6 +84,23 @@ public class UserControllerTestKeycloak {
         mockMvc.perform(post("/api/users/{id}/unblock", id)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+    }
+
+    /**
+     * Test for the deleteUser method.
+     * Verifies that a user is anonymized, deleted in Keycloak, and removed from the local database correctly.
+     */
+    @Test
+    void testDeleteUser() throws Exception {
+        Users user = new Users(1L, "Abdel", "Alahyane", "abdel@gmail.com", LocalDate.now(), false,null,null);
+
+        doNothing().when(keycloakUserService).deleteUser(user.getId().toString());
+        doNothing().when(userService).delete(user.getId());
+        when(userService.findById(user.getId())).thenReturn(user);
+
+        mockMvc.perform(delete("/api/users/{id}", user.getId().toString())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
     }
 
     /**

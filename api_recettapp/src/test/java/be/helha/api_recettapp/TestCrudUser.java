@@ -126,21 +126,5 @@ class TestCrudUser {
         verify(userService, times(1)).save(user);
     }
 
-    /**
-     * Test for the deleteUser method.
-     * Verifies that a user is deleted correctly.
-     */
-    @Test
-    void testDeleteUser() {
-        doNothing().when(userService).delete(1L);
-
-        ResponseEntity<Void> response = usersController.deleteUser(1L);
-
-        assertEquals(204, response.getStatusCodeValue());
-
-        verify(userService, times(1)).delete(1L);
-    }
-
-
 
 }
