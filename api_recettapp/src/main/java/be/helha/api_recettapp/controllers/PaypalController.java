@@ -1,13 +1,11 @@
 package be.helha.api_recettapp.controllers;
 
+import be.helha.api_recettapp.models.PaypalResponse;
 import be.helha.api_recettapp.services.PaypalService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -53,5 +51,22 @@ public class PaypalController {
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create(approvalUrl));
         return new ResponseEntity<>(headers, HttpStatus.FOUND); // 302 Redirect
+    }
+
+    /**
+     * Endpoint to save the PayPal response associated with a user.
+     *
+     * <p>This endpoint receives a user ID and the PayPal response JSON, and it calls the service layer to
+     * save the PayPal response to the database. The PayPal response is associated with the user identified by the given user ID.</p>
+     *
+     * <p>The method accepts the user ID as a query parameter and the PayPal response JSON as the request body.</p>
+     *
+     * @param userId The ID of the user to associate with the PayPal response.
+     * @param jsonResponse The PayPal response JSON to be saved.
+     * @return The saved {@link PaypalResponse} entity.
+     */
+    @PostMapping("/response")
+    public PaypalResponse savePaypalResponse(@RequestParam Long userId, @RequestBody String jsonResponse) {
+        return paypalService.savePaypalResponse(userId, jsonResponse);
     }
 }
