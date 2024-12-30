@@ -37,6 +37,7 @@ export class EvaluationComponent implements OnInit {
     this.loadEntries();
     this.loadRecipes();
     this.loadEvaluations();
+    this.resetForm();
   }
 
   initEvaluation(): Evaluation {
@@ -144,8 +145,8 @@ export class EvaluationComponent implements OnInit {
 
   resetForm(): void {
     this.currentEvaluation = this.initEvaluation();
-    this.selectedEntryId = null;
-    this.selectedRecipeId = null;
+    this.selectedEntryId = undefined;
+    this.selectedRecipeId = undefined;
   }
 
 }
