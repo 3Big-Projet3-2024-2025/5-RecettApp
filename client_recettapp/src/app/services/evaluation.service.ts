@@ -28,6 +28,7 @@ export class EvaluationService {
     return this.http.post<Evaluation>(this.baseUrl, evaluation);
   }
 
+
   deleteEvaluation(id: number, isAdmin: boolean): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}?isAdmin=${isAdmin}`);
   }
