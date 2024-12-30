@@ -19,28 +19,39 @@ import { ImageServiceService } from '../services/image-service.service';
 export class RecipeComponent {
   recipes: Recipe[] = [];
   isLoading = false;
+  currentPage = 0;
+  pageSize = 3;
+  totalPages = 0;
+
   constructor(private service: RecipeService,private router:Router, private imaService: ImageServiceService) {}
 
 
    ngOnInit(): void {
+    this.loadRecipes(this.currentPage, this.pageSize);
+  }
+
+  loadRecipes(page: number, size: number): void {
     this.isLoading = false;
-    
-    this.service.getAllRecipe().subscribe(data => {
-      const imageRequests = data.map(recipe => {
+    this.service.getAllRecipesPaginated(page, size).subscribe((data) => {
+      this.totalPages = data.totalPages;
+      this.currentPage = page; 
+      const recipes: Recipe[] = data.content;
+  
+      const imageRequests = recipes.map((recipe) => {
         if (recipe.photo_url) {
           return this.imaService.getImage(recipe.photo_url).pipe(
             map((blob: Blob) => {
               recipe.photo_url = URL.createObjectURL(blob);
-              return recipe;  
+              return recipe;
             })
           );
         }
-        return of(recipe);  
+        return of(recipe);
       });
-      
+  
       forkJoin(imageRequests).subscribe((updatedRecipes) => {
         this.recipes = updatedRecipes;
-        this.isLoading = true;  
+        this.isLoading = true;
       });
     });
   }
