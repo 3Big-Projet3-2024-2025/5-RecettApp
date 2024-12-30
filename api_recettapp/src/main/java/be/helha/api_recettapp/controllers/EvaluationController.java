@@ -32,6 +32,7 @@ public class EvaluationController {
      */
     @PostMapping
     public ResponseEntity<Evaluation> addEvaluation(@RequestBody Evaluation evaluation) {
+        evaluation.setId(0L);
         return ResponseEntity.ok(evaluationService.addEvaluation(evaluation));
     }
 
