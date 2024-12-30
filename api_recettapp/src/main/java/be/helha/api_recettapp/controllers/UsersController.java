@@ -100,7 +100,6 @@ public class UsersController {
         Users user = userService.findById(id);
         keycloakUserService.deleteUser(user.getEmail()); //Suppress in Keycloak first because we need the email
         anonymizeUserData(user);
-        userService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
@@ -180,6 +179,7 @@ public class UsersController {
         String uuid = UUID.randomUUID().toString();
         user.setFirstName("Anonymized");
         user.setEmail("anonymized" + uuid + "@example.com");
+        user.setBlocked(true);
         user.setRegistrations(null); // it's not necessary to keep the active entries if the user delete his account
         userService.save(user);
     }

@@ -95,7 +95,6 @@ public class UserControllerTestKeycloak {
         Users user = new Users(1L, "Abdel", "Alahyane", "abdel@gmail.com", LocalDate.now(), false,null,null);
 
         doNothing().when(keycloakUserService).deleteUser(user.getId().toString());
-        doNothing().when(userService).delete(user.getId());
         when(userService.findById(user.getId())).thenReturn(user);
 
         mockMvc.perform(delete("/api/users/{id}", user.getId().toString())
