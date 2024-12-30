@@ -82,5 +82,24 @@ export class RecipeComponent {
     }
   }
 
+  goToPage(page: number): void {
+    if (page >= 0 && page < this.totalPages) {
+      this.loadRecipes(page, this.pageSize);
+    }
+  }
+  
+  goToPrevious(): void {
+    if (this.currentPage > 0) {
+      this.goToPage(this.currentPage - 1);
+    } 
+  }
+  
+  
+  goToNext(): void {
+    if (this.currentPage < this.totalPages - 1) {
+      this.goToPage(this.currentPage + 1);
+    }
+}
+
 }
 
