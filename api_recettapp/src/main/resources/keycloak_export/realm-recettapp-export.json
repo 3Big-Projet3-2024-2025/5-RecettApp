@@ -326,7 +326,16 @@
           "attributes": {}
         }
       ],
-      "backend_recettapp": [],
+      "backend_recettapp": [
+        {
+          "id": "c1cec4d8-d5cf-4a58-9403-0b62c57655a9",
+          "name": "uma_protection",
+          "composite": false,
+          "clientRole": true,
+          "containerId": "06796860-8358-4f35-9a4e-b3e6b7a7b769",
+          "attributes": {}
+        }
+      ],
       "security-admin-console": [],
       "admin-cli": [],
       "account-console": [],
@@ -457,7 +466,11 @@
     "totpAppGoogleName",
     "totpAppMicrosoftAuthenticatorName"
   ],
-  "localizationTexts": {},
+  "localizationTexts": {
+    "en": {
+      "termsText": "    <p>Last updated: December 29, 2024</p>      <h3>1. Acceptance of Terms</h3>     <p>By using this platform, you agree to comply with and be bound by the following terms and conditions. Please read them carefully.</p>      <h3>2. User-Generated Content</h3>     <p>By uploading or submitting any images, you acknowledge and agree that the images you post will be publicly visible on the platform. You retain ownership of the images but grant us a worldwide, royalty-free, and non-exclusive license to use, display, and distribute the content in any medium, mode, or format now known or hereafter developed. You understand that these images may be seen by other users and the general public.</p>      <h3>3. Public Nature of Posted Content</h3>     <p>Any content you post, including images, is considered public. You understand that once your images are uploaded, they will be accessible to other users and potentially to anyone with internet access. It is your responsibility to ensure that you are comfortable with the public nature of your submissions.</p>      <h3>4. Restrictions on Use</h3>     <p>You agree not to upload or share any content that violates the rights of others, including but not limited to copyright infringement, harassment, or the sharing of explicit material.</p>      <h3>5. Modifications to the Terms</h3>     <p>We reserve the right to modify or update these terms at any time. Any changes will be posted on this page with an updated revision date. Continued use of the platform after any changes constitutes your acceptance of those changes.</p>      <h3>6. Contact Information</h3>     <p>If you have any questions or concerns about these terms and conditions, please contact us at ceref.groupe1.projetphp.helha@gmail.com.</p>      <p>By using this platform, you acknowledge that you have read, understood, and agree to these Terms and Conditions.</p>"
+    }
+  },
   "webAuthnPolicyRpEntityName": "keycloak",
   "webAuthnPolicySignatureAlgorithms": [
     "ES256",
@@ -486,6 +499,63 @@
   "webAuthnPolicyPasswordlessAvoidSameAuthenticatorRegister": false,
   "webAuthnPolicyPasswordlessAcceptableAaguids": [],
   "webAuthnPolicyPasswordlessExtraOrigins": [],
+  "users": [
+    {
+      "id": "5bfa9ba6-36a0-40ff-ad72-a95241969c73",
+      "username": "service-account-backend_recettapp",
+      "emailVerified": false,
+      "createdTimestamp": 1735476340544,
+      "enabled": true,
+      "totp": false,
+      "serviceAccountClientId": "backend_recettapp",
+      "disableableCredentialTypes": [],
+      "requiredActions": [],
+      "realmRoles": [
+        "default-roles-recettapp"
+      ],
+      "clientRoles": {
+        "realm-management": [
+          "manage-events",
+          "view-clients",
+          "query-groups",
+          "manage-users",
+          "realm-admin",
+          "view-authorization",
+          "manage-realm",
+          "create-client",
+          "view-realm",
+          "manage-authorization",
+          "view-identity-providers",
+          "manage-identity-providers",
+          "impersonation",
+          "view-events",
+          "query-users",
+          "manage-clients",
+          "query-clients",
+          "view-users",
+          "query-realms"
+        ],
+        "backend_recettapp": [
+          "uma_protection"
+        ],
+        "broker": [
+          "read-token"
+        ],
+        "account": [
+          "view-groups",
+          "view-applications",
+          "manage-account",
+          "manage-account-links",
+          "view-profile",
+          "delete-account",
+          "manage-consent",
+          "view-consent"
+        ]
+      },
+      "notBefore": 0,
+      "groups": []
+    }
+  ],
   "scopeMappings": [
     {
       "clientScope": "offline_access",
@@ -680,16 +750,17 @@
       "standardFlowEnabled": true,
       "implicitFlowEnabled": false,
       "directAccessGrantsEnabled": true,
-      "serviceAccountsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "authorizationServicesEnabled": true,
       "publicClient": false,
       "frontchannelLogout": true,
       "protocol": "openid-connect",
       "attributes": {
-        "client.secret.creation.time": "1733144829",
+        "client.secret.creation.time": "1735477798",
         "client.introspection.response.allow.jwt.claim.enabled": "false",
         "login_theme": "keycloak.v2",
         "post.logout.redirect.uris": "+",
-        "oauth2.device.authorization.grant.enabled": "false",
+        "oauth2.device.authorization.grant.enabled": "true",
         "use.jwks.url": "false",
         "backchannel.logout.revoke.offline.tokens": "false",
         "use.refresh.tokens": "true",
@@ -707,6 +778,53 @@
       "authenticationFlowBindingOverrides": {},
       "fullScopeAllowed": true,
       "nodeReRegistrationTimeout": -1,
+      "protocolMappers": [
+        {
+          "id": "bf45b2bc-be38-477a-b2a7-c106e3fb0960",
+          "name": "Client Host",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientHost",
+            "id.token.claim": "true",
+            "introspection.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientHost",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "d44bd3f5-2c63-400c-9d5a-b47ddafdc584",
+          "name": "Client ID",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "client_id",
+            "id.token.claim": "true",
+            "introspection.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "client_id",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "b0e82ccd-34d2-4c84-a34f-40af594f4442",
+          "name": "Client IP Address",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usersessionmodel-note-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.session.note": "clientAddress",
+            "id.token.claim": "true",
+            "introspection.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "clientAddress",
+            "jsonType.label": "String"
+          }
+        }
+      ],
       "defaultClientScopes": [
         "web-origins",
         "acr",
@@ -721,7 +839,47 @@
         "organization",
         "offline_access",
         "microprofile-jwt"
-      ]
+      ],
+      "authorizationSettings": {
+        "allowRemoteResourceManagement": true,
+        "policyEnforcementMode": "ENFORCING",
+        "resources": [
+          {
+            "name": "Default Resource",
+            "type": "urn:backend_recettapp:resources:default",
+            "ownerManagedAccess": false,
+            "attributes": {},
+            "uris": [
+              "/*"
+            ]
+          }
+        ],
+        "policies": [
+          {
+            "name": "Default Policy",
+            "description": "A policy that grants access only for users within this realm",
+            "type": "js",
+            "logic": "POSITIVE",
+            "decisionStrategy": "AFFIRMATIVE",
+            "config": {
+              "code": "// by default, grants any permission associated with this policy\n$evaluation.grant();\n"
+            }
+          },
+          {
+            "name": "Default Permission",
+            "description": "A permission that applies to the default resource type",
+            "type": "resource",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "config": {
+              "defaultResourceType": "urn:backend_recettapp:resources:default",
+              "applyPolicies": "[\"Default Policy\"]"
+            }
+          }
+        ],
+        "scopes": [],
+        "decisionStrategy": "UNANIMOUS"
+      }
     },
     {
       "id": "09feb586-a347-4520-84cc-b837a7e498e3",
@@ -2423,8 +2581,8 @@
       "alias": "TERMS_AND_CONDITIONS",
       "name": "Terms and Conditions",
       "providerId": "TERMS_AND_CONDITIONS",
-      "enabled": false,
-      "defaultAction": false,
+      "enabled": true,
+      "defaultAction": true,
       "priority": 20,
       "config": {}
     },

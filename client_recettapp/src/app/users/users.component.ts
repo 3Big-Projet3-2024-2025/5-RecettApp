@@ -63,8 +63,7 @@ export class UsersComponent implements OnInit {
     this.filteredUsers = this.users.filter(user =>
       user.firstName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
       user.lastName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-      user.email.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-      user.phone_number.toLowerCase().includes(this.searchTerm.toLowerCase())
+      user.email.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
   } else {
     this.filteredUsers = [...this.users];
@@ -98,7 +97,27 @@ onSearchByEmail(): void {
           this.errMessage = `Error during the process : ${err.error.error}`;
           console.log(this.errMessage);
         }
-        
+
+      }));
+    }
+  }
+
+  toggleBlockStatus(email: string, isBlocked: boolean): void {
+    if (isBlocked) {
+      this.usersService.unblockUser(email).subscribe(({
+        next: () => {
+          this.loadUsers();
+        }, error: (error) => {
+          console.error('Error unblocking user:', error.error.error);
+        }
+      }));
+    } else {
+      this.usersService.blockUser(email).subscribe(({
+        next: () => {
+          this.loadUsers();
+        }, error: (error) => {
+          console.error('Error blocking user:', error.error.error);
+        }
       }));
     }
   }

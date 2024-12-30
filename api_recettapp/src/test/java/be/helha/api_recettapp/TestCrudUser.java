@@ -38,7 +38,7 @@ class TestCrudUser {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        user = new Users(1L, "Abdel", "Alahyane", "abdel@gmail.com", "password", "active", LocalDate.now(), "0471772755",null,null);
+        user = new Users(1L, "Abdel", "Alahyane", "abdel@gmail.com", LocalDate.now(), false,null,null);
     }
 
 

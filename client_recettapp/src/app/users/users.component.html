@@ -3,7 +3,7 @@
     <div class="alert alert-danger" role="alert">
       {{this.errMessage}}
     </div>
-  } 
+  }
 
 <!-- Barre de recherche
 <div class="search-container">
@@ -26,13 +26,11 @@
     <thead>
       <tr>
         <!--<th>ID</th> -->
-        
+
         <th>First Name</th>
         <th>Last Name</th>
         <th>Email</th>
-        <th>Status</th>
         <th>Registration Date</th>
-        <th>Phone</th>
         <th>Actions</th>
       </tr>
     </thead>
@@ -43,10 +41,12 @@
         <td>{{ user.firstName }}</td>
         <td>{{ user.lastName }}</td>
         <td>{{ user.email }}</td>
-        <td>{{ user.status }}</td>
         <td>{{ user.date_registration | date: 'dd/MM/yyyy' }}</td>
-        <td>{{ user.phone_number }}</td>
         <td>
+          <button *ngIf="!user.blocked" class="action-btn block-btn"
+                  (click)="toggleBlockStatus(user.email, user.blocked)">Block</button>
+          <button *ngIf="user.blocked" class="action-btn unblock-btn"
+                  (click)="toggleBlockStatus(user.email, user.blocked)">Unblock</button>
           <button class="action-btn delete-btn" (click)="onDelete(user.id)">Delete</button>
         </td>
       </tr>
