@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * REST Controller for managing Users.
@@ -42,7 +43,12 @@ public class UsersController {
      */
     @GetMapping
     public ResponseEntity<List<Users>> getAllUsers() {
-        return ResponseEntity.ok(userService.findAll());
+        List<Users> allUsers = userService.findAll();
+        // Filter users to suppress users with FirstName = "Anonymized"
+        List<Users> filteredUsers = allUsers.stream()
+                .filter(user -> !user.getFirstName().equals("Anonymized"))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(filteredUsers);
     }
 
     /**
