@@ -101,7 +101,7 @@ export class EvaluationComponent implements OnInit {
 
   saveEvaluation(): void {
     console.log(this.currentEvaluation);
-    if (this.currentEvaluation.id) {
+    if (!this.currentEvaluation.id) {
       if(this.currentEvaluation.entry){
         this.currentEvaluation.entry.id = this.selectedEntryId
       }
@@ -119,7 +119,6 @@ export class EvaluationComponent implements OnInit {
         },
       });
     } else {
-
       this.evaluationService.addEvaluation(this.currentEvaluation).subscribe({
         next: () => {
           this.loadEvaluations();
@@ -132,8 +131,6 @@ export class EvaluationComponent implements OnInit {
       });
     }
   }
-
-
 
 
   editEvaluation(evaluation: Evaluation): void {
