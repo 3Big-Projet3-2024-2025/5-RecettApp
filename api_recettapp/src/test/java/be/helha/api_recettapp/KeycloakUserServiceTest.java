@@ -102,5 +102,25 @@ class KeycloakUserServiceTest {
         verify(mockUsersResource).search(isNull(), isNull(), isNull(), eq("test-email@example.com"), isNull(), isNull());
         verify(mockUserResource).update(argThat(argument -> argument.isEnabled()));
     }
+
+    /**
+     * Tests the {@link KeycloakUserService#deleteUser(String)} method.
+     *
+     * <p>This test verifies that a user retrieved via Keycloak API is deleted
+     * from the Keycloak server.</p>
+     */
+    @Test
+    void testDeleteUser() {
+        UserRepresentation user = new UserRepresentation();
+        user.setId("test-user-id");
+
+        when(mockUsersResource.search(isNull(), isNull(), isNull(), eq("test-email@example.com"), isNull(), isNull()))
+                .thenReturn(Collections.singletonList(user));
+
+        keycloakUserService.deleteUser("test-email@example.com");
+
+        verify(mockUsersResource).search(isNull(), isNull(), isNull(), eq("test-email@example.com"), isNull(), isNull());
+        verify(mockUserResource).remove();
+    }
 }
 
