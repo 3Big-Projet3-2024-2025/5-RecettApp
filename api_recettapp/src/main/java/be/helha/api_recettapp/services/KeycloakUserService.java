@@ -3,11 +3,14 @@ package be.helha.api_recettapp.services;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
+import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
@@ -104,6 +107,43 @@ public class KeycloakUserService {
         } else {
             throw new RuntimeException("User not found with email: " + email);
         }
+    }
+
+    /**
+     * Retrieves a list of all users in the specified Keycloak realm, along with their associated roles.
+     *
+     * <p>This method interacts with the Keycloak server to fetch all users in the realm. For each user,
+     * it retrieves their roles at the realm level and adds these roles as a list of strings to the user's attributes.</p>
+     *
+     * <p>The roles are extracted from the Keycloak server and mapped into a list of role names, which are then
+     * set as an attribute in each user's {@code UserRepresentation} object under the key "roles".</p>
+     *
+     * @return a {@link List} of {@link UserRepresentation} objects, each containing user details along with their associated roles.
+     */
+    public List<UserRepresentation> listUsers() {
+        Keycloak keycloak = getKeycloakInstance();
+
+        // List all users in the realm
+        List<UserRepresentation> users = keycloak.realm(realm).users().list();
+
+        // For each user list all his roles
+        users.forEach(user -> {
+            List<RoleRepresentation> realmRoles = keycloak.realm(realm).users()
+                    .get(user.getId())
+                    .roles()
+                    .realmLevel()
+                    .listAll();
+
+            //For each role transform the name of the role in string
+            List<String> roleNames = realmRoles.stream()
+                    .map(RoleRepresentation::getName)
+                    .toList();
+
+            // Add roles at the user
+            user.setAttributes(Map.of("roles", roleNames));
+        });
+
+        return users;
     }
 }
 
