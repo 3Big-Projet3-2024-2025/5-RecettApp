@@ -5,6 +5,9 @@ import { EntriesService } from '../services/entries.service';
 import { RecipeService } from '../services/recipe_Service/recipe.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Entry } from '../models/entry';
+import { Recipe } from '../models/recipe';
+
 
 
 @Component({
@@ -36,33 +39,35 @@ export class EvaluationComponent implements OnInit {
     this.loadEvaluations();
   }
 
-  // Initialisation avec des valeurs par défaut
   initEvaluation(): Evaluation {
-    return {
+    const entry : Entry = {
+
+    }
+    const recipe : Recipe = {
+      id: 0,
+      title: '',
+      description: '',
+      category: '',
+      preparation_time: 0,
+      cooking_time: 0,
+      servings: 0,
+      difficulty_level: '',
+      instructions: '',
+      approved: false,
+      components: [],
+      image: []
+    }
+    const evaluation : Evaluation = {
+      id: 0,
       rate: 0,
-      entry: {
-        id: 0,
-        users: undefined,
-        contest: undefined,
-        status: ''
-      },
-      recipe: {
-        id: 0,
-        title: '',
-        description: '',
-        category: '',
-        preparation_time: 0,
-        cooking_time: 0,
-        servings: 0,
-        difficulty_level: '',
-        instructions: '',
-        approved: false,
-        components: []
-      }
-    };
+      entry: entry,
+      recipe: recipe
+    }
+    return evaluation;
   }
 
-  // Chargement des évaluations
+
+
   loadEvaluations(): void {
     this.evaluationService.getAllEvaluations().subscribe({
       next: (data) => (this.evaluations = data),
@@ -70,7 +75,6 @@ export class EvaluationComponent implements OnInit {
     });
   }
 
-  // Chargement des entrées
   loadEntries(): void {
     this.entryService.getAllEntries().subscribe({
       next: (data) => (this.entries = data),
@@ -78,7 +82,6 @@ export class EvaluationComponent implements OnInit {
     });
   }
 
-  // Chargement des recettes
   loadRecipes(): void {
     this.recipeService.getAllRecipe().subscribe({
       next: (data) => (this.recipes = data),
@@ -86,7 +89,6 @@ export class EvaluationComponent implements OnInit {
     });
   }
 
-  // Méthode pour supprimer une évaluation
   deleteEvaluation(evaluation: Evaluation): void {
     if (confirm('Êtes-vous sûr de vouloir supprimer cette évaluation ?')) {
       this.evaluationService.deleteEvaluation(evaluation.id!, this.isAdmin).subscribe({
@@ -96,32 +98,38 @@ export class EvaluationComponent implements OnInit {
     }
   }
 
-  // Méthode pour ajouter ou modifier une évaluation
   saveEvaluation(): void {
+    console.log(this.currentEvaluation);
     if (this.currentEvaluation.id) {
-      // Modification d'une évaluation existante
+
       this.evaluationService.addEvaluation(this.currentEvaluation).subscribe({
         next: () => {
           this.loadEvaluations();
           this.resetForm();
           this.showForm = false;
         },
-        error: (err) => console.error('Erreur lors de la modification de l\'évaluation :', err),
+        error: (err) => {
+          console.error('Erreur lors de la modification de l\'évaluation :', err);
+        },
       });
     } else {
-      // Ajout d'une nouvelle évaluation
+
       this.evaluationService.addEvaluation(this.currentEvaluation).subscribe({
         next: () => {
           this.loadEvaluations();
           this.resetForm();
           this.showForm = false;
         },
-        error: (err) => console.error('Erreur lors de l\'ajout de l\'évaluation :', err),
+        error: (err) => {
+          console.error('Erreur lors de l\'ajout de l\'évaluation :', err);
+        },
       });
     }
   }
 
-  // Méthode pour initialiser le formulaire pour l'édition
+
+
+
   editEvaluation(evaluation: Evaluation): void {
     this.currentEvaluation = { ...evaluation };
     this.selectedEntryId = evaluation.entry?.id || null;
@@ -129,7 +137,6 @@ export class EvaluationComponent implements OnInit {
     this.showForm = true;
   }
 
-  // Méthode pour réinitialiser le formulaire
   resetForm(): void {
     this.currentEvaluation = this.initEvaluation();
     this.selectedEntryId = null;
