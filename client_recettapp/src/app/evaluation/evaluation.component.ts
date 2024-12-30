@@ -24,8 +24,8 @@ export class EvaluationComponent implements OnInit {
   recipes: any[] = [];
   showForm = false;
   isAdmin = true;
-  selectedEntryId: number | null = null;
-  selectedRecipeId: number | null = null;
+  selectedEntryId: number | undefined;
+  selectedRecipeId: number | undefined;
 
   constructor(
     private evaluationService: EvaluationService,
@@ -101,7 +101,12 @@ export class EvaluationComponent implements OnInit {
   saveEvaluation(): void {
     console.log(this.currentEvaluation);
     if (this.currentEvaluation.id) {
-
+      if(this.currentEvaluation.entry){
+        this.currentEvaluation.entry.id = this.selectedEntryId
+      }
+      if(this.selectedRecipeId && this.currentEvaluation.recipe){
+        this.currentEvaluation.recipe.id = this.selectedRecipeId
+      }
       this.evaluationService.addEvaluation(this.currentEvaluation).subscribe({
         next: () => {
           this.loadEvaluations();
