@@ -87,5 +87,23 @@ public class KeycloakUserService {
             throw new RuntimeException("User not found with email: " + email);
         }
     }
+
+    /**
+     * Deletes a user in Keycloak.
+     *
+     * This method fetches the user by their email from the specified realm and deletes their account.
+     *
+     * @param email The email of the user to delete.
+     */
+    public void deleteUser(String email) {
+        Keycloak keycloak = getKeycloakInstance();
+        List<UserRepresentation> users = keycloak.realm(realm).users().search(null, null, null, email, null, null);
+        if (!users.isEmpty()) {
+            UserRepresentation user = users.get(0); // Email is unique in Keycloak Config so no problem
+            keycloak.realm(realm).users().get(user.getId()).remove();
+        } else {
+            throw new RuntimeException("User not found with email: " + email);
+        }
+    }
 }
 
