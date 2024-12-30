@@ -28,6 +28,9 @@ public class Evaluation {
      */
     private int rate;
 
+
+    private String commentaire ;
+
     /**
      * The contest entry associated with this evaluation.
      */
