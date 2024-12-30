@@ -133,13 +133,6 @@ export class EvaluationComponent implements OnInit {
   }
 
 
-  editEvaluation(evaluation: Evaluation): void {
-    this.currentEvaluation = { ...evaluation };
-    this.selectedEntryId = evaluation.entry?.id || undefined;
-    this.selectedRecipeId = evaluation.recipe?.id || undefined;
-    this.showForm = true;
-  }
-
   resetForm(): void {
     this.currentEvaluation = this.initEvaluation();
     this.selectedEntryId = undefined;
