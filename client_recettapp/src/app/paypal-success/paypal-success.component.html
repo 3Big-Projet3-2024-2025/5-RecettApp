@@ -1,1 +1,51 @@
-<p>paypal-success works!</p>
+<div class="container">
+  <h2 class="my-5 text-success">Success Payment</h2>
+
+  @if(this.paymentData){
+  <h2 class="my-5 text-success">Your informations</h2>
+  <div class="card">
+    <div class="card-body">
+      <p><strong>PayerId:</strong> {{this.paymentData.payerId}}</p>
+      <p><strong>PaymentId:</strong> {{this.paymentData.paymentId}}</p>
+      <p><strong>Token:</strong> {{this.paymentData.token}}</p>
+    </div>
+  </div>
+  }
+
+  @if(this.paymentStatus){
+    <div class="my-3">
+  @if(this.paymentStatus === 'Payment Successful'){
+  <div class="alert alert-success" role="alert">
+    {{this.paymentStatus}}
+  </div>
+  }
+  @else if (this.paymentStatus === 'Payment Failed') {
+  <div class="alert alert-warning" role="alert">
+    {{this.paymentStatus}}
+  </div>
+  }
+  @else if
+  (this.paymentStatus === 'Payment Validation Error'){
+  <div class="alert alert-danger" role="alert">
+    {{this.paymentStatus}}
+  </div>
+  }
+  @else if(this.paymentStatus === 'This Payment was successful and already happened'){
+    <div class="alert alert-primary" role="alert">
+      {{this.paymentStatus}}
+    </div>
+  }
+  <p>You will be redirected in {{countdown}} seconds...</p>
+  </div>
+  } @else{
+    <div class="container">
+      <div class="d-flex justify-content-center my-3">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    </div>
+    
+  }
+
+</div>

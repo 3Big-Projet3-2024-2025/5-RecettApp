@@ -27,6 +27,7 @@ export const routes: Routes = [
         { path: 'entries', component: EntriesTableComponent , canActivate: [KeycloakGuard]},
         { path: 'available-contests', component: AvailableContestComponent, canActivate: [KeycloakGuard]},
         { path: 'success', component:PaypalSuccessComponent},
+        { path: 'cancel', component:PaypalCancelComponent},
         { path: 'home', component: HomePageComponent}
 
 

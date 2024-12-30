@@ -58,4 +58,24 @@ public class PaypalController {
         // Return the URL in the response body
         return ResponseEntity.ok(response);
     }
+
+    /**
+     * Validates a PayPal payment by checking the payment status using the provided payment ID and payer ID.
+     *
+     * This endpoint handles GET requests to the {@code /validate} path. It verifies if the payment was successfully
+     * completed by interacting with the PayPal service. The validation checks if the provided {@code paymentId}
+     * and {@code payerId} match a successful transaction.
+     *
+     * @param paymentId The unique PayPal payment ID associated with the payment.
+     * @param payerId The PayPal payer ID associated with the payment.
+     * @return A {@link ResponseEntity} containing a {@code Boolean} value indicating whether the payment was
+     *         successful. If the payment is successful, it returns {@code true}, otherwise {@code false}.
+     */
+    @GetMapping("/validate")
+    public ResponseEntity<Boolean> validatePayment(
+            @RequestParam String paymentId,
+            @RequestParam String payerId) {
+        boolean isPaymentSuccessful = paypalService.validatePayment(paymentId, payerId);
+        return ResponseEntity.ok(isPaymentSuccessful);
+    }
 }
