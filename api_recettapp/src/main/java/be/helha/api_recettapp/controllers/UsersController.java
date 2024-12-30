@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * REST Controller for managing Users.
@@ -89,13 +90,16 @@ public class UsersController {
     }
 
     /**
-     * Deletes a user by their ID.
+     * Get the user by its ID to anonymize it, suppress its account in Keycloak and the local DB.
      *
      * @param id the ID of the user to delete
      * @return a ResponseEntity with an HTTP status of 204 (No Content)
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        Users user = userService.findById(id);
+        keycloakUserService.deleteUser(user.getEmail()); //Suppress in Keycloak first because we need the email
+        anonymizeUserData(user);
         userService.delete(id);
         return ResponseEntity.noContent().build();
     }
@@ -161,6 +165,23 @@ public class UsersController {
             updateUser(localUser.getId(), localUser);
         }
         return ResponseEntity.ok("User unblocked successfully");
+    }
+
+    /**
+     * Anonymizes the personal data of a given user.
+     *
+     * <p>This method replaces the user's first name with the string "Anonymized"
+     * and sets their email address to a unique anonymized value using a randomly
+     * generated UUID. The updated user data is then saved to the database.</p>
+     *
+     * @param user the {@link Users} object whose data needs to be anonymized.
+     */
+    public void anonymizeUserData(Users user) {
+        String uuid = UUID.randomUUID().toString();
+        user.setFirstName("Anonymized");
+        user.setEmail("anonymized" + uuid + "@example.com");
+        user.setRegistrations(null); // it's not necessary to keep the active entries if the user delete his account
+        userService.save(user);
     }
 
 }
