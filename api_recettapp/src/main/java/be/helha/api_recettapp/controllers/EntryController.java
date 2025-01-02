@@ -3,9 +3,12 @@ package be.helha.api_recettapp.controllers;
 import be.helha.api_recettapp.models.Entry;
 import be.helha.api_recettapp.services.IEntryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Controlers of Entry
@@ -16,7 +19,7 @@ import java.util.List;
 public class EntryController {
 
     @Autowired
-    private IEntryService contestService;
+    private IEntryService entryService;
 
     /**
      * GET - get all the entries
@@ -24,7 +27,7 @@ public class EntryController {
      */
     @GetMapping
     public List<Entry> getEntries(){
-        return contestService.getEntries();
+        return entryService.getEntries();
     }
 
     /**
@@ -34,7 +37,7 @@ public class EntryController {
      */
     @GetMapping(path="/{id}")
     public Entry getContestById(@PathVariable int id){
-        return contestService.getEntryById(id);
+        return entryService.getEntryById(id);
     }
 
     /**
@@ -44,7 +47,7 @@ public class EntryController {
      */
     @PostMapping
     public Entry addEntry(@RequestBody Entry entry){
-        return contestService.addEntry(entry);
+        return entryService.addEntry(entry);
     }
 
     /**
@@ -54,7 +57,33 @@ public class EntryController {
      */
     @PutMapping
     public Entry updateEntry(@RequestBody Entry entry){
-        return contestService.updateEntry(entry);
+        return entryService.updateEntry(entry);
+    }
+
+
+    /**
+     * PUT - register an entry if the UUID is correct
+     * @param entry the entry to update
+     * @param uuid the uuid of the entry registered
+     * @return Entry the entry registered
+     */
+    @PutMapping("/register")
+    public Entry registerEntry(@RequestBody Entry entry, @RequestBody UUID uuid){
+        Entry entry1 = entryService.getEntryById(entry.getId());
+
+
+        if(entry1.getUuid() == uuid){
+            entry1.setStatus("registered");
+            entry1.setUuid(null);
+            entryService.updateEntry(entry);
+            return entry;
+        } else{
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "The provided UUID is incorrect or not found for this entry."
+            );
+        }
+
     }
 
     /**
@@ -63,6 +92,6 @@ public class EntryController {
      */
     @DeleteMapping(path = "/{id}")
     public void deleteEntry(@PathVariable int id){
-        contestService.deleteEntry(id);
+        entryService.deleteEntry(id);
     }
 }
