@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 
 /**
@@ -41,6 +42,37 @@ public class EntryService implements IEntryService {
                 .orElseThrow(() -> new EntityNotFoundException("Entry with id " + id + " not found"));
     }
 
+    /**
+     *  Find an Entry with a specific UUID and remove it
+     *
+     * @param uuid the specific uuid
+     * @return entry the Entry object
+     */
+    public Entry removeUuid(UUID uuid){
+        Entry entry = repository.findByUuid(uuid);
+        if (entry != null) {
+
+            // remove uuid
+            entry.setUuid(null);
+            repository.save(entry);
+        }
+
+
+        return null;
+    }
+
+    /**
+     * Find an entry by his UUID
+     *
+     * @param uuid the specific uuid
+     * @return entry the Entry object
+     */
+    @Override
+    public Entry getEntryByUuid(UUID uuid) {
+        return repository.findByUuid(uuid);
+    }
+
+    
     /**
      * Add an entry
      * @param entry the entry to add
