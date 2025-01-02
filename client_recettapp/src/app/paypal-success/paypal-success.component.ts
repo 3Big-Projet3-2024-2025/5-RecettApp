@@ -27,12 +27,13 @@ export class PaypalSuccessComponent {
   
 
   ngOnInit():void{
+    const uuid = this.route.snapshot.queryParamMap.get('uuid') || '';
     const paymentId = this.route.snapshot.queryParamMap.get('paymentId') || '';
     const token = this.route.snapshot.queryParamMap.get('token') || '';
     const payerId = this.route.snapshot.queryParamMap.get('PayerID') || '';
 
     this.setPaypalPaymentData(paymentId, token, payerId);
-    this.validatePayment(paymentId,payerId);
+    this.validatePayment(uuid, paymentId,payerId);
     console.log('PayPal Payment Data:', this.paymentData);
     this.startCountdown();
     
@@ -48,9 +49,9 @@ export class PaypalSuccessComponent {
     };
   }
 
-  validatePayment(paymentId : string,payerId : string){
+  validatePayment(uuid : string, paymentId : string,payerId : string){
     if (paymentId && payerId) {
-      this.paypalService.validatePayment(paymentId, payerId).subscribe({
+      this.paypalService.validatePayment(paymentId, payerId, uuid).subscribe({
         next: (isSuccessful) => {
           this.paymentStatus = isSuccessful ? 'Payment Successful' : 'Payment Failed';
 
@@ -80,7 +81,7 @@ export class PaypalSuccessComponent {
   }
 
   redirectToHome(): void {
-    this.router.navigate(['/home']); // Redirect to the desired route
+    this.router.navigate(['/home']); 
   }
 
 

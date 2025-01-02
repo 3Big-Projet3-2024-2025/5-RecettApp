@@ -7,6 +7,7 @@ import { KeycloakService } from 'keycloak-angular';
 import {jwtDecode} from 'jwt-decode';
 import { UsersService } from '../services/users.service';
 import { PaypalService } from '../services/paypal.service';
+import { Entry } from '../models/entry';
 
 @Component({
   selector: 'app-registration',
@@ -24,15 +25,18 @@ export class RegistrationComponent {
   user!: User;
   userName!: string;
 
+  entry: Entry = {id: 0, contest : undefined, users: undefined, status: "" };
+
   constructor(
     private keycloakService : KeycloakService,
     private userService : UsersService,
-    private paypalService : PaypalService
+    private paypalService : PaypalService,
   ) {}
 
   ngOnInit() {
     console.log('Received contest:', this.contest);
     this.getUserDetail();
+
   }
 
   getUserDetail():void{
@@ -67,9 +71,13 @@ export class RegistrationComponent {
   }
 
 
+
   pay():void{
+    this.entry.contest = this.contest;
+    this.entry.users = this.user;
+    this.entry.status = "process";
     const price = 20
-    this.paypalService.payToRegister(price).subscribe({
+    this.paypalService.payToRegister(price, this.entry).subscribe({
       next: (approvalUrl) => {
         console.log('Redirecting to PayPal URL:', approvalUrl);
         window.location.href = approvalUrl;

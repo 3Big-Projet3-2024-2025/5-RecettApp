@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs';
 import { PayPalPayment } from '../models/paypal-payment';
+import { Entry } from '../models/entry';
 
 interface PayPalResponse {
   approvalUrl: string;
@@ -17,9 +18,9 @@ export class PaypalService {
   constructor(private http: HttpClient) { }
 
 
-  payToRegister(amount: number): Observable<string> {
+  payToRegister(amount: number, entry : Entry): Observable<string> {
     console.log('Initiating PayPal payment for amount:', amount);
-    return this.http.get<PayPalResponse>(`${this.apiUrl}/pay?total=${amount}`)
+    return this.http.post<PayPalResponse>(`${this.apiUrl}/pay?total=${amount}`, entry)
       .pipe(
         map(response => {
           console.log('Received PayPal response:', response);
@@ -38,9 +39,9 @@ export class PaypalService {
   /*
   Check if a paypal payment is valid
   */
-  validatePayment(paymentId: string, payerId: string): Observable<boolean> {
+  validatePayment(paymentId: string, payerId: string, uuid: string): Observable<boolean> {
     return this.http.get<boolean>(`${this.apiUrl}/validate`, {
-      params: { paymentId, payerId }
+      params: { uuid, paymentId, payerId }
     });
   }
 }

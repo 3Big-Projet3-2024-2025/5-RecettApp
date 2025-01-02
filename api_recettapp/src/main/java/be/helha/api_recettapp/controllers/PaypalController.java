@@ -54,7 +54,7 @@ public class PaypalController {
      * @param total The total amount for the payment in USD.
      * @return A {@link String} containing the approval URL for the user to complete the payment.
      */
-    @GetMapping("/pay")
+    @PostMapping ("/pay")
     public ResponseEntity<Map<String, String>> pay(@RequestParam double total, @RequestBody Entry entry) {
 
         // check if entry is valid
@@ -79,7 +79,9 @@ public class PaypalController {
 
         // set Random UUID
         Entry updatedEntry = entryService.setUuid(entry);
+        updatedEntry.setStatus("waiting");
         UUID uuid = updatedEntry.getUuid();
+        entryService.updateEntry(updatedEntry);
 
         // Redirect to these url
         String successUrl = "http://localhost:4200/success?uuid=" + uuid;
@@ -113,9 +115,22 @@ public class PaypalController {
             @RequestParam String paymentId,
             @RequestParam String payerId) {
 
+
         boolean isPaymentSuccessful = paypalService.validatePayment(paymentId, payerId);
+        boolean uuidExist = false;
         if(isPaymentSuccessful){
-            // do something
+
+            Entry entry = entryService.getEntryByUuid(uuid);
+            if( entry != null){
+                // remove the UUID
+                entryService.removeUuid(uuid);
+                entry.setStatus("registered");
+                entryService.updateEntry(entry);
+                // save paypal payment
+            } else{
+
+                return ResponseEntity.ok(!uuidExist);
+            }
         }
         return ResponseEntity.ok(isPaymentSuccessful);
     }
