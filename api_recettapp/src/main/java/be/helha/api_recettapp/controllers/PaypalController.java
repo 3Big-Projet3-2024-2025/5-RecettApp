@@ -1,6 +1,9 @@
 package be.helha.api_recettapp.controllers;
 
-import be.helha.api_recettapp.services.PaypalService;
+import be.helha.api_recettapp.models.Contest;
+import be.helha.api_recettapp.models.Entry;
+import be.helha.api_recettapp.models.Users;
+import be.helha.api_recettapp.services.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Controller class for handling PayPal-related endpoints.
@@ -23,14 +28,20 @@ import java.util.Map;
 @CrossOrigin(origins = "http://localhost:4200")
 public class PaypalController {
     private final PaypalService paypalService;
+    private final IEntryService entryService;
+    private final IContestService contestService;
+    private final UserService userService;
 
     /**
      * Constructs a new {@code PaypalController}.
      *
      * @param paypalService The {@link PaypalService} instance used to interact with the PayPal API.
      */
-    public PaypalController(PaypalService paypalService) {
+    public PaypalController(PaypalService paypalService, IEntryService entryService, IContestService contestService, UserService userService) {
         this.paypalService = paypalService;
+        this.entryService = entryService;
+        this.contestService = contestService;
+        this.userService = userService;
     }
 
     /**
@@ -44,18 +55,43 @@ public class PaypalController {
      * @return A {@link String} containing the approval URL for the user to complete the payment.
      */
     @GetMapping("/pay")
-    public ResponseEntity<Map<String, String>> pay(@RequestParam double total) {
-        String successUrl = "http://localhost:4200/success";
-        String cancelUrl = "http://localhost:4200/cancel";
+    public ResponseEntity<Map<String, String>> pay(@RequestParam double total, @RequestBody Entry entry) {
 
-        // Get the PayPal approval URL
+        // check if entry is valid
+        if (entry == null || entry.getContest() == null || entry.getUsers() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", "Invalid entry. Entry, user, or contest is null."));
+        }
+
+        // check user
+        Users user = userService.findById((long) entry.getUsers().getId());
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", "User not found with ID: " + entry.getUsers().getId()));
+        }
+
+        // check contest
+        Optional<Contest> contest = contestService.getContestById(entry.getContest().getId());
+        if (contest.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", "Contest not found with ID: " + entry.getContest().getId()));
+        }
+
+        // set Random UUID
+        Entry updatedEntry = entryService.setUuid(entry);
+        UUID uuid = updatedEntry.getUuid();
+
+        // Redirect to these url
+        String successUrl = "http://localhost:4200/success?uuid=" + uuid;
+        String cancelUrl = "http://localhost:4200/cancel?uuid=" + uuid;
+
+        // Get PAYPAL url
         String approvalUrl = paypalService.createPayment(total, "USD", cancelUrl, successUrl);
 
-        // Create a response object containing the URL
+        // Create response
         Map<String, String> response = new HashMap<>();
         response.put("approvalUrl", approvalUrl);
 
-        // Return the URL in the response body
         return ResponseEntity.ok(response);
     }
 
@@ -73,9 +109,14 @@ public class PaypalController {
      */
     @GetMapping("/validate")
     public ResponseEntity<Boolean> validatePayment(
+            @RequestParam UUID uuid,
             @RequestParam String paymentId,
             @RequestParam String payerId) {
+
         boolean isPaymentSuccessful = paypalService.validatePayment(paymentId, payerId);
+        if(isPaymentSuccessful){
+            // do something
+        }
         return ResponseEntity.ok(isPaymentSuccessful);
     }
 }

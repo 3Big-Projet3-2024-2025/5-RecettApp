@@ -37,6 +37,8 @@ public interface IEntryService {
      */
     public Entry removeUuid(UUID uuid);
 
+    public Entry setUuid(Entry entry);
+
     /**
      * Add an entry
      * @param entry the entry to add

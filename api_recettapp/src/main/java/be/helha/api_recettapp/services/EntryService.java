@@ -62,6 +62,18 @@ public class EntryService implements IEntryService {
     }
 
     /**
+     * Set a UUID to an Entry
+     *
+     * @param entry the entry to update
+     * @return @type Entry the entry updated
+     */
+    public Entry setUuid(Entry entry){
+        entry.setUuid(UUID.randomUUID());
+
+        return repository.save(entry);
+    }
+
+    /**
      * Find an entry by his UUID
      *
      * @param uuid the specific uuid
@@ -72,7 +84,7 @@ public class EntryService implements IEntryService {
         return repository.findByUuid(uuid);
     }
 
-    
+
     /**
      * Add an entry
      * @param entry the entry to add
