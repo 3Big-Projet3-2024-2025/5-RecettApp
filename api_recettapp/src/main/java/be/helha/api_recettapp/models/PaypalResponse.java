@@ -31,9 +31,7 @@ public class PaypalResponse {
 
     /**
      * The PayPal response stored as a JSON string.
-     * This is stored as a large object (LOB) in the database.
      */
-    @Lob
     private String responseJson;
 
     /**
