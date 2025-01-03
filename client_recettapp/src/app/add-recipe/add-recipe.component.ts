@@ -50,7 +50,7 @@ export class AddRecipeComponent {
     servings: 0,
     difficulty_level: '',
     instructions: '',
-    approved: false,
+    masked: false,
     photo_url: '',
     entry: undefined,
     components: [],
