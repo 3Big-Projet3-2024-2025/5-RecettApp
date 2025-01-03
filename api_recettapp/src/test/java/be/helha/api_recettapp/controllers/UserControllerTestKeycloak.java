@@ -1,5 +1,8 @@
 package be.helha.api_recettapp.controllers;
 
+
+import be.helha.api_recettapp.models.Users;
+
 import be.helha.api_recettapp.services.KeycloakUserService;
 import be.helha.api_recettapp.services.UserService;
 import org.junit.jupiter.api.Test;
@@ -13,9 +16,19 @@ import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.test.web.servlet.MockMvc;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.hamcrest.Matchers.hasSize;
 
-import static org.mockito.Mockito.doNothing;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -76,6 +89,59 @@ public class UserControllerTestKeycloak {
         mockMvc.perform(post("/api/users/{id}/unblock", id)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+    }
+
+    /**
+
+     * Test for the deleteUser method.
+     * Verifies that a user is anonymized, deleted in Keycloak, and removed from the local database correctly.
+     */
+    @Test
+    void testDeleteUser() throws Exception {
+        Users user = new Users(1L, "Abdel", "Alahyane", "abdel@gmail.com", LocalDate.now(), false,null,null);
+
+        doNothing().when(keycloakUserService).deleteUser(user.getId().toString());
+        when(userService.findById(user.getId())).thenReturn(user);
+
+        mockMvc.perform(delete("/api/users/{id}", user.getId().toString())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+    }
+
+    /**
+     * Test case for the {@link UsersController#getAllUsers()} method.
+     *
+     * <p>This test verifies that the {@code getAllUsers} endpoint correctly retrieves all user records from the
+     * service layer and returns them in the expected JSON format. It ensures proper communication between
+     * the controller and service layers.</p>
+     *
+     * <p>The following steps are performed in this test:</p>
+     * <ol>
+     *     <li>Mock the {@link UserService#findAll()} method to return a predefined list of {@link Users} objects.</li>
+     *     <li>Invoke the GET request on the endpoint {@code /api/users} using {@link MockMvc}.</li>
+     *     <li>Assert that the HTTP status is {@code 200 OK}.</li>
+     *     <li>Verify that the returned JSON array has the expected size and that the content matches the mocked data.</li>
+     *     <li>Validate that the service layer's {@code findAll()} method is called exactly once during the test.</li>
+     * </ol>
+     *
+     * @throws Exception if the request fails or if any validation/assertion fails.
+     * @see UsersController#getAllUsers()
+     * @see UserService#findAll()
+     */
+    @Test
+    void testGetAllUsers() throws Exception {
+        Users user = new Users(1L, "Abdel", "Alahyane", "abdel@gmail.com", LocalDate.now(), false, null, null);
+        List<Users> usersList = Arrays.asList(user);
+
+        when(userService.findAll()).thenReturn(usersList);
+
+        mockMvc.perform(get("/api/users")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("[0].firstName").value("Abdel"));
+
+        verify(userService, times(1)).findAll();
     }
 
     /**

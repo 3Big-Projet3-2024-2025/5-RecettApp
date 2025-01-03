@@ -11,8 +11,6 @@ import org.springframework.http.ResponseEntity;
 import be.helha.api_recettapp.controllers.UsersController;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -56,23 +54,6 @@ class TestCrudUser {
         assertEquals("Abdel", response.getBody().getFirstName());
 
         verify(userService, times(1)).save(user);
-    }
-
-    /**
-     * Test for the getAllUsers method.
-     * Verifies that all users are retrieved correctly.
-     */
-    @Test
-    void testGetAllUsers() {
-        when(userService.findAll()).thenReturn(Arrays.asList(user));
-
-        ResponseEntity<List<Users>> response = usersController.getAllUsers();
-
-        assertNotNull(response);
-        assertEquals(1, response.getBody().size());
-        assertEquals("Abdel", response.getBody().get(0).getFirstName());
-
-        verify(userService, times(1)).findAll();
     }
 
     /**
@@ -125,22 +106,6 @@ class TestCrudUser {
         verify(userService, times(1)).findById(1L);
         verify(userService, times(1)).save(user);
     }
-
-    /**
-     * Test for the deleteUser method.
-     * Verifies that a user is deleted correctly.
-     */
-    @Test
-    void testDeleteUser() {
-        doNothing().when(userService).delete(1L);
-
-        ResponseEntity<Void> response = usersController.deleteUser(1L);
-
-        assertEquals(204, response.getStatusCodeValue());
-
-        verify(userService, times(1)).delete(1L);
-    }
-
 
 
 }
