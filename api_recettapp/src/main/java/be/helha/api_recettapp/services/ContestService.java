@@ -2,7 +2,6 @@ package be.helha.api_recettapp.services;
 
 import be.helha.api_recettapp.repositories.jpa.ContestRepository;
 import be.helha.api_recettapp.models.Contest;
-import be.helha.api_recettapp.repositories.jpa.ContestRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -38,6 +38,15 @@ public class ContestService implements IContestService {
     @Override
     public List<Contest> getContestByTitle(String title) {
         return repository.findByTitle(title);
+    }
+
+    /**
+     * @param id of the contest to match
+     * @return
+     */
+    @Override
+    public Optional<Contest> getContestById(int id) {
+        return repository.findById(id);
     }
 
     /**

@@ -62,8 +62,10 @@ public class RecipeControllerTest {
         recipe.setDifficulty_level("Medium");
         recipe.setInstructions("Mix ingredients, bake for 45 minutes.");
 
+
         Entry entry = new Entry();
         entry.setId(1);
+
 
         RecipeType recipeType = new RecipeType();
         recipeType.setId(2);

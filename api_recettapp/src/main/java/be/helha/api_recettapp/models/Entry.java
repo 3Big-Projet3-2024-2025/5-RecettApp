@@ -1,7 +1,9 @@
 package be.helha.api_recettapp.models;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Data;
+import java.util.UUID;
 
 /**
  * This class reprents each entry for an user to a contest
@@ -29,4 +31,10 @@ public class Entry {
     private Contest contest;
 
     private String status;
+
+    @Nullable
+    private UUID uuid;
+
+
+
 }
