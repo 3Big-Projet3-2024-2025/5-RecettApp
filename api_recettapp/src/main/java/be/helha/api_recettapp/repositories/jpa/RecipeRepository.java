@@ -19,4 +19,13 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer>, Paging
      * **/
     @Query("SELECT r FROM Recipe r WHERE r.entry.contest.id = :idContest")
     List<Recipe> findRecipesByContestId(@Param("idContest") int idContest);
+
+    /**
+     * Retrieves all recipes created by a specific user.
+     *
+     * @param userMail The email address of the user.
+     * @return A list of recipes created by the user.
+     */
+    @Query("SELECT r FROM Recipe r WHERE r.entry.users.email = :userMail")
+    List<Recipe> findRecipesByUserMail(@Param("userMail") String userMail);
 }
