@@ -20,9 +20,9 @@
   }
   
   .bi-person-circle {
-    color: #ffffff; /* Couleur blanche pour l'icône */
-    background-color: #28a745; /* Fond vert pour se marier au design */
+    color: #ffffff; 
+    background-color: #28a745; 
     border-radius: 50%;
-    padding: 10px; /* Espace autour de l'icône */
+    padding: 10px; 
   }
   
