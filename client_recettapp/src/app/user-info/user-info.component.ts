@@ -27,12 +27,23 @@ export class UserInfoComponent implements OnInit {
     this.keycloakService.getToken()
       .then(token => {
         const decodedToken: any = jwtDecode(token);
-        const email = decodedToken.email;
+        const email = decodedToken.email; 
         this.userName = decodedToken.preferred_username; 
-        this.getUserByEmail(email); 
       })
       .catch(err => {
         console.error("Erreur lors de la récupération des informations utilisateur :", err);
       });
+  }
+
+  getUserByEmail(email: string): void {
+    this.userService.findByEmail(email).subscribe({
+      next: (user) => {
+        this.user = user; // Affecter les données utilisateur
+        console.log("Données utilisateur :", this.user);
+      },
+      error: (err) => {
+        console.error("Erreur lors de la récupération des informations utilisateur :", err);
+      }
+    });
   }
 }
