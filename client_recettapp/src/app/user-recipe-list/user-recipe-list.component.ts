@@ -35,8 +35,19 @@ export class UserRecipeListComponent {
       error: (error) => console.error('Error fetching recipes:', error)
     });
   }
-
-  anonymizeRecipe(){
+  
+  anonymizeRecipe(recipe: Recipe) {
     
+    this.recipeService.anonymizeRecipe(recipe.id).subscribe({
+      next: () => {
+        console.log('Recipe anonymized successfully.');
+        this.getRecipesForUser(); 
+      },
+      error: (err) => {
+        console.error('Error anonymizing recipe:', err);
+      },
+    });
   }
+  
+  
 }
