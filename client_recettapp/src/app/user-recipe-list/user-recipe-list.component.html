@@ -16,7 +16,21 @@
           </div>
         </div>
       </div>
-  
+      
+      <div class="pagination-buttons card-footer bg-light text-center">
+        <button (click)="goToPage(0)" [class.active]="currentPage === 0" class="btn btn-success pagination-button"
+        > 1</button>
+      
+        <button (click)="goToPrevious()" *ngIf="!(currentPage === 0)" class="btn btn-dark pagination-button"
+        > Previous</button>
+      
+        <button (click)="goToNext()" *ngIf="!(currentPage >= totalPages - 1)" class="btn btn-dark pagination-button"
+        > Next </button>
+
+       <button *ngIf="totalPages > 1" (click)="goToPage(totalPages - 1)" [class.active]="currentPage === totalPages - 1" class="btn btn-success pagination-button"
+        > {{ totalPages }}</button>
+      </div>  
+
       <ng-template #noData>
         <p class="text-center text-danger">No recipes available.</p>
       </ng-template>

@@ -27,7 +27,7 @@ entry: Entry = {}
 
 // Pagination properties
 currentPage: number = 0;
-itemsPerPage: number = 1;
+itemsPerPage: number = 10;
 totalPages: number = 0;
 
 constructor(private service: RecipeService,private router:Router, private route: ActivatedRoute,private imaService: ImageServiceService,private entryService: EntriesService) {}
