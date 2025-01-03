@@ -15,6 +15,10 @@ import { Router } from '@angular/router';
 })
 export class UserRecipeListComponent {
   recipes: Recipe[] = [];
+  currentPage: number = 0;
+  pageSize: number = 10; 
+  totalPages: number = 0;
+  totalElements: number = 0;
   userMail: string = ''; 
 
   constructor(private recipeService: RecipeService,private authService: KeycloakService, private router: Router) {}
@@ -27,13 +31,21 @@ export class UserRecipeListComponent {
     const token = await this.authService.getToken();
     const decodedToken: any = jwtDecode(token);
     this.userMail = decodedToken.email;
-    this.getRecipesForUser();
+    this.getRecipesForUser(this.currentPage);
   }  
 
-  getRecipesForUser(): void {
-    this.recipeService.getRecipesByUserMail(this.userMail).subscribe({
-      next: (data) => this.recipes = data,
-      error: (error) => console.error('Error fetching recipes:', error)
+  getRecipesForUser(page: number): void {
+    this.recipeService.getRecipesByUserMail(this.userMail, page, this.pageSize).subscribe({
+      next: (data) => {
+        this.recipes = data.content;
+        this.currentPage = data.pageable.pageNumber;
+        this.pageSize = data.pageable.pageSize;
+        this.totalPages = data.totalPages;
+        this.totalElements = data.totalElements;
+      },
+      error: (err) => {
+        console.error('Error fetching recipes:', err);
+      },
     });
   }
   
@@ -42,7 +54,7 @@ export class UserRecipeListComponent {
     this.recipeService.anonymizeRecipe(recipe.id).subscribe({
       next: () => {
         console.log('Recipe anonymized successfully.');
-        this.getRecipesForUser(); 
+        this.getRecipesForUser(this.currentPage); 
       },
       error: (err) => {
         console.error('Error anonymizing recipe:', err);
