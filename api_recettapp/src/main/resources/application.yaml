@@ -22,7 +22,20 @@ jwt:
   expirationTokenMs: 3600000
   expirationRefreshTokenMs: 604800000
 
+
+
+keycloak:
+  auth-server-url: http://localhost:8081/
+  realm: recettapp
+  resource: backend_recettapp
+  credentials:
+    secret: VWdTknIOvlOEFDS2KZoSbmW5I0uF8PYG
+  public-client: false
+
+
+
 paypal:
   client-id : AYNrryhL8K4n1OuZnepGl_L-qo82AYvcKgPNbYrYi7cZKpQsWBDIyxU8_yXlD4PwcxXGR_6zR5CvU2Sq
   client-secret: EELGBaiizFScSj-vA8_AiVQXsjtBHH-rTpQ85cow1zwF0LYcF2jwcXTLKJ3586Krw_HZ0dk2oDJiALut
   api-url: https://api-m.sandbox.paypal.com
+

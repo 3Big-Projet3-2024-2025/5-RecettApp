@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../models/users';
+import {emit} from "@angular-devkit/build-angular/src/tools/esbuild/angular/compilation/parallel-worker";
 
 
 
@@ -41,5 +42,13 @@ export class UsersService {
   authenticate(email: string, password: string): Observable<any> {
     const credentials = { email, password };
     return this.http.post(`${this.baseUrl}/authenticate`, credentials);
+  }
+
+  unblockUser(email: string): Observable<any>{
+    return this.http.post(`${this.baseUrl}/${email}/unblock`, email)
+  }
+
+  blockUser(email: string): Observable<any>{
+    return this.http.post(`${this.baseUrl}/${email}/block`, email)
   }
 }

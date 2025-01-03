@@ -12,93 +12,120 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./recipe-type.component.css'],
 })
 export class RecipeTypeComponent implements OnInit {
-  recipeTypes: RecipeType[] = []; // List of recipe types
-  recipeTypeForm: FormGroup; // Form group for the recipe type form
-  isEditing = false; // Flag to check if we are editing or adding a new recipe type
-  currentId: number | null = null; // Store the ID of the recipe type being edited
+  recipeTypes: RecipeType[] = []; // Full list of recipe types
+  filteredRecipeTypes: RecipeType[] = []; // Recipe types displayed on the current page
+  recipeTypeForm: FormGroup; // Form for adding or editing a recipe type
+  currentPage: number = 1; // Current page number
+  pageSize: number = 5; // Number of items per page
+  totalRecipeTypes: number = 0; // Total number of recipe types
+  isEditing = false; // Flag for edit mode
+  currentId: number | null = null; // ID of the recipe type being edited
 
   constructor(
-    private fb: FormBuilder,
-    private recipeTypeService: RecipeTypeService
+    private fb: FormBuilder, // Form builder for managing forms
+    private recipeTypeService: RecipeTypeService // Service to interact with the backend
   ) {
-    // Initialize the form group with validation rules
+    // Initialize the form with validation rules
     this.recipeTypeForm = this.fb.group({
-      name: [
-        '', 
-        [Validators.required, Validators.maxLength(255), Validators.minLength(3)],
-      ],
+      name: ['', [Validators.required, Validators.maxLength(255), Validators.minLength(3)]],
     });
   }
 
+  // Load all recipe types when the component is initialized
   ngOnInit(): void {
-    // Load all recipe types when the component is initialized
     this.loadRecipeTypes();
   }
 
-  // Load all recipe types from the server
+  // Fetch recipe types from the backend
   loadRecipeTypes(): void {
     this.recipeTypeService.getAllRecipeTypes().subscribe(
       (data) => {
-        this.recipeTypes = Array.isArray(data) ? data : []; // Check if data is an array
+        this.recipeTypes = Array.isArray(data) ? data : [];
+        this.totalRecipeTypes = this.recipeTypes.length; // Update total count
+        this.applyPagination(); // Apply pagination logic
       },
       (error) => {
-        console.error('Error loading recipe types:', error); // Log an error if loading fails
+        console.error('Error loading recipe types:', error);
       }
     );
   }
 
+  // Apply pagination to the recipe types
+  applyPagination(): void {
+    const startIndex = (this.currentPage - 1) * this.pageSize; // Start index for slicing
+    const endIndex = startIndex + this.pageSize; // End index for slicing
+    this.filteredRecipeTypes = this.recipeTypes.slice(startIndex, endIndex); // Slice the list
+  }
+
+  // Handle page changes
+  onPageChange(page: number): void {
+    this.currentPage = page;
+    this.applyPagination();
+  }
+
+  // Calculate the total number of pages
+  get totalPages(): number {
+    return Math.ceil(this.totalRecipeTypes / this.pageSize);
+  }
+
   // Save a new recipe type or update an existing one
   saveRecipeType(): void {
-    if (this.recipeTypeForm.invalid) return; // Do nothing if the form is invalid
+    if (this.recipeTypeForm.invalid) return; // Stop if the form is invalid
 
-    const recipeType = this.recipeTypeForm.value; // Get the form values
+    const recipeType = this.recipeTypeForm.value;
 
-    // Check if we are editing or creating a new recipe type
     if (this.isEditing && this.currentId !== null) {
-      // Update an existing recipe type
+      // Update existing recipe type
       this.recipeTypeService.updateRecipeType(this.currentId, recipeType).subscribe(
         () => {
-          this.loadRecipeTypes(); // Reload the recipe types list
-          this.resetForm(); // Reset the form
+          this.loadRecipeTypes();
+          this.resetForm();
         },
-        (error) => console.error('Error updating recipe type:', error) // Log error if update fails
+        (error) => console.error('Error updating recipe type:', error)
       );
     } else {
-      // Create a new recipe type
+      // Create new recipe type
       this.recipeTypeService.createRecipeType(recipeType).subscribe(
         () => {
-          this.loadRecipeTypes(); // Reload the recipe types list
-          this.resetForm(); // Reset the form
+          this.loadRecipeTypes();
+          this.resetForm();
         },
-        (error) => console.error('Error creating recipe type:', error) // Log error if creation fails
+        (error) => console.error('Error creating recipe type:', error)
       );
     }
   }
 
-  // Populate the form with the recipe type to be edited
+  // Populate the form with the data of the recipe type being edited
   editRecipeType(recipeType: RecipeType): void {
-    this.recipeTypeForm.patchValue(recipeType); // Fill the form with the recipe type's data
-    this.currentId = recipeType.id!; // Store the ID of the recipe type being edited
-    this.isEditing = true; // Set editing mode to true
+    this.recipeTypeForm.patchValue(recipeType);
+    this.currentId = recipeType.id!;
+    this.isEditing = true;
   }
 
-  // Delete a recipe type by its ID
+  // Delete a recipe type
   deleteRecipeType(id: number): void {
     if (confirm('Are you sure you want to delete this recipe type?')) {
       this.recipeTypeService.deleteRecipeType(id).subscribe(
         () => {
-          // Remove the deleted recipe type from the list
-          this.recipeTypes = this.recipeTypes.filter((recipeType) => recipeType.id !== id);
+          this.recipeTypes = this.recipeTypes.filter((recipeType) => recipeType.id !== id); // Remove the deleted item
+          this.totalRecipeTypes = this.recipeTypes.length; // Update the total count
+
+          // Adjust the current page if the last page becomes empty
+          if (this.currentPage > this.totalPages && this.currentPage > 1) {
+            this.currentPage--;
+          }
+
+          this.applyPagination();
         },
-        (error) => console.error('Error deleting recipe type:', error) // Log error if deletion fails
+        (error) => console.error('Error deleting recipe type:', error)
       );
     }
   }
 
-  // Reset the form and exit editing mode
+  // Reset the form and exit edit mode
   resetForm(): void {
-    this.recipeTypeForm.reset(); // Clear the form fields
-    this.isEditing = false; // Set editing mode to false
-    this.currentId = null; // Clear the current ID
+    this.recipeTypeForm.reset();
+    this.isEditing = false;
+    this.currentId = null;
   }
 }
