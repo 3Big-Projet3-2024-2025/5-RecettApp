@@ -3,7 +3,7 @@
     <div *ngIf="recipes">
       <div class="">
         <div class="mb-3" *ngFor="let recipe of recipes">
-          <div *ngIf="!recipe.masked" class="recipe-card shadow-sm rounded hover-effect">
+          <div (click)="detailRecipe(recipe.id)" *ngIf="!recipe.masked" class="recipe-card shadow-sm rounded hover-effect">
             <div class="card-body">
               <h5 class="card-title text-success">{{ recipe.title }}</h5>
             </div>

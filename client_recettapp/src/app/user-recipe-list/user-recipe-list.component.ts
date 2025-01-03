@@ -4,6 +4,7 @@ import { RecipeService } from '../services/recipe_Service/recipe.service';
 import { KeycloakService } from 'keycloak-angular';
 import { jwtDecode } from 'jwt-decode';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-recipe-list',
@@ -16,7 +17,7 @@ export class UserRecipeListComponent {
   recipes: Recipe[] = [];
   userMail: string = ''; 
 
-  constructor(private recipeService: RecipeService,private authService: KeycloakService) {}
+  constructor(private recipeService: RecipeService,private authService: KeycloakService, private router: Router) {}
 
   ngOnInit(): void {
     this.getUserMail();
@@ -49,5 +50,7 @@ export class UserRecipeListComponent {
     });
   }
   
-  
+  detailRecipe(id: number) : void {
+    this.router.navigate(['/recipe', id]);
+  }
 }
