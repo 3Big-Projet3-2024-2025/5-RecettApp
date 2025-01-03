@@ -20,9 +20,16 @@ export class RecipeContestListComponent {
 
 recipes: Recipe[] = [];
 filteredRecipes: Recipe[] = [];
-  searchTerm: string = '';
- contestID: number |undefined;
- entry: Entry = {}
+displayedRecipes: Recipe[] = [];
+searchTerm: string = '';
+contestID: number |undefined;
+entry: Entry = {}
+
+// Pagination properties
+currentPage: number = 0;
+itemsPerPage: number = 1;
+totalPages: number = 0;
+
 constructor(private service: RecipeService,private router:Router, private route: ActivatedRoute,private imaService: ImageServiceService,private entryService: EntriesService) {}
 
 
@@ -67,7 +74,9 @@ constructor(private service: RecipeService,private router:Router, private route:
       forkJoin(imageRequests).subscribe((updatedRecipes) => {
         this.recipes = updatedRecipes;
         this.filteredRecipes = updatedRecipes;
-
+        this.filteredRecipes = [...this.recipes];
+        this.totalPages = Math.ceil(this.filteredRecipes.length / this.itemsPerPage);
+        this.updateDisplayedRecipes();
       });
     });
   }
@@ -78,6 +87,9 @@ constructor(private service: RecipeService,private router:Router, private route:
       recipe.description.toLowerCase().includes(term) || 
       recipe.category.toLowerCase().includes(term)
     );
+    this.currentPage = 0; // Reset to the first page after filtering
+    this.totalPages = Math.ceil(this.filteredRecipes.length / this.itemsPerPage);
+    this.updateDisplayedRecipes();
   }
 
   sortRecipesByDifficulty(difficulty: string): void {
@@ -87,6 +99,9 @@ constructor(private service: RecipeService,private router:Router, private route:
   resetFilters(): void {
     this.filteredRecipes = [...this.recipes];
     this.searchTerm = ''; // Clear the search term
+    this.currentPage = 0; // Reset to the first page
+    this.totalPages = Math.ceil(this.filteredRecipes.length / this.itemsPerPage);
+    this.updateDisplayedRecipes();
   }
   // Sort recipes alphabetically by title
   sortRecipesByTitle(): void {
@@ -98,5 +113,28 @@ constructor(private service: RecipeService,private router:Router, private route:
   addRecipe() {
    this.router.navigate(['/recipe/add/', this.entry.id]);
   }
+  
+  updateDisplayedRecipes(): void {
+    const startIndex = this.currentPage * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+    this.displayedRecipes = this.filteredRecipes.slice(startIndex, endIndex);
+  }
 
+
+  goToPage(page: number): void {
+    this.currentPage = page;
+    this.updateDisplayedRecipes();
+  }
+  goToPrevious(): void {
+    if (this.currentPage > 0) {
+      this.currentPage--;
+      this.updateDisplayedRecipes();
+    }
+  }
+  goToNext(): void {
+    if (this.currentPage < this.totalPages - 1) {
+      this.currentPage++;
+      this.updateDisplayedRecipes();
+    }
+  }
 }
