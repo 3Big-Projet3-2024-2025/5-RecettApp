@@ -65,4 +65,22 @@ export class UserRecipeListComponent {
   detailRecipe(id: number) : void {
     this.router.navigate(['/recipe', id]);
   }
+  goToPage(page: number): void {
+    if (page >= 0 && page < this.totalPages) {
+      this.getRecipesForUser(page); 
+    }
+  }
+  
+  goToPrevious(): void {
+    if (this.currentPage > 0) {
+      this.goToPage(this.currentPage - 1);
+    }
+  }
+  
+  goToNext(): void {
+    if (this.currentPage < this.totalPages - 1) {
+      this.goToPage(this.currentPage + 1);
+    }
+  }
+  
 }
