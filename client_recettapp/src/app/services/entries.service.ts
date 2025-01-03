@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { from, Observable, switchMap } from 'rxjs';
 import { Entry } from '../models/entry';
+import { KeycloakService } from 'keycloak-angular';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +11,7 @@ import { Entry } from '../models/entry';
 export class EntriesService {
   private apiUrl = "http://localhost:8080/entries";
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,private authService: KeycloakService) { }
 
   getAllEntries(): Observable<Entry[]> {
     return this.http.get<Entry[]>(this.apiUrl);
@@ -29,5 +31,20 @@ export class EntriesService {
 
   getEntry(idEntry: number): Observable<Entry> {
     return this.http.get<Entry>(`${this.apiUrl}/${idEntry}`);
+  }
+
+  getEntryByUserMailAndIdContest(idContest: number):Observable<Entry>{
+    return from(this.getUserMail()).pipe(
+      switchMap(userMail => {
+        const url = `${this.apiUrl}/entry?contestId=${idContest}&userMail=${userMail}`;
+        return this.http.get<Entry>(url);
+      })
+    );
+        
+  }
+  async getUserMail(){
+     const token = await this.authService.getToken();
+    const decodedToken: any = jwtDecode(token);
+    return decodedToken.email;
   }
 }

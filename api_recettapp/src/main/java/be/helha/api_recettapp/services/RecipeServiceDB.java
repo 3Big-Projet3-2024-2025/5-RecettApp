@@ -131,4 +131,15 @@ public class RecipeServiceDB implements IRecipeService{
                 .orElseThrow(() -> new NoSuchElementException("Recipe with ID " + id + " not found"));
     }
 
+    /**
+     * Retrieves all recipes that belong to a specific contest.
+     *
+     * @param idContest The ID of the contest.
+     * @return A list of recipes associated with the contest.
+     */
+    @Override
+    public List<Recipe> getRecipeByIdContest(int idContest) {
+         return recipeRepository.findRecipesByContestId(idContest);
+    }
+
 }

@@ -1,6 +1,7 @@
 package be.helha.api_recettapp.controllers;
 
 import be.helha.api_recettapp.models.Entry;
+import be.helha.api_recettapp.services.EntryService;
 import be.helha.api_recettapp.services.IEntryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ public class EntryController {
 
     @Autowired
     private IEntryService entryService;
+
 
     /**
      * GET - get all the entries
@@ -93,5 +95,18 @@ public class EntryController {
     @DeleteMapping(path = "/{id}")
     public void deleteEntry(@PathVariable int id){
         entryService.deleteEntry(id);
+    }
+    /**
+     * GET - Get an entry by user email and contest ID
+     * @param contestId the ID of the contest
+     * @param userMail the email of the user
+     * @return Entry the entry matching the user email and contest ID
+     */
+    @GetMapping("/entry")
+    public Entry getEntryByUserMailAndIdContest(
+            @RequestParam int contestId,
+            @RequestParam String userMail) {
+        return entryService.getEntryByUserMailAndIdContest(contestId, userMail);
+
     }
 }

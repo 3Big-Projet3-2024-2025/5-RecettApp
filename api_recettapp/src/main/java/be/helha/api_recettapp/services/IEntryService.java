@@ -58,4 +58,11 @@ public interface IEntryService {
      * @param id the identifier of the entry to delete
      */
     public void deleteEntry(int id);
+    /**
+     * GET - Get an entry by user email and contest ID
+     * @param idContest the ID of the contest
+     * @param userMail the email of the user
+     * @return the entry matching the user email and contest ID
+     */
+    public Entry getEntryByUserMailAndIdContest(int idContest, String userMail);
 }
