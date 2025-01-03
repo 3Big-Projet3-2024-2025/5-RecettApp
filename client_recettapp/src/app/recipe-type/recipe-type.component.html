@@ -1,20 +1,17 @@
 <div class="container mt-5">
   <div class="row justify-content-between align-items-center mb-4">
     <h1 class="col-auto text-primary">Recipe Types</h1>
-    <button 
-      class="btn btn-success col-auto" 
-      (click)="resetForm()"
-    >
+    <button class="btn btn-success col-auto" (click)="resetForm()">
       <i class="bi bi-plus-circle"></i> Add Recipe Type
     </button>
   </div>
 
+  <!-- Recipe Type Form -->
   <form [formGroup]="recipeTypeForm" (ngSubmit)="saveRecipeType()" class="card border-primary mb-4">
     <div class="card-header bg-primary text-white">
       <h5 class="mb-0">{{ isEditing ? 'Edit Recipe Type' : 'Add New Recipe Type' }}</h5>
     </div>
     <div class="card-body">
-      <!-- Name Field -->
       <div class="mb-3">
         <label for="name" class="form-label">Name</label>
         <input
@@ -26,27 +23,16 @@
             'is-invalid': recipeTypeForm.get('name')?.invalid && recipeTypeForm.get('name')?.touched
           }"
         />
-        <div 
-          *ngIf="recipeTypeForm.get('name')?.invalid && recipeTypeForm.get('name')?.touched" 
-          class="text-danger mt-1"
-        >
+        <div *ngIf="recipeTypeForm.get('name')?.invalid && recipeTypeForm.get('name')?.touched" class="text-danger mt-1">
           Name is required and must be between 3 and 255 characters.
         </div>
       </div>
     </div>
     <div class="card-footer d-flex justify-content-end">
-      <button 
-        type="submit" 
-        class="btn btn-primary me-2" 
-        [disabled]="recipeTypeForm.invalid"
-      >
-        <i class="bi bi-save"></i> {{ isEditing ? 'Update' : 'Save' }}
+      <button type="submit" class="btn btn-primary me-2" [disabled]="recipeTypeForm.invalid">
+        <i class="bi bi-save"></i> {{ isEditing ? 'Update' : 'Add +' }}
       </button>
-      <button 
-        type="button" 
-        class="btn btn-secondary" 
-        (click)="resetForm()"
-      >
+      <button type="button" class="btn btn-secondary" (click)="resetForm()">
         <i class="bi bi-x-circle"></i> Cancel
       </button>
     </div>
@@ -58,7 +44,7 @@
   </div>
 
   <!-- Recipe Types Table -->
-  <table *ngIf="recipeTypes.length > 0" class="table table-striped table-hover table-bordered">
+  <table *ngIf="filteredRecipeTypes.length > 0" class="table table-striped table-hover table-bordered">
     <thead class="table-dark">
       <tr>
         <th>Name</th>
@@ -66,23 +52,36 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let recipeType of recipeTypes">
+      <tr *ngFor="let recipeType of filteredRecipeTypes">
         <td>{{ recipeType.name }}</td>
         <td class="text-center">
-          <button 
-            class="btn btn-warning btn-sm me-2" 
-            (click)="editRecipeType(recipeType)"
-          >
+          <button class="btn btn-warning btn-sm me-2" (click)="editRecipeType(recipeType)">
             <i class="bi bi-pencil-square"></i> Edit
           </button>
-          <button 
-            class="btn btn-danger btn-sm" 
-            (click)="deleteRecipeType(recipeType.id!)"
-          >
+          <button class="btn btn-danger btn-sm" (click)="deleteRecipeType(recipeType.id!)">
             <i class="bi bi-trash"></i> Delete
           </button>
         </td>
       </tr>
     </tbody>
   </table>
+
+  <!-- Pagination Controls -->
+  <div *ngIf="totalPages > 1" class="d-flex justify-content-center mt-3">
+    <button class="btn btn-outline-primary me-2" [disabled]="currentPage === 1" (click)="onPageChange(currentPage - 1)">
+      Previous
+    </button>
+    <button
+      *ngFor="let page of [].constructor(totalPages); let i = index"
+      class="btn"
+      [class.btn-primary]="currentPage === i + 1"
+      [class.btn-outline-primary]="currentPage !== i + 1"
+      (click)="onPageChange(i + 1)"
+    >
+      {{ i + 1 }}
+    </button>
+    <button class="btn btn-outline-primary ms-2" [disabled]="currentPage === totalPages" (click)="onPageChange(currentPage + 1)">
+      Next
+    </button>
+  </div>
 </div>
