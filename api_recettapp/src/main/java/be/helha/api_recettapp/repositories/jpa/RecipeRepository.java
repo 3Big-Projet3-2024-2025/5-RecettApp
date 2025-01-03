@@ -1,6 +1,8 @@
 package be.helha.api_recettapp.repositories.jpa;
 
 import be.helha.api_recettapp.models.Recipe;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -22,14 +24,14 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer>, Paging
     List<Recipe> findRecipesByContestId(@Param("idContest") int idContest);
 
     /**
-     * Retrieves all recipes created by a specific user.
+     * Retrieves paginated recipes created by a specific user.
      *
      * @param userMail The email address of the user.
-     * @return A list of recipes created by the user.
+     * @param pageable The pagination information.
+     * @return A paginated list of recipes.
      */
     @Query("SELECT r FROM Recipe r WHERE r.entry.users.email = :userMail")
-    List<Recipe> findRecipesByUserMail(@Param("userMail") String userMail);
-
+    Page<Recipe> findRecipesByUserMail(@Param("userMail") String userMail, Pageable pageable);
     /**
      * Updates the "masked" field of a recipe to the specified value.
      *

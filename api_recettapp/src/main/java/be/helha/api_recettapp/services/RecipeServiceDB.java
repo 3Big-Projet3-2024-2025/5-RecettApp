@@ -7,6 +7,7 @@ import be.helha.api_recettapp.repositories.jpa.EntryRepository;
 import be.helha.api_recettapp.repositories.jpa.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -144,19 +145,23 @@ public class RecipeServiceDB implements IRecipeService{
     }
 
     /**
-     * Retrieves a list of recipes associated with a specific user.
+     * Retrieves paginated recipes created by a specific user.
      *
      * @param userMail the unique identifier of the user.
-     * @return a list of {@code Recipe} objects associated with the specified contest and user.
+     * @param page     and size The pagination information.
+     * @param size
+     * @return A paginated list of recipes.
      */
     @Override
-    public List<Recipe> getRecipeByUserMail(String userMail) {
+    public Page<Recipe> getRecipeByUserMail(String userMail, int page, int size) {
         try {
-            return recipeRepository.findRecipesByUserMail(userMail);
+            Pageable pageable = PageRequest.of(page, size);
+            return recipeRepository.findRecipesByUserMail(userMail, pageable);
         } catch (Exception e) {
             throw new RuntimeException("Error retrieving recipes for user email " + userMail + ": " + e.getMessage(), e);
         }
     }
+
 
     /**
      * Sets the "masked" field of a recipe to true, effectively anonymizing it.

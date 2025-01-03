@@ -67,12 +67,13 @@ public interface IRecipeService {
      */
     List<Recipe> getRecipeByIdContest(int idContest);
     /**
-     * Retrieves a list of recipes associated with a specific user.
+     * Retrieves paginated recipes created by a specific user.
      *
      * @param userMail the unique identifier of the user.
-     * @return a list of {@code Recipe} objects associated with the specified contest and user.
+     * @param page and size The pagination information.
+     * @return A paginated list of recipes.
      */
-    List<Recipe> getRecipeByUserMail(String userMail);
+    public Page<Recipe> getRecipeByUserMail(String userMail, int page, int size) ;
     /**
      * Sets the "masked" field of a recipe to true, effectively anonymizing it.
      *
