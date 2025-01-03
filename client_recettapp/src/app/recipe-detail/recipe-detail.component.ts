@@ -26,7 +26,6 @@ export class RecipeDetailComponent implements OnInit {
     if (id) {
       this.service.getRecipeById(+id).subscribe(
         (data) => {
-          console.log('la photoo :' + data.photo_url)
         if (data.photo_url) {
           this.getImage(data.photo_url);
         }

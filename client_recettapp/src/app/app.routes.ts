@@ -18,7 +18,7 @@ export const routes: Routes = [
         { path: '', redirectTo: 'home', pathMatch: 'full' },
         { path: 'recipe', component: RecipeComponent , canActivate: [KeycloakGuard]},
         { path: 'recipe/:id', component: RecipeDetailComponent , canActivate: [KeycloakGuard]},
-        { path: 'recipe/add/:idConstest', component: AddRecipeComponent , canActivate: [KeycloakGuard]},
+        { path: 'recipe/add/:idEntry', component: AddRecipeComponent , canActivate: [KeycloakGuard]},
         { path: 'ContestCategory', component: ContestCategoryComponent , canActivate: [KeycloakGuard]},
         { path:'RecipeType',component:RecipeTypeComponent , canActivate: [KeycloakGuard]},
         { path: 'users', component : UsersComponent , canActivate: [KeycloakGuard]},

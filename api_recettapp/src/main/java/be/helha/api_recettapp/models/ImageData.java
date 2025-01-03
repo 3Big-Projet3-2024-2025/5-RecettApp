@@ -39,7 +39,14 @@ public class ImageData {
      */
     @Lob
     @Basic(fetch = FetchType.LAZY)
-    @Column(name = "imagedata",length = 1000)
+    @Column(name = "imagedata",length = 5242880) // Allow up to 5 MB
     private byte[] imageData;
+
+    /**
+     * Represents the recipe associated with this image.
+     */
+    @ManyToOne
+    @JoinColumn(name = "id_recipe", nullable = false)
+    private Recipe recipe;
 
 }
