@@ -4,6 +4,7 @@ import be.helha.api_recettapp.models.Entry;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Interface with all the methods implemented in EntryService
@@ -21,6 +22,22 @@ public interface IEntryService {
      * @return @type List<> of contests matching the title
      */
     public Entry getEntryById(int id);
+
+    /**
+     * Get a specific entry by his UUID
+     * @param uuid the uuid of the entry
+     * @return @type Entry of contests matching the title
+     */
+    public Entry getEntryByUuid(UUID uuid);
+
+    /**
+     * Remove the UUID of a specific entry by his UUID
+     * @param uuid the uuid of the entry
+     * @return @type Entry of contests matching the title
+     */
+    public Entry removeUuid(UUID uuid);
+
+    public Entry setUuid(Entry entry);
 
     /**
      * Add an entry

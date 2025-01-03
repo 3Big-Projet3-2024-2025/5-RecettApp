@@ -1,10 +1,9 @@
-package be.helha.api_recettapp;
+package be.helha.api_recettapp.controllers;
 
-import be.helha.api_recettapp.controllers.RecipeController;
-import be.helha.api_recettapp.models.Contest;
+import be.helha.api_recettapp.models.Entry;
 import be.helha.api_recettapp.models.Recipe;
 import be.helha.api_recettapp.models.RecipeType;
-import be.helha.api_recettapp.services.IRecipeService;
+import be.helha.api_recettapp.services.RecipeServiceDB;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 //@WebMvcTest(IngredientController.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class RecipeTest {
+public class RecipeControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
@@ -41,7 +40,7 @@ public class RecipeTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private IRecipeService recipeService;
+    private RecipeServiceDB recipeService;
 
     /**
      * Creates a new Recipe instance with the provided title, description, and category,
@@ -62,11 +61,11 @@ public class RecipeTest {
         recipe.setServings(8);
         recipe.setDifficulty_level("Medium");
         recipe.setInstructions("Mix ingredients, bake for 45 minutes.");
-        recipe.setApproved(true);
 
-        Contest contest = new Contest();
-        contest.setId(1);
-        recipe.setContest(contest);
+
+        Entry entry = new Entry();
+        entry.setId(1);
+
 
         RecipeType recipeType = new RecipeType();
         recipeType.setId(2);
@@ -100,8 +99,7 @@ public class RecipeTest {
                 .andExpect(jsonPath("$.preparation_time").value(30))
                 .andExpect(jsonPath("$.cooking_time").value(45))
                 .andExpect(jsonPath("$.servings").value(8))
-                .andExpect(jsonPath("$.difficulty_level").value("Medium"))
-                .andExpect(jsonPath("$.approved").value(true));
+                .andExpect(jsonPath("$.difficulty_level").value("Medium"));
 
 
     }
@@ -127,8 +125,7 @@ public class RecipeTest {
                 .andExpect(jsonPath("$.preparation_time").value(30))
                 .andExpect(jsonPath("$.cooking_time").value(45))
                 .andExpect(jsonPath("$.servings").value(8))
-                .andExpect(jsonPath("$.difficulty_level").value("Medium"))
-                .andExpect(jsonPath("$.approved").value(true));
+                .andExpect(jsonPath("$.difficulty_level").value("Medium"));
     }
 
     /**
