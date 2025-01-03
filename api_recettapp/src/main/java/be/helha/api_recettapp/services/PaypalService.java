@@ -142,6 +142,38 @@ public class PaypalService {
 
         throw new RuntimeException("Failed to create PayPal payment");
     }
+    /**
+     * Validates a PayPal payment by executing the payment using the provided payment ID and payer ID.
+     *
+     * This method interacts with the PayPal API to execute the payment and checks if the payment has been approved.
+     * It sends a request to the PayPal API with the payment ID and payer ID, and based on the response, it determines
+     * whether the payment was successfully approved.
+     *
+     * @param paymentId The unique PayPal payment ID associated with the payment to be validated.
+     * @param payerId The PayPal payer ID associated with the payment to be validated.
+     * @return {@code true} if the payment has been successfully approved, otherwise {@code false}.
+     * @throws RuntimeException If the payment validation fails or the PayPal API returns an error.
+     */
+    public boolean validatePayment(String paymentId, String payerId) {
+        String url = apiUrl + "/v1/payments/payment/" + paymentId + "/execute";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(getAccessToken());
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        Map<String, String> payer = new HashMap<>();
+        payer.put("payer_id", payerId);
+
+        HttpEntity<Map<String, String>> entity = new HttpEntity<>(payer, headers);
+
+        ResponseEntity<JsonNode> response = restTemplate.exchange(url, HttpMethod.POST, entity, JsonNode.class);
+
+        if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
+            return response.getBody().get("state").asText().equals("approved");
+        }
+
+        throw new RuntimeException("Payment validation failed");
+    }
 
     /**
      * Saves the PayPal response data associated with a user.

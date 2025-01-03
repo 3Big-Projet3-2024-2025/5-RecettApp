@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 
 /**
@@ -40,6 +41,49 @@ public class EntryService implements IEntryService {
         return repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Entry with id " + id + " not found"));
     }
+
+    /**
+     *  Find an Entry with a specific UUID and remove it
+     *
+     * @param uuid the specific uuid
+     * @return entry the Entry object
+     */
+    public Entry removeUuid(UUID uuid){
+        Entry entry = repository.findByUuid(uuid);
+        if (entry != null) {
+
+            // remove uuid
+            entry.setUuid(null);
+            repository.save(entry);
+        }
+
+
+        return null;
+    }
+
+    /**
+     * Set a UUID to an Entry
+     *
+     * @param entry the entry to update
+     * @return @type Entry the entry updated
+     */
+    public Entry setUuid(Entry entry){
+        entry.setUuid(UUID.randomUUID());
+
+        return repository.save(entry);
+    }
+
+    /**
+     * Find an entry by his UUID
+     *
+     * @param uuid the specific uuid
+     * @return entry the Entry object
+     */
+    @Override
+    public Entry getEntryByUuid(UUID uuid) {
+        return repository.findByUuid(uuid);
+    }
+
 
     /**
      * Add an entry
@@ -74,5 +118,18 @@ public class EntryService implements IEntryService {
                 .orElseThrow(() -> new EntityNotFoundException("Entry with id " + id + " not found"));
 
         repository.deleteById(id);
+    }
+
+    /**
+     * GET - Get an entry by user email and contest ID
+     *
+     * @param idContest the ID of the contest
+     * @param userMail  the email of the user
+     * @return the entry matching the user email and contest ID
+     */
+    @Override
+    public Entry getEntryByUserMailAndIdContest(int idContest, String userMail) {
+        return repository.findByContestIdAndUserEmail(idContest, userMail)
+                .orElse(null);
     }
 }

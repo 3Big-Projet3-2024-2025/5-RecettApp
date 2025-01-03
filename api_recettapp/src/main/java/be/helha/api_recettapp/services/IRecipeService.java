@@ -58,4 +58,12 @@ public interface IRecipeService {
      * @return a {@link Recipe} objects.
      */
     public Recipe getRecipeById(int id);
+
+    /**
+     * Retrieves all recipes that belong to a specific contest.
+     *
+     * @param idContest The ID of the contest.
+     * @return A list of recipes associated with the contest.
+     */
+    List<Recipe> getRecipeByIdContest(int idContest);
 }

@@ -10,6 +10,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -35,7 +37,7 @@ public class PaypalControllerTest {
                 .thenReturn(redirectUrl);
 
         // Call the controller method
-        ResponseEntity<Void> response = paypalController.pay(total);
+        ResponseEntity<Map<String, String>> response = paypalController.pay(total);
 
         // Verify and assert
         assertEquals(HttpStatus.FOUND, response.getStatusCode());

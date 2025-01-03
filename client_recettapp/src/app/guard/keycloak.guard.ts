@@ -32,15 +32,17 @@ export class KeycloakGuard extends KeycloakAuthGuard {
           this.userService.findByEmail(decodedToken.email).subscribe( user => {},
             error => {
               if (error.status === 404) {
+                let date = new Date();
+                // Format this date to obtain ISO format "yyyy-MM-dd"
+                let formattedDate = date.toISOString().split('T')[0];
+
                 let user: User = {
                   id: 0,
                   firstName: decodedToken.given_name,
                   lastName: decodedToken.family_name,
                   email: decodedToken.email,
-                  password: "Test1234",
-                  status: "active",
-                  date_registration: "2024-01-01",
-                  phone_number: " ",
+                  date_registration: formattedDate,
+                  blocked: false
                 };
                 this.userService.save(user).subscribe( user => {},
                   error => {

@@ -1,4 +1,5 @@
 import be.helha.api_recettapp.controllers.RecipeTypeController;
+import be.helha.api_recettapp.models.AppError;
 import be.helha.api_recettapp.models.RecipeType;
 import be.helha.api_recettapp.services.RecipeTypeService;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 /**
@@ -21,21 +22,12 @@ import static org.mockito.Mockito.*;
  */
 class RecipeTypeControllerTest {
 
-    /**
-     * Controller being tested.
-     */
     @InjectMocks
     private RecipeTypeController recipeTypeController;
 
-    /**
-     * Mocked service to simulate RecipeTypeService behavior.
-     */
     @Mock
     private RecipeTypeService recipeTypeService;
 
-    /**
-     * Setup method to initialize mocks before each test.
-     */
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -51,7 +43,7 @@ class RecipeTypeControllerTest {
         List<RecipeType> mockRecipeTypes = new ArrayList<>();
         mockRecipeTypes.add(new RecipeType() {{
             setId(1);
-            setName("Plat");
+            setName("Main Dish");
         }});
         mockRecipeTypes.add(new RecipeType() {{
             setId(2);
@@ -83,7 +75,9 @@ class RecipeTypeControllerTest {
 
         // Assert
         assertEquals(200, response.getStatusCodeValue());
-        assertEquals("No recipe types found.", response.getBody());
+        AppError error = (AppError) response.getBody();
+        assertNotNull(error);
+        assertEquals("No recipe types found.", error.getMessage());
         verify(recipeTypeService, times(1)).findAll();
     }
 
@@ -96,7 +90,7 @@ class RecipeTypeControllerTest {
         // Arrange
         RecipeType mockRecipeType = new RecipeType();
         mockRecipeType.setId(1);
-        mockRecipeType.setName("Plat");
+        mockRecipeType.setName("Main Dish");
 
         when(recipeTypeService.findById(1)).thenReturn(Optional.of(mockRecipeType));
 
@@ -123,7 +117,9 @@ class RecipeTypeControllerTest {
 
         // Assert
         assertEquals(404, response.getStatusCodeValue());
-        assertEquals("Recipe type with ID 1 not found.", response.getBody());
+        AppError error = (AppError) response.getBody();
+        assertNotNull(error);
+        assertEquals("Recipe type with ID 1 not found.", error.getMessage());
         verify(recipeTypeService, times(1)).findById(1);
     }
 
@@ -136,7 +132,7 @@ class RecipeTypeControllerTest {
         // Arrange
         RecipeType mockRecipeType = new RecipeType();
         mockRecipeType.setId(1);
-        mockRecipeType.setName("Plat");
+        mockRecipeType.setName("Main Dish");
 
         when(recipeTypeService.save(any(RecipeType.class))).thenReturn(mockRecipeType);
 
@@ -145,7 +141,9 @@ class RecipeTypeControllerTest {
 
         // Assert
         assertEquals(200, response.getStatusCodeValue());
-        assertEquals("Recipe type created successfully with ID: 1", response.getBody());
+        AppError error = (AppError) response.getBody();
+        assertNotNull(error);
+        assertEquals("Recipe type created successfully with ID: 1", error.getMessage());
         verify(recipeTypeService, times(1)).save(mockRecipeType);
     }
 
@@ -158,7 +156,7 @@ class RecipeTypeControllerTest {
         // Arrange
         RecipeType mockRecipeType = new RecipeType();
         mockRecipeType.setId(1);
-        mockRecipeType.setName("starter");
+        mockRecipeType.setName("Starter");
 
         when(recipeTypeService.findById(1)).thenReturn(Optional.of(new RecipeType()));
         when(recipeTypeService.save(any(RecipeType.class))).thenReturn(mockRecipeType);
@@ -168,7 +166,9 @@ class RecipeTypeControllerTest {
 
         // Assert
         assertEquals(200, response.getStatusCodeValue());
-        assertEquals("Recipe type with ID 1 updated successfully.", response.getBody());
+        AppError error = (AppError) response.getBody();
+        assertNotNull(error);
+        assertEquals("Recipe type with ID 1 updated successfully.", error.getMessage());
         verify(recipeTypeService, times(1)).findById(1);
         verify(recipeTypeService, times(1)).save(any(RecipeType.class));
     }
@@ -182,7 +182,7 @@ class RecipeTypeControllerTest {
         // Arrange
         RecipeType mockRecipeType = new RecipeType();
         mockRecipeType.setId(1);
-        mockRecipeType.setName("starter");
+        mockRecipeType.setName("Starter");
 
         when(recipeTypeService.findById(1)).thenReturn(Optional.empty());
 
@@ -191,7 +191,9 @@ class RecipeTypeControllerTest {
 
         // Assert
         assertEquals(404, response.getStatusCodeValue());
-        assertEquals("Recipe type with ID 1 not found.", response.getBody());
+        AppError error = (AppError) response.getBody();
+        assertNotNull(error);
+        assertEquals("Recipe type with ID 1 not found.", error.getMessage());
         verify(recipeTypeService, times(1)).findById(1);
         verify(recipeTypeService, times(0)).save(any(RecipeType.class));
     }
@@ -210,7 +212,9 @@ class RecipeTypeControllerTest {
 
         // Assert
         assertEquals(200, response.getStatusCodeValue());
-        assertEquals("Recipe type with ID 1 deleted successfully.", response.getBody());
+        AppError error = (AppError) response.getBody();
+        assertNotNull(error);
+        assertEquals("Recipe type with ID 1 deleted successfully.", error.getMessage());
         verify(recipeTypeService, times(1)).findById(1);
         verify(recipeTypeService, times(1)).deleteById(1);
     }
@@ -229,9 +233,10 @@ class RecipeTypeControllerTest {
 
         // Assert
         assertEquals(404, response.getStatusCodeValue());
-        assertEquals("Recipe type with ID 1 not found. Deletion failed.", response.getBody());
+        AppError error = (AppError) response.getBody();
+        assertNotNull(error);
+        assertEquals("Recipe type with ID 1 not found. Deletion failed.", error.getMessage());
         verify(recipeTypeService, times(1)).findById(1);
         verify(recipeTypeService, times(0)).deleteById(1);
     }
 }
-
