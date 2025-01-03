@@ -66,4 +66,12 @@ public interface IRecipeService {
      * @return A list of recipes associated with the contest.
      */
     List<Recipe> getRecipeByIdContest(int idContest);
+    /**
+     * Retrieves a list of recipes associated with a specific user.
+     *
+     * @param userMail the unique identifier of the user.
+     * @return a list of {@code Recipe} objects associated with the specified contest and user.
+     */
+    List<Recipe> getRecipeByUserMail(String userMail);
+
 }

@@ -142,4 +142,19 @@ public class RecipeServiceDB implements IRecipeService{
          return recipeRepository.findRecipesByContestId(idContest);
     }
 
+    /**
+     * Retrieves a list of recipes associated with a specific user.
+     *
+     * @param userMail the unique identifier of the user.
+     * @return a list of {@code Recipe} objects associated with the specified contest and user.
+     */
+    @Override
+    public List<Recipe> getRecipeByUserMail(String userMail) {
+        try {
+            return recipeRepository.findRecipesByUserMail(userMail);
+        } catch (Exception e) {
+            throw new RuntimeException("Error retrieving recipes for user email " + userMail + ": " + e.getMessage(), e);
+        }
+    }
+
 }
