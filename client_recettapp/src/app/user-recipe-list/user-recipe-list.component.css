@@ -1,29 +1,37 @@
 
-.recipe-card {
-    border-radius: 10px; 
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  
+.pagination-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px; 
+  margin-top: 20px;
+  margin-bottom: 50px;
+}
 
-  .recipe-card:hover {
-    transform: translateY(-5px); 
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); 
-  }
-  
-  
-  .rounded-button {
-    border-radius: 5px; 
-    transition: background-color 0.3s ease, transform 0.2s ease; 
-  }
-  
+.pagination-button {
+  padding: 10px 20px; 
+  border-radius: 5px; 
+  font-size: 16px; 
+  font-weight: bold; 
+}
 
-  .rounded-button:hover {
-    background-color: #c82333;
-    transform: scale(1.1);
-  }
-  
-  .card-footer {
-    border-radius: 0 0 10px 10px; 
-    background-color: #f8f9fa; 
-  }
-  
+.pagination-button.active {
+  background-color: #91c29c; 
+  color: white;
+  border: none;
+}
+
+.pagination-button:hover {
+  background-color: #218838; 
+  color: white;
+}
+
+.pagination-button.btn-dark {
+  background-color: #343a40; 
+  color: white;
+  border: none;
+}
+
+.pagination-button.btn-dark:hover {
+  background-color: #23272b;
+}
