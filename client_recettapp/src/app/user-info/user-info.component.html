@@ -1,1 +1,17 @@
-<p>user-info works!</p>
+<div class="container">
+    <h2 class="my-5 text-success">Informations de l'utilisateur connecté</h2>
+    <div *ngIf="user" class="card">
+      <div class="card-body">
+        <p><strong>Nom d'utilisateur :</strong> {{ userName }}</p>
+        <p><strong>Nom :</strong> {{ user.lastName }}</p>
+        <p><strong>Prénom :</strong> {{ user.firstName }}</p>
+        <p><strong>Email :</strong> {{ user.email }}</p>
+        <p><strong>Date d'inscription :</strong> {{ user.date_registration | date }}</p>
+        <p><strong>Compte bloqué :</strong> {{ user.blocked ? 'Oui' : 'Non' }}</p>
+      </div>
+    </div>
+    <div *ngIf="!user" class="alert alert-danger">
+      Impossible de récupérer les informations de l'utilisateur.
+    </div>
+  </div>
+  
