@@ -75,4 +75,17 @@ public class EntryService implements IEntryService {
 
         repository.deleteById(id);
     }
+
+    /**
+     * GET - Get an entry by user email and contest ID
+     *
+     * @param idContest the ID of the contest
+     * @param userMail  the email of the user
+     * @return the entry matching the user email and contest ID
+     */
+    @Override
+    public Entry getEntryByUserMailAndIdContest(int idContest, String userMail) {
+        return repository.findByContestIdAndUserEmail(idContest, userMail)
+                .orElse(null);
+    }
 }

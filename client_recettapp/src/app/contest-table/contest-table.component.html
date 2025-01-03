@@ -72,8 +72,8 @@
       <tr *ngFor="let contest of contests">
         <!-- <td>{{ contest.id }}</td> -->
 
-        <td>{{ contest.title }}</td>
-        <td>{{ contest.max_participants }}</td>
+        <td (click)="getAllRecipe(contest.id)">{{ contest.title }}</td>
+        <td >{{ contest.max_participants }}</td>
         <td>
           <span class="badge" [ngClass]="{'bg-success': contest.status, 'bg-danger': !contest.status}">
             {{ contest.status ? 'Active' : 'Inactive' }}
