@@ -2,6 +2,7 @@ package be.helha.api_recettapp.controllers;
 
 import be.helha.api_recettapp.models.Users;
 import be.helha.api_recettapp.services.IUserService;
+import be.helha.api_recettapp.services.KeycloakUserService;
 import be.helha.api_recettapp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,9 @@ public class UsersController {
 
     @Autowired
     private final UserService userService;
+
+    @Autowired
+    private KeycloakUserService keycloakUserService;
 
     /**
      * Constructor for UsersController.
@@ -109,6 +113,54 @@ public class UsersController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(user);
+    }
+
+    /**
+     * Controller method for blocking a user.
+     *
+     * This method handles a {@code POST} request to the {@code /{email}/block} path. It changes the
+     * user's status to "blocked" both in Keycloak and in the database. The user is identified by
+     * the {@code email} path variable.
+     *
+     * @param email The email of the user to be blocked.
+     * @return A {@link ResponseEntity} with a success message indicating the user has been blocked.
+     */
+    @PostMapping("/{email}/block")
+    public ResponseEntity<String> blockUser(@PathVariable String email) {
+        //Change Keycloak status
+        keycloakUserService.blockUser(email);
+
+        //Change DB status
+        Users localUser = getUserByEmail(email).getBody();
+        if (localUser != null) {
+            localUser.setBlocked(true);
+            updateUser(localUser.getId(), localUser);
+        }
+        return ResponseEntity.ok("User blocked successfully");
+    }
+
+    /**
+     * Controller method for unblocking a user.
+     *
+     * This method handles a {@code POST} request to the {@code /{email}/unblock} path. It changes
+     * the user's status to "unblocked" both in Keycloak and in the database. The user is identified
+     * by the {@code email} path variable.
+     *
+     * @param email The email of the user to be unblocked.
+     * @return A {@link ResponseEntity} with a success message indicating the user has been unblocked.
+     */
+    @PostMapping("/{email}/unblock")
+    public ResponseEntity<String> unblockUser(@PathVariable String email) {
+        //Change Keycloak status
+        keycloakUserService.unblockUser(email);
+
+        //Change DB status
+        Users localUser = getUserByEmail(email).getBody();
+        if (localUser != null) {
+            localUser.setBlocked(false);
+            updateUser(localUser.getId(), localUser);
+        }
+        return ResponseEntity.ok("User unblocked successfully");
     }
 
 }
