@@ -1,0 +1,29 @@
+
+.recipe-card {
+    border-radius: 10px; 
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+
+  .recipe-card:hover {
+    transform: translateY(-5px); 
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); 
+  }
+  
+  
+  .rounded-button {
+    border-radius: 5px; 
+    transition: background-color 0.3s ease, transform 0.2s ease; 
+  }
+  
+
+  .rounded-button:hover {
+    background-color: #c82333;
+    transform: scale(1.1);
+  }
+  
+  .card-footer {
+    border-radius: 0 0 10px 10px; 
+    background-color: #f8f9fa; 
+  }
+  
