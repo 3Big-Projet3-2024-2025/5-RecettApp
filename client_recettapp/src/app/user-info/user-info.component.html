@@ -6,7 +6,7 @@
         <p><strong>Nom :</strong> {{ user.lastName }}</p>
         <p><strong>Prénom :</strong> {{ user.firstName }}</p>
         <p><strong>Email :</strong> {{ user.email }}</p>
-        <p><strong>Date d'inscription :</strong> {{ user.date_registration | date }}</p>
+        <p><strong>Date d'inscription :</strong> {{ user.date_registration | date:'dd/MM/yyyy' }}</p>
         <p><strong>Compte bloqué :</strong> {{ user.blocked ? 'Oui' : 'Non' }}</p>
       </div>
     </div>
