@@ -73,5 +73,11 @@ public interface IRecipeService {
      * @return a list of {@code Recipe} objects associated with the specified contest and user.
      */
     List<Recipe> getRecipeByUserMail(String userMail);
+    /**
+     * Sets the "masked" field of a recipe to true, effectively anonymizing it.
+     *
+     * @param recipeId The ID of the recipe to anonymize.
+     */
+    public boolean anonymizeRecipe(int recipeId);
 
 }

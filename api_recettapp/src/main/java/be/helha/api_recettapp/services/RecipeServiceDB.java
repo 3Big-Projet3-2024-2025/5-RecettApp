@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -155,6 +156,24 @@ public class RecipeServiceDB implements IRecipeService{
         } catch (Exception e) {
             throw new RuntimeException("Error retrieving recipes for user email " + userMail + ": " + e.getMessage(), e);
         }
+    }
+
+    /**
+     * Sets the "masked" field of a recipe to true, effectively anonymizing it.
+     *
+     * @param recipeId The ID of the recipe to anonymize.
+     */
+    @Transactional
+    public boolean anonymizeRecipe(int recipeId) {
+        try {
+            Recipe existingRecipe = recipeRepository.findById(recipeId)
+                    .orElseThrow(() -> new NoSuchElementException("Recipe with ID " + recipeId + " not found"));
+            recipeRepository.updateMasked(recipeId, true);
+            return true;
+        }catch (NoSuchElementException e) {
+            return false;
+        }
+
     }
 
 }
