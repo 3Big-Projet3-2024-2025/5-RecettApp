@@ -71,6 +71,7 @@ public class RecipeController {
     @PostMapping
     public Recipe addRecipe(@RequestBody Recipe recipe) {
         recipe.setId(0);
+        recipe.setMasked(false);
         return recipeService.addRecipe(recipe);
     }
 
@@ -112,6 +113,21 @@ public class RecipeController {
             return recipes;
         } catch (Exception e) {
            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    /**
+     * Sets the "masked" field of a recipe to true, effectively anonymizing it.
+     *
+     * @param id The ID of the recipe to anonymize.
+     * @return a boolean
+     */
+    @PutMapping("/anonymize/{id}")
+    public boolean anonymizeRecipe(@PathVariable int id) {
+        try {
+            return recipeService.anonymizeRecipe(id);
+        } catch (Exception e) {
+            throw new RuntimeException(" can't anonymize the recipe :" + e.getMessage());
         }
     }
 }
