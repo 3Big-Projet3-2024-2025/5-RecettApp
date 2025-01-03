@@ -33,19 +33,6 @@ export class ContestTableComponent {
     this.getAllCategory();
   }
 
-  /*
-  convertContestDates(): void {
-    this.contests.forEach(contest => {
-      if (contest.start_date) {
-        contest.start_date = this.convertToLocalDateFormat(contest.start_date);
-      }
-      if (contest.end_date) {
-        contest.end_date = this.convertToLocalDateFormat(contest.end_date);
-      }
-    });
-  }
-  */
-
 
   convertToLocalDateFormat(date: string): string {
     const localDate = new Date(date);
@@ -103,16 +90,22 @@ export class ContestTableComponent {
 
   }
 
-  convertDateToIsoFormat(inputDate: string | undefined): string {
-    if (inputDate == undefined) {
-      return "";
-    }
-    const date = new Date(inputDate);
-    return date.toISOString();
+  formatDateForInput(date: string | undefined): string {
+    if (!date) return "null";
+    const parsedDate = new Date(date);
+    const year = parsedDate.getFullYear();
+    const month = String(parsedDate.getMonth() + 1).padStart(2, '0');
+    const day = String(parsedDate.getDate()).padStart(2, '0');
+    const hours = String(parsedDate.getHours()).padStart(2, '0');
+    const minutes = String(parsedDate.getMinutes()).padStart(2, '0');
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
   }
 
   editContest(contest: Contest): void {
     this.currentContest = { ...contest }; 
+    this.currentContest.start_date = this.formatDateForInput(this.currentContest.start_date);
+    this.currentContest.end_date = this.formatDateForInput(this.currentContest.end_date);
+
     this.isEditing = true;
     this.showForm = true;
   }
@@ -125,12 +118,21 @@ export class ContestTableComponent {
     }
   }
 
+  convertDateToBackendFormat(inputDate: string | undefined): string {
+    if (!inputDate) return "null";
+    const date = new Date(inputDate);
+    return date.toISOString(); 
+  }
+
   saveContest(): void {
     console.log('Contest to save:', this.currentContest);
     if (this.isEditing) {
       if (this.checkContest(this.currentContest)) {
-        this.currentContest.start_date = this.convertDateToIsoFormat(this.currentContest.start_date);
-        this.currentContest.end_date = this.convertDateToIsoFormat(this.currentContest.end_date);
+        this.currentContest.start_date = this.convertDateToBackendFormat(this.currentContest.start_date);
+        this.currentContest.end_date = this.convertDateToBackendFormat(this.currentContest.end_date);
+        if(this.currentContest.start_date === "null" || this.currentContest.end_date === "null"){
+          throw new Error("Error Format Date");
+        }
         const sub = this.contestService.updateContest(this.currentContest).subscribe({
           next: () => {
             this.getAllContests();
@@ -144,8 +146,11 @@ export class ContestTableComponent {
       }
     } else {
       if (this.checkContest(this.currentContest)) {
-        this.currentContest.start_date = this.convertDateToIsoFormat(this.currentContest.start_date);
-        this.currentContest.end_date = this.convertDateToIsoFormat(this.currentContest.end_date);
+        this.currentContest.start_date = this.convertDateToBackendFormat(this.currentContest.start_date);
+        this.currentContest.end_date = this.convertDateToBackendFormat(this.currentContest.end_date);
+        if(this.currentContest.start_date === "null" || this.currentContest.end_date === "null"){
+          throw new Error("Error Format Date");
+        }
         const sub = this.contestService.addContest(this.currentContest).subscribe({
           next: () => {
             this.getAllContests();
