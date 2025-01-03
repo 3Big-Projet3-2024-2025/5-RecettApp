@@ -41,6 +41,7 @@ dependencies {
 	implementation 'org.keycloak:keycloak-admin-client:26.0.0'
 	implementation 'org.springframework.boot:spring-boot-starter-json'
 
+
 }
 
 tasks.named('test') {

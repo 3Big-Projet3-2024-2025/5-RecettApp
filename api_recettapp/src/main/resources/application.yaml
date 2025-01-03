@@ -23,6 +23,7 @@ jwt:
   expirationRefreshTokenMs: 604800000
 
 
+
 keycloak:
   auth-server-url: http://localhost:8081/
   realm: recettapp
@@ -30,6 +31,7 @@ keycloak:
   credentials:
     secret: VWdTknIOvlOEFDS2KZoSbmW5I0uF8PYG
   public-client: false
+
 
 
 paypal:
