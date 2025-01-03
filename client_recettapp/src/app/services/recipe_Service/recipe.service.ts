@@ -37,4 +37,9 @@ export class RecipeService {
     const params = { page: page.toString(), size: size.toString() };
     return this.http.get<any>(this.Url, { params });
   }
+  
+  getRecipesByUserMail(userMail: string): Observable<Recipe[]> {
+    const params = { email: userMail }; 
+    return this.http.get<Recipe[]>(`${this.Url}/user`, { params });
+  }
 }
