@@ -13,6 +13,7 @@ import { AvailableContestComponent } from './available-contest/available-contest
 import { PaypalSuccessComponent } from './paypal-success/paypal-success.component';
 import { PaypalCancelComponent } from './paypal-cancel/paypal-cancel.component';
 import { RecipeContestListComponent } from './recipe-contest-list/recipe-contest-list.component';
+import { UserRecipeListComponent } from './user-recipe-list/user-recipe-list.component';
 
 
 
@@ -31,6 +32,7 @@ export const routes: Routes = [
         { path: 'available-contests', component: AvailableContestComponent, canActivate: [KeycloakGuard]},
         { path: 'success', component:PaypalSuccessComponent},
         { path: 'cancel', component:PaypalCancelComponent},
+        { path: 'myrecipe', component:UserRecipeListComponent},
         { path: 'home', component: HomePageComponent}
 
 
