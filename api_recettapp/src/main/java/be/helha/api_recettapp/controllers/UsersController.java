@@ -189,6 +189,7 @@ public class UsersController {
         return ResponseEntity.ok("User unblocked successfully");
     }
 
+
     /**
      * Anonymizes the personal data of a given user.
      *
@@ -206,5 +207,6 @@ public class UsersController {
         user.setRegistrations(null); // it's not necessary to keep the active entries if the user delete his account
         userService.save(user);
     }
+
 
 }

@@ -14,6 +14,9 @@ import { EntriesService } from '../services/entries.service';
 import { User } from '../models/users';
 import { UsersService } from '../services/users.service';
 import {jwtDecode} from 'jwt-decode';
+import { RecipeType } from '../models/recipe-type';
+import { RecipeTypeService } from '../services/recipe-type.service';
+
 
 
 @Component({
@@ -26,7 +29,7 @@ import {jwtDecode} from 'jwt-decode';
 export class AddRecipeComponent {
 
   constructor(private route: ActivatedRoute,private recipeService: RecipeService, private componentService: RecipeComponentService,
-              private router: Router,private imService: ImageServiceService,private authService: KeycloakService,private entryService: EntriesService,
+              private router: Router, private recipeTypeService: RecipeTypeService,private imService: ImageServiceService,private authService: KeycloakService,private entryService: EntriesService,
               private userService: UsersService){}
       
   //Init image variables
@@ -55,8 +58,11 @@ export class AddRecipeComponent {
     image: []
   };
   recipeComponentError = "";
+  recipeTypes: RecipeType[] = [];
+
             
   ngOnInit(): void {
+    this.loadRecipeTypes();
     const entryId = this.route.snapshot.paramMap.get('idEntry');
     if (entryId != null) {
       this.entryService.getEntry(+entryId).subscribe({
@@ -76,6 +82,15 @@ export class AddRecipeComponent {
       });
     }
   }
+  loadRecipeTypes(): void {
+    this.recipeTypeService.getAllRecipeTypes().subscribe(
+      (data) => {
+        this.recipeTypes = data; // Load RecipeType list
+      },
+      (error) => console.error('Error fetching recipe types:', error) 
+    );
+  }
+  
 
   async checkUserIdentity(user: User) {
     try {

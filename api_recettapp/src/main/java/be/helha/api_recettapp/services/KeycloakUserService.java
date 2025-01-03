@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 
+
 /**
  * Service class for managing Keycloak users.
  *
@@ -90,6 +91,7 @@ public class KeycloakUserService {
         }
     }
 
+
     /**
      * Deletes a user in Keycloak.
      *
@@ -144,5 +146,6 @@ public class KeycloakUserService {
 
         return users;
     }
+
 }
 

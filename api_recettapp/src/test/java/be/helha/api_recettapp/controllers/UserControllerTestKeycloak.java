@@ -1,6 +1,8 @@
 package be.helha.api_recettapp.controllers;
 
+
 import be.helha.api_recettapp.models.Users;
+
 import be.helha.api_recettapp.services.KeycloakUserService;
 import be.helha.api_recettapp.services.UserService;
 import org.junit.jupiter.api.Test;
@@ -26,6 +28,7 @@ import java.util.List;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -89,6 +92,7 @@ public class UserControllerTestKeycloak {
     }
 
     /**
+
      * Test for the deleteUser method.
      * Verifies that a user is anonymized, deleted in Keycloak, and removed from the local database correctly.
      */

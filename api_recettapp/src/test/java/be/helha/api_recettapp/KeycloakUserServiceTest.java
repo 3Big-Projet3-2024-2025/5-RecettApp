@@ -4,6 +4,7 @@ import be.helha.api_recettapp.services.KeycloakUserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.keycloak.admin.client.Keycloak;
+
 import org.keycloak.admin.client.resource.*;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -14,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -34,6 +36,7 @@ class KeycloakUserServiceTest {
     private UserResource mockUserResource;
     private RoleMappingResource mockRoleMappingResource;
     private RoleScopeResource mockRoleScopeResource;
+
 
     /**
      * Sets up the test environment by initializing and mocking the dependencies
@@ -56,16 +59,19 @@ class KeycloakUserServiceTest {
         mockRoleMappingResource = mock(RoleMappingResource.class);
         mockRoleScopeResource = mock(RoleScopeResource.class);
 
+
         // Mock Keycloak hierarchy
         when(mockKeycloak.realm(any())).thenReturn(mockRealmResource);
         when(mockRealmResource.users()).thenReturn(mockUsersResource);
         when(mockUsersResource.get(any())).thenReturn(mockUserResource);
+
 
         // Simulate that the roles() method returns a mock RoleMappingResource
         when(mockUserResource.roles()).thenReturn(mockRoleMappingResource);
 
         // Simulate that realmLevel() returns a mock RoleScopeResource
         when(mockRoleMappingResource.realmLevel()).thenReturn(mockRoleScopeResource);
+
 
         // Spy on the method that creates Keycloak instances
         doReturn(mockKeycloak).when(keycloakUserService).getKeycloakInstance();
@@ -114,6 +120,7 @@ class KeycloakUserServiceTest {
         verify(mockUsersResource).search(isNull(), isNull(), isNull(), eq("test-email@example.com"), isNull(), isNull());
         verify(mockUserResource).update(argThat(argument -> argument.isEnabled()));
     }
+
 
     /**
      * Tests the {@link KeycloakUserService#deleteUser(String)} method.
@@ -198,5 +205,6 @@ class KeycloakUserServiceTest {
         assertEquals(Collections.singletonList("admin"), users.get(0).getAttributes().get("roles"));
         assertEquals(Collections.singletonList("user"), users.get(1).getAttributes().get("roles"));
     }
+
 }
 
