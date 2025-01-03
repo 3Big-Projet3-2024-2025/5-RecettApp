@@ -97,24 +97,24 @@ public class RecipeController {
     public void deleteRecipe(@PathVariable int id) {
         recipeService.deleteRecipe(id);
     }
+
     /**
-     * Retrieves all recipes created by a user based on their email address.
+     * Retrieves paginated recipes created by a specific user.
      *
-     * @param userMail The email address of the user.
-     * @return A list of recipes created by the user.
+     * @param email The email address of the user.
+     * @param page and size The pagination information.
+     * @return A paginated list of recipes.
      */
-    @GetMapping("/user")
-    public List<Recipe> getRecipesByUserMail(@RequestParam("email") String userMail) {
+    @GetMapping("/usermail")
+    public Page<Recipe> getRecipesByUserMailWithPagination(@RequestParam String email,@RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
         try {
-            List<Recipe> recipes = recipeService.getRecipeByUserMail(userMail);
-            if (recipes.isEmpty()) {
-                throw new NoSuchElementException("This user has no recipes");
-            }
-            return recipes;
+            return recipeService.getRecipeByUserMail(email, page, size);
         } catch (Exception e) {
-           throw new RuntimeException(e.getMessage());
+            throw new NoSuchElementException("This user has no recipes" + e.getMessage());
         }
     }
+
 
     /**
      * Sets the "masked" field of a recipe to true, effectively anonymizing it.

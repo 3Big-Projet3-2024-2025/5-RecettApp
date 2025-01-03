@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Recipe } from '../../models/recipe';
@@ -38,9 +38,12 @@ export class RecipeService {
     return this.http.get<any>(this.Url, { params });
   }
 
-  getRecipesByUserMail(userMail: string): Observable<Recipe[]> {
-    const params = { email: userMail }; 
-    return this.http.get<Recipe[]>(`${this.Url}/user`, { params });
+  getRecipesByUserMail(email: string, page: number, size: number): Observable<any> {
+    const params = new HttpParams()
+      .set('email', email)
+      .set('page', page.toString())
+      .set('size', size.toString());
+    return this.http.get<any>(`${this.Url}/usermail`, { params });
   }
 
   anonymizeRecipe(id: number): Observable<void> {
