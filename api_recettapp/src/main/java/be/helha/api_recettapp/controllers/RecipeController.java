@@ -96,5 +96,22 @@ public class RecipeController {
     public void deleteRecipe(@PathVariable int id) {
         recipeService.deleteRecipe(id);
     }
-
+    /**
+     * Retrieves all recipes created by a user based on their email address.
+     *
+     * @param userMail The email address of the user.
+     * @return A list of recipes created by the user.
+     */
+    @GetMapping("/user")
+    public List<Recipe> getRecipesByUserMail(@RequestParam("email") String userMail) {
+        try {
+            List<Recipe> recipes = recipeService.getRecipeByUserMail(userMail);
+            if (recipes.isEmpty()) {
+                throw new NoSuchElementException("This user has no recipes");
+            }
+            return recipes;
+        } catch (Exception e) {
+           throw new RuntimeException(e.getMessage());
+        }
+    }
 }
