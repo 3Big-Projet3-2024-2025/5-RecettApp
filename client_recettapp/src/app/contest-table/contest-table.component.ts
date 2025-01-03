@@ -4,6 +4,8 @@ import { ContestService } from '../services/contest.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ContestCategory } from '../models/contest-category';
+import { ContestCategoryService } from '../services/contest-category.service';
 
 @Component({
   selector: 'app-contest-table',
@@ -17,12 +19,18 @@ export class ContestTableComponent {
   currentContest: Contest = this.initContest();
   isEditing = false;
   showForm = false;
+  categories!: ContestCategory[];
 
-  constructor(private contestService: ContestService,private router: Router) { }
+  constructor(
+    private contestService: ContestService,
+    private router: Router,
+    private categoryService : ContestCategoryService
+  ) { }
 
   ngOnInit(): void {
     this.getAllContests();
     //this.convertContestDates();
+    this.getAllCategory();
   }
 
   /*
@@ -118,6 +126,7 @@ export class ContestTableComponent {
   }
 
   saveContest(): void {
+    console.log('Contest to save:', this.currentContest);
     if (this.isEditing) {
       if (this.checkContest(this.currentContest)) {
         this.currentContest.start_date = this.convertDateToIsoFormat(this.currentContest.start_date);
@@ -161,5 +170,17 @@ export class ContestTableComponent {
   }
   getAllRecipe(idContest: any){
     this.router.navigate(['recipe-contest/', idContest]);
+  }
+
+  getAllCategory(){
+    const sub = this.categoryService.getAllCategories().subscribe({
+      next: (res) => {
+        console.log("categories");
+        this.categories = res;
+        console.log(this.categories);
+      }, error: (err) => {
+        console.log('error while getting categories');
+      }
+    })
   }
 }

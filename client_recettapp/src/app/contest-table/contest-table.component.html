@@ -39,6 +39,20 @@
           <input type="datetime-local" id="end_date" [(ngModel)]="currentContest.end_date" name="end_date"
             class="form-control" />
         </div>
+        <div class="mb-3">
+          <label for="category" class="form-label">Category</label>
+          <select
+            id="category"
+            [(ngModel)]="currentContest.category"
+            name="category"
+            class="form-select"
+            required
+          >
+            <option *ngFor="let category of categories" [ngValue]="category">
+              {{ category.title }}
+            </option>
+          </select>
+        </div>
         <div class="form-check mb-3">
           <input type="checkbox" id="status" [(ngModel)]="currentContest.status" name="status"
             class="form-check-input" />
