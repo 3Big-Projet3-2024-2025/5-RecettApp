@@ -18,12 +18,19 @@ import { EntriesService } from '../services/entries.service';
 })
 export class RecipeContestListComponent {
 
-recipes: Recipe[] = [];
-filteredRecipes: Recipe[] = [];
+  recipes: Recipe[] = [];
+  filteredRecipes: Recipe[] = [];
+  displayedRecipes: Recipe[] = [];
   searchTerm: string = '';
- contestID: number |undefined;
- entry: Entry = {}
-constructor(private service: RecipeService,private router:Router, private route: ActivatedRoute,private imaService: ImageServiceService,private entryService: EntriesService) {}
+  contestID: number |undefined;
+  entry: Entry = {}
+
+  // Pagination properties
+  currentPage: number = 0;
+  itemsPerPage: number = 2;
+  totalPages: number = 0;
+
+  constructor(private service: RecipeService,private router:Router, private route: ActivatedRoute,private imaService: ImageServiceService,private entryService: EntriesService) {}
 
 
    ngOnInit(): void {
@@ -98,8 +105,12 @@ constructor(private service: RecipeService,private router:Router, private route:
   addRecipe() {
    this.router.navigate(['/recipe/add/', this.entry.id]);
   }
-
-  private shuffleArray(array: Recipe[]): Recipe[] {
+  /**
+   * Shuffles an array of recipes using the Fisher-Yates algorithm.
+   * preventing the same recipes from always being displayed at the top of the list.
+   * 
+   **/
+  shuffleArray(array: Recipe[]): Recipe[] {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [array[i], array[j]] = [array[j], array[i]];
