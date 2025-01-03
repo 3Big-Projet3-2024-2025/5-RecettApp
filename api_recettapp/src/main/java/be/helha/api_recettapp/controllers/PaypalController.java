@@ -5,12 +5,10 @@ import be.helha.api_recettapp.models.Entry;
 import be.helha.api_recettapp.models.Users;
 import be.helha.api_recettapp.models.PaypalResponse;
 import be.helha.api_recettapp.services.*;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
