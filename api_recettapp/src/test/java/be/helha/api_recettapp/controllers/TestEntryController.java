@@ -150,7 +150,21 @@ public class TestEntryController {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("registered"));
     }
-    
+
+
+    /**
+     * Tests the DELETE endpoint to delete an entry by its ID.
+     * Checks if the response status is OK (200) after deletion.
+     *
+     * @throws Exception Exception if an error occurs during the request or response processing.
+     */
+    @Test
+    void testDeleteEntry() throws Exception {
+        Mockito.doNothing().when(entryService).deleteEntry(1);
+
+        mockMvc.perform(delete("/entries/1"))
+                .andExpect(status().isOk());
+    }
 
 
 }
