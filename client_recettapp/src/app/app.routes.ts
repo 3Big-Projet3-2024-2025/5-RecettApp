@@ -13,6 +13,7 @@ import { AvailableContestComponent } from './available-contest/available-contest
 import { PaypalSuccessComponent } from './paypal-success/paypal-success.component';
 import { PaypalCancelComponent } from './paypal-cancel/paypal-cancel.component';
 import { RecipeContestListComponent } from './recipe-contest-list/recipe-contest-list.component';
+import {AdminGuard} from "./guard/admin.guard";
 
 
 
@@ -25,7 +26,7 @@ export const routes: Routes = [
         { path: 'recipe/add/:idEntry', component: AddRecipeComponent , canActivate: [KeycloakGuard]},
         { path: 'ContestCategory', component: ContestCategoryComponent , canActivate: [KeycloakGuard]},
         { path:'RecipeType',component:RecipeTypeComponent , canActivate: [KeycloakGuard]},
-        { path: 'users', component : UsersComponent , canActivate: [KeycloakGuard]},
+        { path: 'users', component : UsersComponent , canActivate: [AdminGuard]},
         { path: 'contests', component: ContestTableComponent , canActivate: [KeycloakGuard]},
         { path: 'entries', component: EntriesTableComponent , canActivate: [KeycloakGuard]},
         { path: 'available-contests', component: AvailableContestComponent, canActivate: [KeycloakGuard]},
