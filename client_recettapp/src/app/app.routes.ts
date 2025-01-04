@@ -29,7 +29,7 @@ export const routes: Routes = [
 
         { path: '', redirectTo: 'home', pathMatch: 'full' },
         { path: 'recipe', component: RecipeComponent , canActivate: [KeycloakGuard]},
-        { path: 'recipe/:id', component: RecipeDetailComponent , canActivate: [KeycloakGuard]},
+        { path: 'recipe/detail/:id/:backto', component: RecipeDetailComponent , canActivate: [KeycloakGuard]},
         { path: 'recipe-contest/:idContest', component: RecipeContestListComponent , canActivate: [KeycloakGuard]},
         { path: 'recipe/add/:idEntry', component: AddRecipeComponent , canActivate: [KeycloakGuard]},
         { path: 'ContestCategory', component: ContestCategoryComponent , canActivate: [KeycloakGuard]},
