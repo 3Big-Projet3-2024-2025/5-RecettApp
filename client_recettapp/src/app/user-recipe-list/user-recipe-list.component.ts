@@ -5,11 +5,12 @@ import { KeycloakService } from 'keycloak-angular';
 import { jwtDecode } from 'jwt-decode';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-user-recipe-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,FormsModule],
   templateUrl: './user-recipe-list.component.html',
   styleUrl: './user-recipe-list.component.css'
 })
@@ -20,7 +21,7 @@ export class UserRecipeListComponent {
   totalPages: number = 0;
   totalElements: number = 0;
   userMail: string = ''; 
-
+  searchTerm: string = '';
   constructor(private recipeService: RecipeService,private authService: KeycloakService, private router: Router) {}
 
   ngOnInit(): void {
@@ -35,7 +36,7 @@ export class UserRecipeListComponent {
   }  
 
   getRecipesForUser(page: number): void {
-    this.recipeService.getRecipesByUserMail(this.userMail, page, this.pageSize).subscribe({
+    this.recipeService.getRecipesByUserMail(this.userMail, this.searchTerm, page, this.pageSize).subscribe({
       next: (data) => {
         this.recipes = data.content;
         this.currentPage = data.pageable.pageNumber;
@@ -82,5 +83,10 @@ export class UserRecipeListComponent {
       this.goToPage(this.currentPage + 1);
     }
   }
-  
+
+  onSearch(): void {
+    this.currentPage = 0; 
+    this.getRecipesForUser(this.currentPage); 
+  }
+
 }

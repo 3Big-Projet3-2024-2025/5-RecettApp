@@ -38,10 +38,11 @@ export class RecipeService {
     return this.http.get<any>(this.Url, { params });
   }
 
-  getRecipesByUserMail(email: string, page: number, size: number): Observable<any> {
+  getRecipesByUserMail(email: string, keyword: string,page: number, size: number): Observable<any> {
     const params = new HttpParams()
       .set('email', email)
       .set('page', page.toString())
+      .set('keyword', keyword)
       .set('size', size.toString());
     return this.http.get<any>(`${this.Url}/usermail`, { params });
   }
