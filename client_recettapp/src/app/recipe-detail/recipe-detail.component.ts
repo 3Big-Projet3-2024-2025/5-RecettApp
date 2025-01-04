@@ -97,6 +97,36 @@ export class RecipeDetailComponent implements OnInit {
   }
 
   addEvaluation(): void {
+    if (!this.imageFile) {
+      Swal.fire({
+        title: 'Erreur',
+        text: 'Veuillez sélectionner une image pour votre évaluation.',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+      return;
+    }
+
+    if (!this.evaluation.rate || this.evaluation.rate <= 0) {
+      Swal.fire({
+        title: 'Erreur',
+        text: 'Veuillez donner une note (au moins 1 étoile).',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+      return;
+    }
+
+    if (!this.evaluation.commentaire || this.evaluation.commentaire.trim() === '') {
+      Swal.fire({
+        title: 'Erreur',
+        text: 'Veuillez ajouter un commentaire.',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+      return;
+    }
+
     this.evaluationService.addEvaluation(this.evaluation).subscribe(
       (next: Evaluation) => {
         console.log("id retourne : ", next.id);
@@ -116,6 +146,7 @@ export class RecipeDetailComponent implements OnInit {
       }
     );
   }
+
 
   validateImage(event: Event) {
 
