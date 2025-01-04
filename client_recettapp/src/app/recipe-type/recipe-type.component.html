@@ -6,6 +6,11 @@
     </button>
   </div>
 
+  <!-- Message When No Recipe Types Available -->
+  <div *ngIf="recipeTypes.length === 0" class="alert alert-info text-center shadow-sm">
+    <i class="bi bi-info-circle"></i> No recipe types available. Add one to get started!
+  </div>
+
   <!-- Recipe Type Form -->
   <form *ngIf="showForm" [formGroup]="recipeTypeForm" (ngSubmit)="saveRecipeType()" class="card border-success mb-4">
     <div class="card-header bg-success text-white">
@@ -61,32 +66,32 @@
     </tbody>
   </table>
 
-<!-- Pagination Controls -->
-<div *ngIf="totalPages > 1" class="d-flex justify-content-center mt-3">
-  <button
-    class="btn btn-outline-success me-2"
-    [disabled]="currentPage === 1"
-    (click)="onPageChange(currentPage - 1)"
-  >
-    Previous
-  </button>
-  <div class="pagination-box d-flex align-items-center">
-    <span *ngFor="let page of [].constructor(totalPages); let i = index">
-      <button
-        class="page-box"
-        [ngClass]="{ 'active-page': currentPage === i + 1 }"
-        (click)="onPageChange(i + 1)"
-      >
-        {{ i + 1 }}
-      </button>
-    </span>
+  <!-- Pagination Controls -->
+  <div *ngIf="totalPages > 1" class="d-flex justify-content-center mt-3">
+    <button
+      class="btn btn-outline-success me-2"
+      [disabled]="currentPage === 1"
+      (click)="onPageChange(currentPage - 1)"
+    >
+      Previous
+    </button>
+    <div class="pagination-box d-flex align-items-center">
+      <span *ngFor="let page of [].constructor(totalPages); let i = index">
+        <button
+          class="page-box"
+          [ngClass]="{ 'active-page': currentPage === i + 1 }"
+          (click)="onPageChange(i + 1)"
+        >
+          {{ i + 1 }}
+        </button>
+      </span>
+    </div>
+    <button
+      class="btn btn-outline-success ms-2"
+      [disabled]="currentPage === totalPages"
+      (click)="onPageChange(currentPage + 1)"
+    >
+      Next
+    </button>
   </div>
-  <button
-    class="btn btn-outline-success ms-2"
-    [disabled]="currentPage === totalPages"
-    (click)="onPageChange(currentPage + 1)"
-  >
-    Next
-  </button>
-</div>
 </div>
