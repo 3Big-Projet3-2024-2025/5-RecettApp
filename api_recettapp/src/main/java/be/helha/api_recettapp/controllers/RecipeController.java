@@ -22,11 +22,13 @@ public class RecipeController {
      * Retrieves a paginated list of recipes.
      *
      * @param pageable the pagination information.
+     * @param keyword the term search.
      * @return a {@link Page} of {@link Recipe}.
      */
     @GetMapping
-    public Page<Recipe> getRecipes(Pageable pageable) {
-        return recipeService.getRecipes(pageable);
+    public Page<Recipe> getRecipes( @RequestParam(required = false) String keyword,
+                                    Pageable pageable) {
+        return recipeService.getRecipes(keyword, pageable);
     }
 
     /**

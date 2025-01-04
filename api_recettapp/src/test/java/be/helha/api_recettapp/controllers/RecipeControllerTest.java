@@ -173,7 +173,7 @@ public class RecipeControllerTest {
 
         Page<Recipe> pagedRecipes = new PageImpl<>(List.of(recipe1, recipe2)); // Use PageImpl to simulate a page
 
-        given(recipeService.getRecipes(Mockito.any(Pageable.class))).willReturn(pagedRecipes);
+        given(recipeService.getRecipes(null,Mockito.any(Pageable.class))).willReturn(pagedRecipes);
 
         mockMvc.perform(get("/recipe")
                         .param("page", "0")
