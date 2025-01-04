@@ -19,6 +19,7 @@ import { UserInfoComponent } from './user-info/user-info.component';
 import { NotAuthorizedComponent } from './not-authorized/not-authorized.component';
 import { ApplePieComponent } from './htmls/apple-pie/apple-pie.component';
 import { ChickenBreastComponent } from './htmls/chicken-breast/chicken-breast.component';
+import { VeganRecipeComponent } from './htmls/vegan-recipe/vegan-recipe.component';
 
 
 
@@ -41,6 +42,7 @@ export const routes: Routes = [
         { path: 'myrecipe', component:UserRecipeListComponent},
         { path: 'recipe/apple-pie', component: ApplePieComponent },
         { path: 'recipe/chicken-breast', component: ChickenBreastComponent },
+        { path: 'recipe/vegan-recipe', component: VeganRecipeComponent },
         { path: 'home', component: HomePageComponent},
         { path:'User-info',component:UserInfoComponent},
         {path:'not-authorized',component:NotAuthorizedComponent},
