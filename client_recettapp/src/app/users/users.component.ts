@@ -125,6 +125,7 @@ async onSearchByEmail(): Promise<void> {
         }
       }));
     }
+    window.location.reload();
   }
 
 }
