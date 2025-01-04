@@ -78,5 +78,5 @@ public class TestEvaluationController {
         assertEquals(evaluation1, response.getBody());
         verify(evaluationService, times(1)).addEvaluation(evaluation1);
     }
-    
+
 }
