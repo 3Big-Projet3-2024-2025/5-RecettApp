@@ -131,7 +131,26 @@ public class TestEntryController {
                 .andExpect(jsonPath("$.status").value("pending"));
     }
 
+    /**
+     * Tests the PUT endpoint to update an existing entry.
+     * Checks if the response contains the updated entry data.
+     *
+     * @throws Exception Exception if an error occurs during the request or response processing.
+     */
+    @Test
+    void testUpdateEntry() throws Exception {
+        Entry entry = createSampleEntry();
+        entry.setStatus("registered");
 
+        given(entryService.updateEntry(Mockito.any(Entry.class))).willReturn(entry);
+
+        mockMvc.perform(put("/entries")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(entry)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("registered"));
+    }
+    
 
 
 }
