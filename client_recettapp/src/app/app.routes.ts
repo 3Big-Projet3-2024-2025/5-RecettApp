@@ -17,6 +17,7 @@ import { UserRecipeListComponent } from './user-recipe-list/user-recipe-list.com
 import { NotFoundComponent } from './not-found/not-found.component';
 import { UserInfoComponent } from './user-info/user-info.component';
 import { NotAuthorizedComponent } from './not-authorized/not-authorized.component';
+import { ApplePieComponent } from './htmls/apple-pie/apple-pie.component';
 
 
 
@@ -37,6 +38,7 @@ export const routes: Routes = [
         { path: 'success', component:PaypalSuccessComponent},
         { path: 'cancel', component:PaypalCancelComponent},
         { path: 'myrecipe', component:UserRecipeListComponent},
+        { path: 'recipe/apple-pie', component: ApplePieComponent },
         { path: 'home', component: HomePageComponent},
         { path:'User-info',component:UserInfoComponent},
         {path:'not-authorized',component:NotAuthorizedComponent},
