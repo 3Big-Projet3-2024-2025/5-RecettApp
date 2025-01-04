@@ -15,7 +15,7 @@ import { PaypalCancelComponent } from './paypal-cancel/paypal-cancel.component';
 import { RecipeContestListComponent } from './recipe-contest-list/recipe-contest-list.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { UserInfoComponent } from './user-info/user-info.component';
-
+import { NotAuthorizedComponent } from './not-authorized/not-authorized.component';
 
 
 
@@ -36,6 +36,8 @@ export const routes: Routes = [
         { path: 'cancel', component:PaypalCancelComponent},
         { path: 'home', component: HomePageComponent},
         { path:'User-info',component:UserInfoComponent},
+        {path:'not-authorized',component:NotAuthorizedComponent},
         { path: '**', component: NotFoundComponent },
+        
 
 ];
