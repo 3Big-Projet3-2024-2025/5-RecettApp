@@ -63,7 +63,8 @@ public class PaypalController {
         }
 
         // check user
-        Users user = userService.findById((long) entry.getUsers().getId());
+        long idUser = (long) entry.getUsers().getId();
+        Users user = userService.findById(idUser);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of("error", "User not found with ID: " + entry.getUsers().getId()));
@@ -74,6 +75,13 @@ public class PaypalController {
         if (contest.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of("error", "Contest not found with ID: " + entry.getContest().getId()));
+        }
+
+        // check if user has already this entry
+        Entry existingEntry = entryService.findByUserAndContest(entry.getUsers(), entry.getContest());
+        if (existingEntry != null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", "User already registered for this contest."));
         }
 
         // set Random UUID
