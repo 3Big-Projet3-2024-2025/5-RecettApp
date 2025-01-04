@@ -8,4 +8,5 @@ export interface Evaluation {
   rate: number;
   entry?: Entry;
   recipe?: Recipe;
+  commentaire?: string;
 }
