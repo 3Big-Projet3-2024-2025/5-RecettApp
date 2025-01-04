@@ -75,6 +75,10 @@ export class EvaluationComponent implements OnInit {
       error: (err) => console.error('Erreur lors du chargement des évaluations :', err),
     });
   }
+  toggleForm(): void {
+    this.showForm = !this.showForm;
+  }
+  
 
   loadEntries(): void {
     this.entryService.getAllEntries().subscribe({
