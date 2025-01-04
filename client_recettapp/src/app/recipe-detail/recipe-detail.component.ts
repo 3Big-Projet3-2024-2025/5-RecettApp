@@ -138,13 +138,20 @@ export class RecipeDetailComponent implements OnInit {
           icon: 'success',
           confirmButtonText: 'Fermer'
         });
-
-        console.log("Added");
       },
       (err) => {
         console.log(err);
+        if (err.status === 400) {
+          Swal.fire({
+            title: 'Erreur',
+            text: err.error,
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+        }
       }
     );
+
   }
 
 
