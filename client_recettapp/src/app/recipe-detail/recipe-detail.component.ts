@@ -11,6 +11,7 @@ import { Evaluation } from '../models/evaluation';
 import { EvaluationService } from '../services/evaluation.service';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
+import {KeycloakService} from "keycloak-angular";
 
 
 @Component({
@@ -39,50 +40,54 @@ export class RecipeDetailComponent implements OnInit {
     private imaService: ImageServiceService,
     private evaluationService : EvaluationService,
     private imService : ImageServiceService,
-    private location: Location
+    private location: Location,
+    private keycloakService: KeycloakService
 
   ) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    const token = await this.keycloakService.getToken();
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.service.getRecipeById(+id).subscribe(
+      this.service.getRecipeById(+id, token).subscribe(
         (data) => {
-        if (data.photo_url) {
-          this.getImage(data.photo_url);
-        }
-        this.getRecipeComponent(+id);
-        this.recipe = data;
-        this.evaluation.entry = this.recipe.entry;
-        this.evaluation.recipe = this.recipe;
-        },(err) => {
+          if (data.photo_url) {
+            this.getImage(data.photo_url);
+          }
+          this.getRecipeComponent(+id);
+          this.recipe = data;
+          this.evaluation.entry = this.recipe.entry;
+          this.evaluation.recipe = this.recipe;
+        }, (err) => {
           console.log(err.error.message)
         }
-
-      );}
+      );
+    }
 
   }
 
-  getImage(imageName: string){
-    this.imaService.getImage(imageName).subscribe(
+  async getImage(imageName: string) {
+    const token = await this.keycloakService.getToken();
+    this.imaService.getImage(imageName, token).subscribe(
       (next: Blob) => {
 
         this.imageRecipe = URL.createObjectURL(next);
       },
       (err) => {
-       console.log(err.error.message)
+        console.log(err.error.message)
       }
     );
   }
-  getRecipeComponent(id : number){
-    this.serviceRecipeComponent.getRecipeComponentsByIdRecipe(+id).subscribe(
+  async getRecipeComponent(id: number) {
+    const token = await this.keycloakService.getToken();
+    this.serviceRecipeComponent.getRecipeComponentsByIdRecipe(+id, token).subscribe(
       (data) => {
-      if (this.recipe) {
-        this.recipe.components = data;
+        if (this.recipe) {
+          this.recipe.components = data;
+        }
+      }, (err) => {
+        console.log(err.error.message)
       }
-    }, (err) => {
-      console.log(err.error.message)
-     }
     );
   }
 
@@ -90,21 +95,23 @@ export class RecipeDetailComponent implements OnInit {
     this.location.back();
   }
 
-  addImage(evaluation : Evaluation){
+  async addImage(evaluation: Evaluation) {
 
-    if(this.imageFile){ //added image
-      this.imService.addImageEvaluation(this.imageFile,evaluation).subscribe( // add image before the recipe
-        { next: () =>{
-          console.log("Image added");
-        },
+    if (this.imageFile) {
+      const token = await this.keycloakService.getToken();//added image
+      this.imService.addImageEvaluation(this.imageFile, evaluation, token).subscribe( // add image before the recipe
+        {
+          next: () => {
+            console.log("Image added");
+          },
           error: (err) => {
             console.log(err)
           }
         })
-      }
+    }
   }
 
-  addEvaluation(): void {
+  async addEvaluation(): Promise<void> {
     if (!this.imageFile) {
       Swal.fire({
         title: 'Erreur',
@@ -135,7 +142,8 @@ export class RecipeDetailComponent implements OnInit {
       return;
     }
 
-    this.evaluationService.addEvaluation(this.evaluation).subscribe(
+    const token = await this.keycloakService.getToken();
+    this.evaluationService.addEvaluation(this.evaluation, token).subscribe(
       (next: Evaluation) => {
         console.log("id retourne : ", next.id);
         this.addImage(next);
