@@ -32,8 +32,8 @@ export class PaypalService {
   /*
   Save succesful payment's data to DB
   */
-  addPaypalPayment(payment : PayPalPayment): Observable<any>{
-    return this.http.post<PayPalPayment>(`${this.apiUrl}`, payment);
+  addPaypalPayment(userId: number, response: string): Observable<any>{
+    return this.http.post<PayPalPayment>(`${this.apiUrl}/response?userId=${userId}`, response);
   }
 
   /*

@@ -29,7 +29,7 @@ keycloak:
   realm: recettapp
   resource: backend_recettapp
   credentials:
-    secret: 0aJMR1Fvn0hG9EdZtCJa8lhgZoB161ao
+    secret: JrfNDH4MkdNerOeFY6VIOHQCMkSxx9E9
   public-client: false
 
 

@@ -1,6 +1,11 @@
 package be.helha.api_recettapp.services;
 
+import be.helha.api_recettapp.models.PaypalResponse;
+import be.helha.api_recettapp.models.Users;
+import be.helha.api_recettapp.repositories.jpa.PaypalResponseRepository;
+import be.helha.api_recettapp.repositories.jpa.UserRepository;
 import com.fasterxml.jackson.databind.JsonNode;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -8,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -26,6 +32,12 @@ public class PaypalService {
     private final String clientId;
     private final String clientSecret;
     private final String apiUrl;
+
+    @Autowired
+    private PaypalResponseRepository paypalResponseRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     /**
      * Constructs a new {@code PaypalService}.
@@ -130,7 +142,6 @@ public class PaypalService {
 
         throw new RuntimeException("Failed to create PayPal payment");
     }
-
     /**
      * Validates a PayPal payment by executing the payment using the provided payment ID and payer ID.
      *
@@ -164,4 +175,30 @@ public class PaypalService {
         throw new RuntimeException("Payment validation failed");
     }
 
+    /**
+     * Saves the PayPal response data associated with a user.
+     *
+     * <p>This method retrieves a user by their ID, creates a new {@link PaypalResponse} entity with the provided
+     * PayPal response JSON, and associates the response with the retrieved user. The PayPal response is then saved
+     * in the database.</p>
+     *
+     * <p>If the user with the given ID does not exist, a {@link RuntimeException} is thrown.</p>
+     *
+     * @param userId The ID of the user to associate with the PayPal response.
+     * @param jsonResponse The PayPal response JSON to be saved.
+     * @return The saved {@link PaypalResponse} entity.
+     * @throws RuntimeException If the user with the specified ID is not found.
+     */
+    public PaypalResponse savePaypalResponse(Long userId, String jsonResponse) {
+        // Get the user
+        Users user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Create and save the PayPal Response
+        PaypalResponse paypalResponse = new PaypalResponse();
+        paypalResponse.setResponseJson(jsonResponse);
+        paypalResponse.setResponseDate(LocalDateTime.now());
+        paypalResponse.setUser(user);
+
+        return paypalResponseRepository.save(paypalResponse);
+    }
 }
