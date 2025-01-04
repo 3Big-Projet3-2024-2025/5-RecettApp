@@ -87,6 +87,20 @@ export class RecipeDetailComponent implements OnInit {
     }
   }
 
+  getRecipeComponent(id : number){
+    this.serviceRecipeComponent.getRecipeComponentsByIdRecipe(+id).subscribe(
+      (data) => {
+      if (this.recipe) {
+        this.recipe.components = data;
+        this.evaluation.recipe = this.recipe;
+
+      }
+    }, (err) => {
+      console.log(err.error.message)
+     }
+    );
+  }
+
 
   getImage(imageName: string){
     this.imaService.getImage(imageName).subscribe(
