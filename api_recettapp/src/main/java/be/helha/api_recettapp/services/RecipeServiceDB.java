@@ -153,10 +153,10 @@ public class RecipeServiceDB implements IRecipeService{
      * @return A paginated list of recipes.
      */
     @Override
-    public Page<Recipe> getRecipeByUserMail(String userMail, int page, int size) {
+    public Page<Recipe> getRecipeByUserMail(String userMail, String keyword, int page, int size) {
         try {
             Pageable pageable = PageRequest.of(page, size);
-            return recipeRepository.findRecipesByUserMail(userMail, pageable);
+            return recipeRepository.findRecipesByUserMailAndKeyword(userMail, keyword, pageable);
         } catch (Exception e) {
             throw new RuntimeException("Error retrieving recipes for user email " + userMail + ": " + e.getMessage(), e);
         }

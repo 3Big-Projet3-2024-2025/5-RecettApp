@@ -73,7 +73,7 @@ public interface IRecipeService {
      * @param page and size The pagination information.
      * @return A paginated list of recipes.
      */
-    public Page<Recipe> getRecipeByUserMail(String userMail, int page, int size) ;
+    public Page<Recipe> getRecipeByUserMail(String userMail,String keyword, int page, int size) ;
     /**
      * Sets the "masked" field of a recipe to true, effectively anonymizing it.
      *
