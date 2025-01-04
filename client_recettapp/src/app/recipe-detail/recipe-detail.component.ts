@@ -11,6 +11,7 @@ import { Evaluation } from '../models/evaluation';
 import { EvaluationService } from '../services/evaluation.service';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
+import { EntriesService } from '../services/entries.service';
 
 
 @Component({
@@ -39,7 +40,8 @@ export class RecipeDetailComponent implements OnInit {
     private imaService: ImageServiceService,
     private evaluationService : EvaluationService,
     private imService : ImageServiceService,
-    private location: Location
+    private location: Location,
+    private entriesService : EntriesService
 
   ) {}
 
@@ -51,9 +53,9 @@ export class RecipeDetailComponent implements OnInit {
         if (data.photo_url) {
           this.getImage(data.photo_url);
         }
-        this.getRecipeComponent(+id);
+        //this.getRecipeComponent(+id);
         this.recipe = data;
-        this.evaluation.entry = this.recipe.entry;
+        this.getEntry();
         this.evaluation.recipe = this.recipe;
         },(err) => {
           console.log(err.error.message)
@@ -62,6 +64,29 @@ export class RecipeDetailComponent implements OnInit {
       );}
 
   }
+
+
+  getEntry() {
+    if (this.recipe?.entry?.contest?.id) {
+      this.entriesService.getEntryByUserMailAndIdContest(this.recipe?.entry?.contest?.id).subscribe(
+        (entrie) => {
+          console.log("Recovered input : ", entrie);
+          this.evaluation.entry = entrie;
+        },
+        (err) => {
+          console.log("You are not registered for this competition");
+
+          Swal.fire({
+            title: 'Not registered',
+            text: 'You are not registered for this competition.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+        }
+      );
+    }
+  }
+
 
   getImage(imageName: string){
     this.imaService.getImage(imageName).subscribe(
@@ -74,17 +99,8 @@ export class RecipeDetailComponent implements OnInit {
       }
     );
   }
-  getRecipeComponent(id : number){
-    this.serviceRecipeComponent.getRecipeComponentsByIdRecipe(+id).subscribe(
-      (data) => {
-      if (this.recipe) {
-        this.recipe.components = data;
-      }
-    }, (err) => {
-      console.log(err.error.message)
-     }
-    );
-  }
+
+
 
   backRecipeList(): void {
     this.location.back();
@@ -92,8 +108,8 @@ export class RecipeDetailComponent implements OnInit {
 
   addImage(evaluation : Evaluation){
 
-    if(this.imageFile){ //added image
-      this.imService.addImageEvaluation(this.imageFile,evaluation).subscribe( // add image before the recipe
+    if(this.imageFile){
+      this.imService.addImageEvaluation(this.imageFile,evaluation).subscribe(
         { next: () =>{
           console.log("Image added");
         },
@@ -107,8 +123,8 @@ export class RecipeDetailComponent implements OnInit {
   addEvaluation(): void {
     if (!this.imageFile) {
       Swal.fire({
-        title: 'Erreur',
-        text: 'Veuillez sélectionner une image pour votre évaluation.',
+        title: 'error',
+        text: 'Please select an image for your evaluation.',
         icon: 'error',
         confirmButtonText: 'OK'
       });
@@ -117,8 +133,8 @@ export class RecipeDetailComponent implements OnInit {
 
     if (!this.evaluation.rate || this.evaluation.rate <= 0) {
       Swal.fire({
-        title: 'Erreur',
-        text: 'Veuillez donner une note (au moins 1 étoile).',
+        title: 'error',
+        text: 'Please give a rating (at least 1 star).',
         icon: 'error',
         confirmButtonText: 'OK'
       });
@@ -128,30 +144,30 @@ export class RecipeDetailComponent implements OnInit {
     if (!this.evaluation.commentaire || this.evaluation.commentaire.trim() === '') {
       Swal.fire({
         title: 'Erreur',
-        text: 'Veuillez ajouter un commentaire.',
+        text: 'Please add a comment.',
         icon: 'error',
         confirmButtonText: 'OK'
       });
       return;
     }
-
+    console.log('User who evaluates :', this.evaluation.entry?.users?.id);
     this.evaluationService.addEvaluation(this.evaluation).subscribe(
       (next: Evaluation) => {
         console.log("id retourne : ", next.id);
         this.addImage(next);
 
         Swal.fire({
-          title: 'Évaluation ajoutée !',
-          text: 'Votre évaluation a été ajoutée avec succès !',
+          title: 'Valuation added!',
+          text: 'Your review has been successfully added!',
           icon: 'success',
-          confirmButtonText: 'Fermer'
+          confirmButtonText: 'Close'
         });
       },
       (err) => {
         console.log(err);
         if (err.status === 400) {
           Swal.fire({
-            title: 'Erreur',
+            title: 'error',
             text: err.error,
             icon: 'error',
             confirmButtonText: 'OK'
