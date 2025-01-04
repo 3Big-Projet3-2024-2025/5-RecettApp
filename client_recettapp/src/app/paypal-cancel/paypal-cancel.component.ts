@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { EntriesService } from '../services/entries.service';
 
 @Component({
   selector: 'app-paypal-cancel',
@@ -10,16 +11,37 @@ import { Router } from '@angular/router';
 })
 export class PaypalCancelComponent {
   countdown: number = 5;
+  msg!: string;
+  err!: boolean;
 
   constructor(
-    private router: Router
+    private route: ActivatedRoute,
+    private router: Router,
+    private entryService : EntriesService
   ) { }
 
   ngOnInit():void{
-
+    const uuid: string = this.route.snapshot.queryParamMap.get('uuid') || '';
     this.startCountdown();
+    this.deleteUuid(uuid);
     
   }
+
+  deleteUuid(uuid: string): void {
+    this.entryService.deleteEntryUuid(uuid).subscribe({
+      next: () => {
+        this.msg = "Cancel the registration to the contest";
+        this.err = false;
+      },
+      error: (err) => {
+        console.error('Backend error:', err);
+        this.msg = err.error?.message || 'An unknown error occurred';
+        this.err = true;
+      }
+    });
+  }
+
+
   startCountdown(): void {
     const interval = setInterval(() => {
       if (this.countdown > 0) {
