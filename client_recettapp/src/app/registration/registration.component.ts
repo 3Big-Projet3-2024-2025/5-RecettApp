@@ -74,12 +74,13 @@ export class RegistrationComponent {
 
 
 
-  pay():void{
+  async pay(): Promise<void> {
     this.entry.contest = this.contest;
     this.entry.users = this.user;
     this.entry.status = "process";
     const price = 20
-    this.paypalService.payToRegister(price, this.entry).subscribe({
+    const token = await this.keycloakService.getToken();
+    this.paypalService.payToRegister(price, this.entry, token).subscribe({
       next: (approvalUrl) => {
         console.log('Redirecting to PayPal URL:', approvalUrl);
         this.errMsg = "";
