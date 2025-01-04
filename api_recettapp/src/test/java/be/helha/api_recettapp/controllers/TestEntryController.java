@@ -91,7 +91,26 @@ public class TestEntryController {
                 .andExpect(jsonPath("$[1].id").value(2));
     }
 
+    /**
+     * Tests the GET endpoint to fetch an entry by its ID.
+     * Checks if the response contains the correct entry data.
+     *
+     * @throws Exception Exception if an error occurs during the request or response processing.
+     */
+    @Test
+    void testGetEntryById() throws Exception {
+        Entry entry = createSampleEntry();
 
+        given(entryService.getEntryById(1)).willReturn(entry);
+
+        mockMvc.perform(get("/entries/1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.status").value("pending"));
+    }
+
+    
 
 
 }
