@@ -46,7 +46,7 @@ public class ImageData {
      */
     @Lob
     @Basic(fetch = FetchType.LAZY)
-    @Column(name = "imagedata", length = 5242880) 
+    @Column(name = "imagedata", length = 5242880)
     private byte[] imageData;
 
     /**
