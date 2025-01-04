@@ -46,7 +46,14 @@ public class ImageData {
      * Represents the recipe associated with this image.
      */
     @ManyToOne
-    @JoinColumn(name = "id_recipe", nullable = false)
+    @JoinColumn(name = "id_recipe")
     private Recipe recipe;
+
+    /**
+     * Represents the evaluation associated with this image.
+     */
+    @ManyToOne
+    @JoinColumn(name = "id_evaluation")
+    private Evaluation evaluation;
 
 }
