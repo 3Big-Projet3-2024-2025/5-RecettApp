@@ -1,4 +1,4 @@
-package be.helha.api_recettapp;
+package be.helha.api_recettapp.services;
 
 import be.helha.api_recettapp.models.Entry;
 import be.helha.api_recettapp.models.Evaluation;
