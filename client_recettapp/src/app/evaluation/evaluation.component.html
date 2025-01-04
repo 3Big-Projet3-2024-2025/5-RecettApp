@@ -67,7 +67,6 @@
     <table class="table table-bordered mt-3">
       <thead>
         <tr>
-          <th>ID</th>
           <th>Note</th>
           <th>Entrée</th>
           <th>Recette</th>
@@ -76,7 +75,6 @@
       </thead>
       <tbody>
         <tr *ngFor="let eval of evaluations">
-          <td>{{ eval.id }}</td>
           <td>{{ eval.rate }}</td>
           <td>{{ eval.entry?.contest?.title || 'N/A' }}</td>
           <td>{{ eval.recipe?.title || 'N/A' }}</td>
