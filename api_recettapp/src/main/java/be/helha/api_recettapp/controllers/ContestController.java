@@ -7,6 +7,8 @@ import be.helha.api_recettapp.services.IContestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -32,8 +34,9 @@ public class ContestController {
      * @return a {@link Page} of {@link Recipe} objects.
      */
     @GetMapping
-    public Page<Contest> getContests(Pageable page){
+    public Page<Contest> getContests(@PageableDefault(page = 0, size = 10) Pageable page){
         try {
+
             return contestService.getContests(page);
         } catch (Exception e){
             throw new ResponseStatusException(
