@@ -82,5 +82,19 @@ export class RecipeDetailComponent implements OnInit {
     this.router.navigate(['/recipe']);
   }
 
+  addImage(evaluation : Evaluation){
+
+    if(this.imageFile){ //added image
+      this.imService.addImageEvaluation(this.imageFile,evaluation).subscribe( // add image before the recipe
+        { next: () =>{
+          console.log("Image added");
+        },
+          error: (err) => {
+            console.log(err)
+          }
+        })
+      }
+  }
+
 
 }
