@@ -95,4 +95,22 @@ public class TestEvaluationController {
         verify(evaluationService, times(1)).deleteEvaluation(1L, true);
     }
 
+    /**
+     * Test the deleteEvaluation method when the user is not an admin.
+     * Verifies that a SecurityException is thrown when a non-admin tries to delete a review.
+     */
+    @Test
+    void testDeleteEvaluationAsNonAdmin() {
+        doThrow(new SecurityException("Only an administrator can delete a review."))
+                .when(evaluationService).deleteEvaluation(1L, false);
+
+        Exception exception = assertThrows(SecurityException.class, () -> {
+            evaluationController.deleteEvaluation(1L, false);
+        });
+
+        assertEquals("Only an administrator can delete a review.", exception.getMessage());
+        verify(evaluationService, times(1)).deleteEvaluation(1L, false);
+    }
+
+
 }
