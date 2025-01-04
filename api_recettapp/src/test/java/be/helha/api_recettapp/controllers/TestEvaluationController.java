@@ -133,6 +133,24 @@ public class TestEvaluationController {
         verify(evaluationService, times(1)).getAllEvaluations();
     }
 
+    /**
+     * Test the getEvaluationsByEntry method in the EvaluationController.
+     * Verifies that evaluations by entry ID are returned successfully.
+     */
+    @Test
+    void testGetEvaluationsByEntry() {
+        List<Evaluation> evaluations = Arrays.asList(evaluation1, evaluation2);
+
+        when(evaluationService.getEvaluationsByEntry(1L)).thenReturn(evaluations);
+
+        ResponseEntity<List<Evaluation>> response = evaluationController.getEvaluationsByEntry(1L);
+
+        assertNotNull(response);
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(evaluations, response.getBody());
+        verify(evaluationService, times(1)).getEvaluationsByEntry(1L);
+    }
+
 
 
 }
