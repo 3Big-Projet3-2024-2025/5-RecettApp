@@ -54,9 +54,9 @@ export class EvaluationComponent implements OnInit {
       servings: 0,
       difficulty_level: '',
       instructions: '',
-      approved: false,
       components: [],
-      image: []
+      image: [],
+      masked: false
     }
     const evaluation : Evaluation = {
       id: 0,
