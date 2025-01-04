@@ -69,15 +69,19 @@ export class AddRecipeComponent {
         next: (entry) => {
           this.recipeToAdd.entry = entry;
           if (entry.users) {
+            if (entry.status == 'waiting') {
+              console.log("you have not completed your registration at the entry");
+              this.router.navigate(['/not-authorized']);
+            }
             this.checkUserIdentity(entry.users);
           }else{
             console.log("User in entry can't be null");
-            this.router.navigate(['/recipe']);
+            this.router.navigate(['/not-authorized']);
           }
         },
         error: (error) => {
             console.log(error.error.message);
-            this.router.navigate(['/recipe']);
+            this.router.navigate(['/not-authorized']);
         }
       });
     }
@@ -97,7 +101,6 @@ export class AddRecipeComponent {
       const token = await this.authService.getToken();
       const decodedToken: any = jwtDecode(token);
   
-      // Ensure the necessary fields exist in the decoded token
       if (!decodedToken || !decodedToken.email || !decodedToken.given_name || !decodedToken.family_name) {
         console.log("Invalid token structure. Missing necessary user information.");
         return;
@@ -110,12 +113,12 @@ export class AddRecipeComponent {
         user.lastName === decodedToken.family_name;
       if (!isAuthorized) {
         console.log("You do not have access to this contest.");
-        this.router.navigate(['/recipe']); 
+        this.router.navigate(['/not-authorized']); 
       }
 
     } catch (error) {
       console.error("Error decoding the token:", error);
-      this.router.navigate(['/recipe']); 
+      this.router.navigate(['/not-authorized']); 
     }
   }
   

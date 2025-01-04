@@ -13,7 +13,6 @@
   
   <div *ngIf="recipes ; else loading">
       <div class="card-footer bg-light text-center">
-        <button class="btn btn-dark" (click)="addRecipe(1)">Add Recipe</button>
       </div>
     <div class="row">
       <div class="col-md-4 mb-3" *ngFor="let recipe of recipes">

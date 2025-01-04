@@ -11,6 +11,9 @@ import { Evaluation } from '../models/evaluation';
 import { EvaluationService } from '../services/evaluation.service';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
+import { KeycloakService } from 'keycloak-angular';
+import { jwtDecode } from 'jwt-decode';
+import { EntriesService } from '../services/entries.service';
 
 
 @Component({
@@ -39,7 +42,9 @@ export class RecipeDetailComponent implements OnInit {
     private imaService: ImageServiceService,
     private evaluationService : EvaluationService,
     private imService : ImageServiceService,
-    private location: Location
+    private location: Location,
+    private authService: KeycloakService,
+    private entryService: EntriesService
 
   ) {}
 
@@ -48,6 +53,9 @@ export class RecipeDetailComponent implements OnInit {
     if (id) {
       this.service.getRecipeById(+id).subscribe(
         (data) => {
+          if (!this.authService.getUserRoles().includes('admin')) {
+            this.checkAccess(data);
+          }
         if (data.photo_url) {
           this.getImage(data.photo_url);
         }
@@ -62,6 +70,30 @@ export class RecipeDetailComponent implements OnInit {
       );}
 
   }
+
+  async checkAccess(recipe: Recipe) {
+      
+     try {
+          if (recipe.entry?.contest?.id) {
+            this.entryService.getEntryByUserMailAndIdContest(recipe.entry?.contest?.id).subscribe(
+              entry => {
+                if (entry.status == 'waiting') {
+                  console.log("you have not completed your registration at the entry");
+                  this.router.navigate(['/not-authorized']);
+                }
+              },
+              err => {
+                console.log(err);
+                this.router.navigate(['/not-authorized']);
+              }
+            )
+          }
+        } catch (error) {
+          console.error("Error decoding the token:", error);
+          this.router.navigate(['/not-authorized']); 
+        }
+  }
+  
 
   getImage(imageName: string){
     this.imaService.getImage(imageName).subscribe(
