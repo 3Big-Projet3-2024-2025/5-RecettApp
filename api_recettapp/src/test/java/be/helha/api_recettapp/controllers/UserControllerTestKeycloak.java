@@ -5,7 +5,11 @@ import be.helha.api_recettapp.models.Users;
 
 import be.helha.api_recettapp.services.KeycloakUserService;
 import be.helha.api_recettapp.services.UserService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -13,9 +17,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.test.web.servlet.MockMvc;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -28,8 +36,6 @@ import java.util.List;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Test class for {@link UsersController}, focused on testing the functionality related to
@@ -185,5 +191,100 @@ public class UserControllerTestKeycloak {
         public UsersController usersController(UserService userService) {
             return new UsersController(userService);
         }
+    }
+
+    /**
+     * Unit tests for UsersController.
+     * These tests validate the behavior of the controller for CRUD operations.
+     */
+    static class TestCrudUser {
+
+        @Mock
+        private UserService userService;
+
+        @InjectMocks
+        private UsersController usersController;
+
+        private Users user;
+
+        /**
+         * Sets up the test environment before each test.
+         * Initializes the mock objects and creates a sample user.
+         */
+        @BeforeEach
+        void setUp() {
+            MockitoAnnotations.openMocks(this);
+            user = new Users(1L, "Abdel", "Alahyane", "abdel@gmail.com", LocalDate.now(), false,null,null);
+        }
+
+
+        /**
+         * Test for the createUser method.
+         * Verifies that a user can be successfully created.
+         */
+        @Test
+        void testCreateUser() {
+            when(userService.save(user)).thenReturn(user);
+
+            ResponseEntity<Users> response = usersController.createUser(user);
+
+            assertNotNull(response);
+            assertEquals("Abdel", response.getBody().getFirstName());
+
+            verify(userService, times(1)).save(user);
+        }
+
+        /**
+         * Test for the getUserById method.
+         * Verifies that a user is retrieved correctly if they exist.
+         */
+        @Test
+        void testGetUserById() {
+            when(userService.findById(1L)).thenReturn(user);
+
+            ResponseEntity<Users> response = usersController.getUserById(1L);
+
+            assertNotNull(response);
+            assertEquals("Abdel", response.getBody().getFirstName());
+
+            verify(userService, times(1)).findById(1L);
+        }
+
+        /**
+         * Test for the getUserByEmail method.
+         * Verifies that a user is retrieved correctly if their email exists.
+         */
+        @Test
+        void testGetUserByEmail() {
+            when(userService.findByEmail("abdel@gmail.com")).thenReturn(user);
+
+            ResponseEntity<Users> response = usersController.getUserByEmail("abdel@gmail.com");
+
+            assertNotNull(response);
+            assertEquals("Abdel", response.getBody().getFirstName());
+            assertEquals("abdel@gmail.com", response.getBody().getEmail());
+
+            verify(userService, times(1)).findByEmail("abdel@gmail.com");
+        }
+
+        /**
+         * Test for the updateUser method.
+         * Verifies that a user is updated correctly if they exist.
+         */
+        @Test
+        void testUpdateUser() {
+            when(userService.findById(1L)).thenReturn(user);
+            when(userService.save(user)).thenReturn(user);
+
+            ResponseEntity<Users> response = usersController.updateUser(1L, user);
+
+            assertNotNull(response);
+            assertEquals("Abdel", response.getBody().getFirstName());
+
+            verify(userService, times(1)).findById(1L);
+            verify(userService, times(1)).save(user);
+        }
+
+
     }
 }
