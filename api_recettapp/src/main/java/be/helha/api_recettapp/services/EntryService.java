@@ -1,5 +1,7 @@
 package be.helha.api_recettapp.services;
 
+import be.helha.api_recettapp.models.Contest;
+import be.helha.api_recettapp.models.Users;
 import be.helha.api_recettapp.repositories.jpa.EntryRepository;
 import be.helha.api_recettapp.models.Entry;
 import jakarta.persistence.EntityNotFoundException;
@@ -82,6 +84,18 @@ public class EntryService implements IEntryService {
     @Override
     public List<Entry> getAllEntriesOfUser(long idUser) {
         return repository.findEntriesByUsersId(idUser);
+    }
+
+    /**
+     * Find an Entry by an user and a contest
+     *
+     * @param user object user
+     * @param contest object contest
+     * @return entry object entry
+     */
+    @Override
+    public Entry findByUserAndContest(Users user, Contest contest) {
+        return repository.findByUsersAndContest(user, contest);
     }
 
     /**
