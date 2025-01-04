@@ -147,9 +147,16 @@ public class EntryController {
     public ResponseEntity<Void> deleteUuid(
             @PathVariable UUID uuid
     ){
+        if (uuid == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "The UUID provided is null or invalid."
+            );
+        }
+        System.out.println("UUID received: " + uuid);
         try {
-            Entry entry = entryService.removeUuid(uuid);
-
+            Entry entry = entryService.removeUuid((UUID)  uuid);
+            System.out.println("UUID received: " + entry.getUuid());
             if(entry != null){
                 entryService.deleteEntry(entry.getId());
                 return ResponseEntity.ok().build();
