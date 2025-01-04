@@ -1,40 +1,56 @@
-<div class="container mt-5">
-    <div class="card shadow-lg">
-      <div class="card-header bg-success text-white">
-        <h2>Vegan Recipe</h2>
+<div class="container mt-5 d-flex justify-content-center">
+  <div class="card shadow-lg" style="width: 80%;">
+    <!-- Header Section -->
+    <div class="card-header bg-success text-white text-center py-3">
+      <h2 class="mb-0">Vegan Recipe</h2>
+    </div>
+
+    <!-- Body Section -->
+    <div class="card-body">
+      <div class="row">
+        <!-- Image Section -->
+        <div class="col-md-6 text-center">
+          <img
+            src="./assets/recipe3.png"
+            alt="Vegan Recipe"
+            class="img-fluid rounded"
+            style="max-height: 300px; object-fit: cover;"
+          />
+          <p class="text-center mt-3 font-weight-bold text-secondary">Dish Preview</p>
+        </div>
+
+        <!-- Details Section -->
+        <div class="col-md-6">
+          <h4 class="text-success mb-4 text-center">Details</h4>
+          <p><strong>Description:</strong> A plant-based recipe full of flavors.</p>
+          <p><strong>Recipe Type:</strong> Vegan</p>
+          <p><strong>Preparation Time:</strong> 20 minutes</p>
+          <p><strong>Cooking Time:</strong> 25 minutes</p>
+          <p><strong>Servings:</strong> 6</p>
+          <p><strong>Difficulty:</strong> Easy</p>
+        </div>
       </div>
-      <div class="card-body">
-        <div class="row">
-          <div class="col-md-4">
-            <img
-              src="./assets/recipe3.png"
-              alt="Vegan Recipe"
-              class="img-fluid rounded"
-            />
-            <p class="text-center mt-2">Dish Preview</p>
-          </div>
-          <div class="col-md-8">
-            <h4 class="text-success">Details</h4>
-            <p><strong>Description:</strong> A plant-based recipe full of flavors.</p>
-            <p><strong>Recipe Type:</strong> Vegan</p>
-            <p><strong>Preparation Time:</strong> 20 minutes</p>
-            <p><strong>Cooking Time:</strong> 25 minutes</p>
-            <p><strong>Servings:</strong> 6</p>
-            <p><strong>Difficulty:</strong> Easy</p>
-            <h5 class="mt-4 text-success">Ingredients</h5>
-            <ul>
-              <li>Tofu - 300 grams</li>
-              <li>Vegetables - 2 cups</li>
-              <li>Soy Sauce - 2 tbsp</li>
-            </ul>
-            <h5 class="mt-4 text-success">Instructions</h5>
-            <p>Stir fry tofu and vegetables, add soy sauce and serve.</p>
-          </div>
+
+      <!-- Ingredients and Instructions -->
+      <div class="row mt-4">
+        <div class="col-md-6">
+          <h5 class="text-success text-center">Ingredients</h5>
+          <ul class="list-unstyled text-center">
+            <li>Tofu - 300 grams</li>
+            <li>Vegetables - 2 cups</li>
+            <li>Soy Sauce - 2 tbsp</li>
+          </ul>
         </div>
-        <div class="text-center mt-4">
-          <a routerLink="/home" class="btn btn-primary">Back to Recipes</a>
+        <div class="col-md-6">
+          <h5 class="text-success text-center">Instructions</h5>
+          <p class="text-center">Stir fry tofu and vegetables, add soy sauce and serve.</p>
         </div>
+      </div>
+
+      <!-- Back Button -->
+      <div class="text-center mt-4">
+        <a routerLink="/home" class="btn btn-primary px-4">Back to Recipes</a>
       </div>
     </div>
   </div>
-  
+</div>
