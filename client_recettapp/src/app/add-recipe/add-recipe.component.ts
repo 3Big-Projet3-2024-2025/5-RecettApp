@@ -162,7 +162,7 @@ export class AddRecipeComponent {
     if(this.imageFile){ //added image
       this.imService.addImage(this.imageFile,this.recipeToAdd).subscribe( // add image before the recipe
         { next: () =>{
-          this.router.navigate(['/recipe', recipe.id]);
+          this.router.navigate(['recipe/detail', recipe.id,"contest"]);
         },
           error: (err) => {
             console.log(err)
