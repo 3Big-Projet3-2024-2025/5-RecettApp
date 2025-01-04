@@ -1,6 +1,8 @@
 package be.helha.api_recettapp.services;
 
+import be.helha.api_recettapp.models.Contest;
 import be.helha.api_recettapp.models.Entry;
+import be.helha.api_recettapp.models.Users;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -52,6 +54,7 @@ public interface IEntryService {
      */
     public List<Entry> getAllEntriesOfUser(long idUser);
 
+    public Entry findByUserAndContest(Users user, Contest contest);
     public List<Entry> getAllEntriesOfContest(Integer idContest);
 
     /**
