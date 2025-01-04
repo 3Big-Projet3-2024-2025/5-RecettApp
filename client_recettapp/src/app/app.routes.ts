@@ -18,6 +18,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { UserInfoComponent } from './user-info/user-info.component';
 import { NotAuthorizedComponent } from './not-authorized/not-authorized.component';
 import { ApplePieComponent } from './htmls/apple-pie/apple-pie.component';
+import { ChickenBreastComponent } from './htmls/chicken-breast/chicken-breast.component';
 
 
 
@@ -39,6 +40,7 @@ export const routes: Routes = [
         { path: 'cancel', component:PaypalCancelComponent},
         { path: 'myrecipe', component:UserRecipeListComponent},
         { path: 'recipe/apple-pie', component: ApplePieComponent },
+        { path: 'recipe/chicken-breast', component: ChickenBreastComponent },
         { path: 'home', component: HomePageComponent},
         { path:'User-info',component:UserInfoComponent},
         {path:'not-authorized',component:NotAuthorizedComponent},
