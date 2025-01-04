@@ -48,15 +48,19 @@ constructor(private service: RecipeService,private router:Router, private route:
     this.entryService.getEntryByUserMailAndIdContest(contestId).subscribe({
       next: (entry) => {
         if (!entry) {
-          this.router.navigate(['/home']); // Redirection if entry is null
+          this.router.navigate(['/not-authorized']); // Redirection if entry is null
         } else {
           this.entry = entry;
+          if (entry.status == 'waiting') {
+            console.log("you have not completed your registration at the entry");
+            this.router.navigate(['/not-authorized']);
+          }
           this.getRecipe(contestId); 
         }
       },
       error: (error) => {
         console.log(error)
-        this.router.navigate(['/home']); 
+        this.router.navigate(['/not-authorized']); 
       },
     });
   }
@@ -82,7 +86,6 @@ constructor(private service: RecipeService,private router:Router, private route:
         this.totalPages = Math.ceil(this.filteredRecipes.length / this.itemsPerPage);
         this.updateDisplayedRecipes();
         this.getRecipeComponent();
-        console.log("the recipe : ",this.recipes)
       });
     });
   }
