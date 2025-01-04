@@ -42,16 +42,15 @@ export class ContestCategoryComponent implements OnInit {
   loadCategories(): void {
     this.categoryService.getAllCategories().subscribe(
       (data) => {
-        this.categories = data;
-        this.totalCategories = data.length;
-        this.applyPagination(); // Update pagination
+        this.categories = Array.isArray(data) ? data : [];
+        this.totalCategories = this.categories.length;
+        this.applyPagination(); 
       },
       (error) => {
         console.error('Error loading categories:', error);
       }
     );
   }
-
   // Apply pagination logic
   applyPagination(): void {
     const startIndex = (this.currentPage - 1) * this.pageSize;
