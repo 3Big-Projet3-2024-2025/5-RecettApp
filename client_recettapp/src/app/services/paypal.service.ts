@@ -17,7 +17,9 @@ export class PaypalService {
 
   constructor(private http: HttpClient) { }
 
-
+  /*
+  Proceed paypal payment and add entry
+  */
   payToRegister(amount: number, entry : Entry): Observable<string> {
     console.log('Initiating PayPal payment for amount:', amount);
     return this.http.post<PayPalResponse>(`${this.apiUrl}/pay?total=${amount}`, entry)
