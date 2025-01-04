@@ -1,104 +1,85 @@
-/* Global styles for the container */
-div {
-  max-width: 800px;
-  margin: 20px auto;
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+.container {
+  max-width: 1200px;
+  margin: auto;
 }
 
-/* Header styling */
-h2, h3 {
-  color: #333;
+h1 {
+  font-size: 1.8rem;
+  color: #198754;
+}
+
+.table {
+  margin-top: 1rem;
+}
+
+.table-bordered {
+  border: 1px solid #dee2e6;
+}
+
+.table-dark {
+  background-color: #343a40;
+  color: #fff;
+}
+
+.table-dark th {
   text-align: center;
-  margin-bottom: 20px;
 }
 
-/* Table styling */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
+.table td, .table th {
+  vertical-align: middle;
 }
 
-th, td {
-  border: 1px solid #ddd;
-  text-align: center;
-  padding: 10px;
-}
-
-th {
-  background-color: #4CAF50;
-  color: white;
-}
-
-tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
-
-tr:hover {
-  background-color: #e0e0e0;
-}
-
-/* Button styling */
-button {
-  background-color: #f44336;
-  color: white;
+.btn-success {
+  background-color: #198754;
   border: none;
-  padding: 8px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
 }
 
-button:hover {
-  background-color: #d32f2f;
+.btn-success:hover {
+  background-color: #157347;
 }
 
-/* Form styling */
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.btn-warning {
+  background-color: #ffc107;
+  border: none;
+  color: #000;
 }
 
-label {
-  display: flex;
-  flex-direction: column;
+.btn-warning:hover {
+  background-color: #e0a800;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border: none;
+}
+
+.btn-danger:hover {
+  background-color: #bd2130;
+}
+
+.card {
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  font-size: 1.25rem;
+}
+
+.form-label {
   font-weight: bold;
-  color: #555;
+  color: #333;
 }
 
-input[type="number"] {
-  padding: 8px;
-  border: 1px solid #ccc;
+.form-control {
   border-radius: 4px;
-  font-size: 14px;
-  margin-top: 5px;
+  border: 1px solid #ced4da;
 }
 
-button[type="submit"] {
-  align-self: flex-start;
-  background-color: #4CAF50;
+.btn {
+  border-radius: 4px;
 }
 
-button[type="submit"]:hover {
-  background-color: #45a049;
-}
-
-/* Responsive design */
-@media (max-width: 600px) {
-  table {
-    font-size: 14px;
-  }
-
-  th, td {
-    padding: 8px;
-  }
-
-  button {
-    padding: 6px 10px;
-  }
+.btn-sm {
+  padding: 0.25rem 0.5rem;
 }
