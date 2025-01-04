@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Contest } from '../models/contest';
+import { PaginatedResponse } from '../models/PaginatedResponse';
 
 
 @Injectable({
@@ -12,9 +13,10 @@ export class ContestService {
 
   constructor(private http: HttpClient) { }
 
-  getAllContests(): Observable<Contest[]> {
-    return this.http.get<Contest[]>(this.apiUrl);
-  }
+  getAllContests(page: number = 0, size: number = 10): Observable<PaginatedResponse<any>> {
+    const params = { page: page.toString(), size: size.toString() };
+    return this.http.get<PaginatedResponse<any>>(this.apiUrl, { params });
+}
 
   addContest(contest: Contest): Observable<Contest> {
     return this.http.post<Contest>(this.apiUrl, contest);

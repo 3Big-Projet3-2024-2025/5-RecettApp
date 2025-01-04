@@ -74,6 +74,28 @@ public class EntryService implements IEntryService {
     }
 
     /**
+     * Find all entries for a specific User
+     *
+     * @param idUser the id of the user
+     * @return List users
+     */
+    @Override
+    public List<Entry> getAllEntriesOfUser(long idUser) {
+        return repository.findEntriesByUsersId(idUser);
+    }
+
+    /**
+     * Find all entries for a specific Contest
+     *
+     * @param idContest  the id of the contest
+     * @return List entries
+     */
+    @Override
+    public List<Entry> getAllEntriesOfContest(Integer idContest) {
+        return repository.findEntriesByContestId(idContest);
+    }
+
+    /**
      * Find an entry by his UUID
      *
      * @param uuid the specific uuid

@@ -4,6 +4,8 @@ import be.helha.api_recettapp.repositories.jpa.ContestRepository;
 import be.helha.api_recettapp.models.Contest;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -21,6 +23,17 @@ public class ContestService implements IContestService {
 
     @Autowired
     private ContestRepository repository;
+
+    /**
+     * Get a pagination of Contests
+     *
+     * @param page the object containing pagination information
+     * @return
+     */
+    @Override
+    public Page<Contest> getContests(Pageable page) {
+            return repository.findAll(page);
+    }
 
     /**
      * Get all contests
