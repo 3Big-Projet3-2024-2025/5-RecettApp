@@ -113,4 +113,26 @@ public class TestEvaluationController {
     }
 
 
+
+
+    /**
+     * Test the getAllEvaluations method in the EvaluationController.
+     * Verifies that all evaluations are returned successfully.
+     */
+    @Test
+    void testGetAllEvaluations() {
+        List<Evaluation> evaluations = Arrays.asList(evaluation1, evaluation2);
+
+        when(evaluationService.getAllEvaluations()).thenReturn(evaluations);
+
+        ResponseEntity<List<Evaluation>> response = evaluationController.getAllEvaluations();
+
+        assertNotNull(response);
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(evaluations, response.getBody());
+        verify(evaluationService, times(1)).getAllEvaluations();
+    }
+
+
+
 }
