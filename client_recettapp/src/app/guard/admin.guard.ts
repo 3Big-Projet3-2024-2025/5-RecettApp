@@ -27,12 +27,12 @@ export class AdminGuard implements CanActivate {
         return true;
       } else {
         // Redirect to an unauthorized page if the user is not an admin
-        await this.router.navigate(['/unauthorized']); // Route to change with the good one
+        await this.router.navigate(['/not-authorized']);
         return false;
       }
     } catch (error) {
       console.error('Error in AdminGuard:', error);
-      await this.router.navigate(['/error']); // Route to change with the good one
+      await this.router.navigate(['/**']);
       return false;
     }
   }
