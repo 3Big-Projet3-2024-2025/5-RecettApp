@@ -73,9 +73,10 @@ export class UsersComponent implements OnInit {
   this.paginateUsers();
 }
 
-onSearchByEmail(): void {
+async onSearchByEmail(): Promise<void> {
   if (this.searchEmail.trim()) {
-    this.usersService.findByEmail(this.searchEmail).subscribe(
+    const token = await this.keycloakService.getToken();
+    this.usersService.findByEmail(this.searchEmail, token).subscribe(
       (user: User) => {
         this.searchedUser = user;
       },
@@ -88,9 +89,10 @@ onSearchByEmail(): void {
 }
 
 
-  onDelete(id: number): void {
+  async onDelete(id: number): Promise<void> {
+    const token = await this.keycloakService.getToken();
     if (confirm('Are you sure you want to delete this user?')) {
-      const sub = this.usersService.delete(id).subscribe(({
+      const sub = this.usersService.delete(id, token).subscribe(({
         next: () => {
           this.err = false;
           this.loadUsers();
@@ -104,9 +106,10 @@ onSearchByEmail(): void {
     }
   }
 
-  toggleBlockStatus(email: string, isBlocked: boolean): void {
+  async toggleBlockStatus(email: string, isBlocked: boolean): Promise<void> {
+    const token = await this.keycloakService.getToken();
     if (isBlocked) {
-      this.usersService.unblockUser(email).subscribe(({
+      this.usersService.unblockUser(email, token).subscribe(({
         next: () => {
           this.loadUsers();
         }, error: (error) => {
@@ -114,7 +117,7 @@ onSearchByEmail(): void {
         }
       }));
     } else {
-      this.usersService.blockUser(email).subscribe(({
+      this.usersService.blockUser(email, token).subscribe(({
         next: () => {
           this.loadUsers();
         }, error: (error) => {
