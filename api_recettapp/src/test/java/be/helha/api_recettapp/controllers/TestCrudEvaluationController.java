@@ -70,7 +70,7 @@ public class TestCrudEvaluationController {
     void testAddEvaluation() {
         when(evaluationService.addEvaluation(evaluation1)).thenReturn(evaluation1);
 
-        ResponseEntity<Evaluation> response = evaluationController.addEvaluation(evaluation1);
+        ResponseEntity<Evaluation> response = (ResponseEntity<Evaluation>) evaluationController.addEvaluation(evaluation1);
 
         assertNotNull(response);
         assertEquals(200, response.getStatusCodeValue());
