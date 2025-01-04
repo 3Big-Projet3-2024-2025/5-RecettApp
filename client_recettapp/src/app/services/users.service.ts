@@ -18,8 +18,6 @@ export class UsersService {
 
   findAll(token: any): Observable<User[]> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-    console.log('token', token);
     return this.http.get<User[]>(`${this.baseUrl}`, {headers});
   }
 

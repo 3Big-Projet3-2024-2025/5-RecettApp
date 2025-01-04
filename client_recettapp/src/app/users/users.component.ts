@@ -111,7 +111,6 @@ async onSearchByEmail(): Promise<void> {
     if (isBlocked) {
       this.usersService.unblockUser(email, token).subscribe(({
         next: () => {
-          this.loadUsers();
         }, error: (error) => {
           console.error('Error unblocking user:', error.error.error);
         }
@@ -119,7 +118,6 @@ async onSearchByEmail(): Promise<void> {
     } else {
       this.usersService.blockUser(email, token).subscribe(({
         next: () => {
-          this.loadUsers();
         }, error: (error) => {
           console.error('Error blocking user:', error.error.error);
         }
