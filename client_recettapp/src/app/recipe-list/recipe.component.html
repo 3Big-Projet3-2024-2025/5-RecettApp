@@ -1,6 +1,16 @@
 
 <div class="container mt-4">
   <h1 class="text-center text-success mb-4">Recipe List</h1>
+  <div class="search-bar mb-4">
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      (input)="onSearch()"
+      class="form-control"
+      placeholder="Search recipes by title or description"
+    />
+  </div>
+  
   <div *ngIf="recipes ; else loading">
       <div class="card-footer bg-light text-center">
         <button class="btn btn-dark" (click)="addRecipe(1)">Add Recipe</button>
