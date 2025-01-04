@@ -130,7 +130,8 @@ constructor(private service: RecipeService,private router:Router, private route:
     this.filteredRecipes = [...this.filteredRecipes].sort((a, b) => a.title.localeCompare(b.title));
   }
   detailRecipe(id: number) {
-    this.router.navigate(['/recipe', id]);
+    this.router.navigate(['recipe/detail', id, "backto"]);
+
   }
   addRecipe() {
    this.router.navigate(['/recipe/add/', this.entry.id]);
