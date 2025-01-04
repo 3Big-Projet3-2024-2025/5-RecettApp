@@ -12,15 +12,20 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -32,6 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 //@WebMvcTest(IngredientController.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@MockBean(RecipeServiceDB.class)
 public class RecipeControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -164,26 +170,29 @@ public class RecipeControllerTest {
      */
     @Test
     public void testGetRecipesWithPagination() throws Exception {
-
         Recipe recipe1 = createRecipe("Chocolate Cake", "Delicious chocolate cake recipe.", "Dessert");
         recipe1.setId(1);
 
         Recipe recipe2 = createRecipe("Vanilla Ice Cream", "Delicious vanilla ice cream recipe.", "Dessert");
         recipe2.setId(2);
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Recipe> recipePage = new PageImpl<>(Arrays.asList(recipe1, recipe2), pageable, 2);
 
-        Page<Recipe> pagedRecipes = new PageImpl<>(List.of(recipe1, recipe2)); // Use PageImpl to simulate a page
+        // Mock du service
+        when(recipeService.getRecipes(null, pageable)).thenReturn(recipePage);
 
-        given(recipeService.getRecipes(null,Mockito.any(Pageable.class))).willReturn(pagedRecipes);
-
+        // Exécution et vérification
         mockMvc.perform(get("/recipe")
+                        .contentType(MediaType.APPLICATION_JSON)
                         .param("page", "0")
-                        .param("size", "2")
-                        .accept(MediaType.APPLICATION_JSON))
+                        .param("size", "10"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content", hasSize(2)))
+                .andExpect(jsonPath("$.content.size()").value(2))
                 .andExpect(jsonPath("$.content[0].title").value("Chocolate Cake"))
                 .andExpect(jsonPath("$.content[1].title").value("Vanilla Ice Cream"));
     }
+
+
 
     /**
      * Tests the updateRecipe functionality of the RecipeController.
