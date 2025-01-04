@@ -31,9 +31,16 @@ public class EvaluationController {
      * @return The added evaluation wrapped in a {@link ResponseEntity}.
      */
     @PostMapping
-    public ResponseEntity<Evaluation> addEvaluation(@RequestBody Evaluation evaluation) {
-        return ResponseEntity.ok(evaluationService.addEvaluation(evaluation));
+    public ResponseEntity<?> addEvaluation(@RequestBody Evaluation evaluation) {
+        try {
+            evaluation.setId(0L);
+            Evaluation savedEval = evaluationService.addEvaluation(evaluation);
+            return ResponseEntity.ok(savedEval);
+        } catch (IllegalStateException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
     }
+
 
     /**
      * Deletes an evaluation by its ID.

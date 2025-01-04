@@ -1,0 +1,62 @@
+.recipe-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.recipe-card:hover {
+  transform: scale(1.05); /* Zoom effect */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Add shadow on hover */
+}
+
+.recipe-photo {
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px 8px 0 0; /* Rounded corners at the top */
+}
+
+.recipe-image-container {
+  overflow: hidden; /* Hide overflow for smooth zoom effect */
+  border-radius: 8px 8px 0 0;
+}
+
+.icon-plus {
+  font-size: larger;
+  font-weight: bold;
+  
+}
+.pagination-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px; 
+    margin-top: 20px;
+    margin-bottom: 50px;
+  }
+  
+  .pagination-button {
+    padding: 10px 20px; 
+    border-radius: 5px; 
+    font-size: 16px; 
+    font-weight: bold; 
+  }
+  
+  .pagination-button.active {
+    background-color: #91c29c; 
+    color: white;
+    border: none;
+  }
+  
+  .pagination-button:hover {
+    background-color: #218838; 
+    color: white;
+  }
+  
+  .pagination-button.btn-dark {
+    background-color: #343a40; 
+    color: white;
+    border: none;
+  }
+  
+  .pagination-button.btn-dark:hover {
+    background-color: #23272b;
+  }

@@ -1,0 +1,95 @@
+<div class="container">
+  <h2>Gestion des Évaluations</h2>
+
+  <!-- Button to show/hide the form -->
+  <button class="btn btn-primary mt-3" (click)="showForm = !showForm">
+    {{ showForm ? 'Annuler' : 'Ajouter une Évaluation' }}
+  </button>
+
+  <!-- Form to add a review -->
+  <div *ngIf="showForm" class="mt-4">
+    <h3>{{ currentEvaluation.id ? 'Modifier' : 'Ajouter' }} une Évaluation</h3>
+    <form (ngSubmit)="saveEvaluation()">
+      <!-- Field for note -->
+      <div class="form-group mb-3">
+        <label for="rate">Note :</label>
+        <input
+          type="number"
+          id="rate"
+          class="form-control"
+          [(ngModel)]="currentEvaluation.rate"
+          name="rate"
+          min="0"
+          max="5"
+          required
+        />
+      </div>
+
+      <!-- Selecting an entry -->
+      <div class="form-group mb-3">
+        <label for="entry">Entrée :</label>
+        <select
+          id="entry"
+          class="form-control"
+          [(ngModel)]="selectedEntryId"
+          name="entry"
+          required
+        >
+          <option *ngFor="let entry of entries" [value]="entry.id">
+            {{ entry.contest?.title || 'Aucun titre' }} - {{ entry.status }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Selecting a recipe -->
+      <div class="form-group mb-3">
+        <label for="recipe">Recette :</label>
+        <select
+          id="recipe"
+          class="form-control"
+          [(ngModel)]="selectedRecipeId"
+          name="recipe"
+          required
+        >
+          <option *ngFor="let recipe of recipes" [value]="recipe.id">
+            {{ recipe.title }}
+          </option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn btn-success">Enregistrer</button>
+    </form>
+  </div>
+
+  <!-- List of assessments -->
+  <div class="mt-5">
+    <h3>Liste des Évaluations</h3>
+    <table class="table table-bordered mt-3">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Note</th>
+          <th>Entrée</th>
+          <th>Recette</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let eval of evaluations">
+          <td>{{ eval.id }}</td>
+          <td>{{ eval.rate }}</td>
+          <td>{{ eval.entry?.contest?.title || 'N/A' }}</td>
+          <td>{{ eval.recipe?.title || 'N/A' }}</td>
+          <td>
+            <button
+              class="btn btn-danger btn-sm"
+              (click)="deleteEvaluation(eval)"
+            >
+              Supprimer
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

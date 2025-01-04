@@ -7,8 +7,10 @@ import be.helha.api_recettapp.repositories.jpa.EntryRepository;
 import be.helha.api_recettapp.repositories.jpa.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -27,12 +29,17 @@ public class RecipeServiceDB implements IRecipeService{
      * Retrieves a paginated list of recipes.
      *
      * @param page the {@link Pageable} object containing pagination information.
+     * @param keyword the term search.
      * @return a {@link Page} of {@link Recipe} objects.
      */
     @Override
-    public Page<Recipe> getRecipes(Pageable page) {
+    public Page<Recipe> getRecipes(String keyword, Pageable page) {
         try {
+            if (keyword == null || keyword.isEmpty()) {
             return recipeRepository.findAll(page);
+        } else {
+            return recipeRepository.findByKeyword(keyword, page);
+        }
         } catch (Exception e) {
             throw new RuntimeException("Error retrieving recipes: " + e.getMessage(), e);
         }
@@ -140,6 +147,43 @@ public class RecipeServiceDB implements IRecipeService{
     @Override
     public List<Recipe> getRecipeByIdContest(int idContest) {
          return recipeRepository.findRecipesByContestId(idContest);
+    }
+
+    /**
+     * Retrieves paginated recipes created by a specific user.
+     *
+     * @param userMail the unique identifier of the user.
+     * @param page     and size The pagination information.
+     * @param size
+     * @return A paginated list of recipes.
+     */
+    @Override
+    public Page<Recipe> getRecipeByUserMail(String userMail, String keyword, int page, int size) {
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            return recipeRepository.findRecipesByUserMailAndKeyword(userMail, keyword, pageable);
+        } catch (Exception e) {
+            throw new RuntimeException("Error retrieving recipes for user email " + userMail + ": " + e.getMessage(), e);
+        }
+    }
+
+
+    /**
+     * Sets the "masked" field of a recipe to true, effectively anonymizing it.
+     *
+     * @param recipeId The ID of the recipe to anonymize.
+     */
+    @Transactional
+    public boolean anonymizeRecipe(int recipeId) {
+        try {
+            Recipe existingRecipe = recipeRepository.findById(recipeId)
+                    .orElseThrow(() -> new NoSuchElementException("Recipe with ID " + recipeId + " not found"));
+            recipeRepository.updateMasked(recipeId, true);
+            return true;
+        }catch (NoSuchElementException e) {
+            return false;
+        }
+
     }
 
 }

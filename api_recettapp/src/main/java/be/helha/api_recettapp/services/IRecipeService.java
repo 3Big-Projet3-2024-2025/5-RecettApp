@@ -17,9 +17,10 @@ public interface IRecipeService {
      * Retrieves a paginated list of recipes.
      *
      * @param page the {@link Pageable} object containing pagination information.
+     * @param keyword the term search.
      * @return a {@link Page} of {@link Recipe} objects.
      */
-    public Page<Recipe> getRecipes(Pageable page);
+    public Page<Recipe> getRecipes(String keyword, Pageable page);
 
     /**
      * Retrieves a list of all recipes.
@@ -66,4 +67,19 @@ public interface IRecipeService {
      * @return A list of recipes associated with the contest.
      */
     List<Recipe> getRecipeByIdContest(int idContest);
+    /**
+     * Retrieves paginated recipes created by a specific user.
+     *
+     * @param userMail the unique identifier of the user.
+     * @param page and size The pagination information.
+     * @return A paginated list of recipes.
+     */
+    public Page<Recipe> getRecipeByUserMail(String userMail,String keyword, int page, int size) ;
+    /**
+     * Sets the "masked" field of a recipe to true, effectively anonymizing it.
+     *
+     * @param recipeId The ID of the recipe to anonymize.
+     */
+    public boolean anonymizeRecipe(int recipeId);
+
 }

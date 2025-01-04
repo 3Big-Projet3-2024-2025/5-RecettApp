@@ -1,7 +1,9 @@
 package be.helha.api_recettapp.services;
 
+import be.helha.api_recettapp.models.Evaluation;
 import be.helha.api_recettapp.models.ImageData;
 import be.helha.api_recettapp.models.Recipe;
+import be.helha.api_recettapp.repositories.jpa.EvaluationRepository;
 import be.helha.api_recettapp.repositories.jpa.ImageDataRepository;
 import be.helha.api_recettapp.repositories.jpa.RecipeRepository;
 import be.helha.api_recettapp.utils.ImageUtils;
@@ -24,6 +26,9 @@ public class ImageDataService implements  IImageDataService{
     private ImageDataRepository imageDataRepository;
     @Autowired
     private RecipeRepository recipeRepository;
+
+    @Autowired
+    private EvaluationRepository evaluationRepository;
     /**
      * Adds a new image to the system.
      *
@@ -82,6 +87,24 @@ public class ImageDataService implements  IImageDataService{
         }catch (Exception e) {
             throw new NoSuchElementException("Image " + nameImage +" not found" +  "\n Trace : " + e.getMessage());
         }
+    }
+
+    public boolean addImageEvaluation(MultipartFile file, Evaluation evaluation) throws IOException {
+        if (file.isEmpty()) {
+            throw new IllegalArgumentException("File is empty");
+        }
+        List<String> validContentTypes = Arrays.asList("image/jpeg", "image/png", "image/svg", "image/webp");
+
+        if (!validContentTypes.contains(file.getContentType())) {
+            throw new IllegalArgumentException("Invalid file type. Supported types: image/jpeg, image/png, image/svg, image/webp");
+        }
+        ImageData imageData = imageDataRepository.save(ImageData.builder()
+                .name(file.getOriginalFilename())
+                .type(file.getContentType())
+                .imageData(ImageUtils.compressImage(file.getBytes()))
+                .evaluation(evaluationRepository.getOne((long) Math.toIntExact(evaluation.getId())))
+                .build());
+        return imageData.getId() != null;
     }
 
 }

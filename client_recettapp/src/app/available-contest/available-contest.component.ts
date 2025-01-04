@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { RegistrationComponent } from '../registration/registration.component';
 import { CommonModule } from '@angular/common';
 
+
 @Component({
   selector: 'app-available-contest',
   standalone: true,
@@ -14,10 +15,12 @@ import { CommonModule } from '@angular/common';
   styleUrl: './available-contest.component.css'
 })
 export class AvailableContestComponent {
-  contests: Contest[] = [];
+  contests: any[] = [];
   currentContest: Contest = this.initContest();
   selectedContest?: Contest;
   showRegistration = false;
+  totalPages: number = 0;
+  currentPage: number = 0;
   
   initContest(): Contest {
     return { title: "", max_participants: 0, start_date: "", end_date: "", status: "" };
@@ -30,21 +33,28 @@ export class AvailableContestComponent {
   ) {}
 
   ngOnInit(): void {
-    this.getAllContests();
+    this.getAllContests(this.currentPage, 5);
     //console.log(this.keycloakService.getToken());
   }
 
-  getAllContests(): void {
-    const sub = this.contestService.getAllContests().subscribe({
+  changePage(page: number): void {
+    this.currentPage = page;
+    this.getAllContests(this.currentPage,5);
+  }
+
+  getAllContests(page: number = 0, size: number): void {
+    const sub = this.contestService.getAllAvailableContests(page, size).subscribe({
       next: (data) => {
-        console.log(data);
-        this.contests = data;
+        console.log(data.content); 
+        this.contests = data.content; 
+        this.totalPages = data.totalPages;
         sub.unsubscribe();
-      }, error: (err) => {
-        console.log("ERROR GETALLCONTESTS");
+      },
+      error: (err) => {
+        console.error("ERROR GETALLCONTESTS", err);
         sub.unsubscribe();
       }
-    })
+    });
   }
 
   onCancelRegistration(): void {

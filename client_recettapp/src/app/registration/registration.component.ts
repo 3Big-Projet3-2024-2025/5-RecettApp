@@ -24,6 +24,7 @@ export class RegistrationComponent {
 
   user!: User;
   userName!: string;
+  errMsg!: string;
 
   entry: Entry = {id: 0, contest : undefined, users: undefined, status: "" };
 
@@ -81,10 +82,12 @@ export class RegistrationComponent {
     this.paypalService.payToRegister(price, this.entry).subscribe({
       next: (approvalUrl) => {
         console.log('Redirecting to PayPal URL:', approvalUrl);
+        this.errMsg = "";
         window.location.href = approvalUrl;
       },
       error: (err) => {
         console.error("PayPal Error:", err);
+        this.errMsg = err.error.error;
       }
     });
   }

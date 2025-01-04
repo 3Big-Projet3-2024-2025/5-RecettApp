@@ -1,3 +1,4 @@
+import { Evaluation } from "./evaluation";
 import { Recipe } from "./recipe";
 
 export interface ImageData {
@@ -5,5 +6,6 @@ export interface ImageData {
   name: string;
   type: string;
   imageData: string;
-  recipe: Recipe; 
+  recipe?: Recipe;
+  evaluation?: Evaluation;
 }

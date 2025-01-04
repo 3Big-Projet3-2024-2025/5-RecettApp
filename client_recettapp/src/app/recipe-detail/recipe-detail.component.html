@@ -1,50 +1,124 @@
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+/>
+
 
 <div class="container mt-4" *ngIf="recipe">
-    <div class="recipe-detail card shadow-lg border-0">
-      <div class="card-header bg-success text-white">
-        <h1 class="card-title text-center">{{ recipe.title }}</h1>
-      </div>
-      <div class="container mt-4" *ngIf="recipe">
-        <div class="row">
-          <div class="col-md-6 text-center">
-            <div class="image-container" >
-              <img *ngIf="imageRecipe" [src]="imageRecipe" [alt]="recipe.title" 
-                   class="img-fluid rounded"
-                   id="image-detail" />
-              <p class="mt-3"><strong>Dish Preview</strong></p>
+  <div class="recipe-detail card shadow-lg border-0">
+    <div class="card-header bg-success text-white">
+      <h1 class="card-title text-center">{{ recipe.title }}</h1>
+    </div>
+    <div class="container mt-4" *ngIf="recipe">
+      <div class="row">
+        <div class="col-md-6 text-center">
+          <div class="image-container">
+            <img
+              *ngIf="imageRecipe"
+              [src]="imageRecipe"
+              [alt]="recipe.title"
+              class="img-fluid rounded"
+              id="image-detail"
+            />
+            <p class="mt-3"><strong>Dish Preview</strong></p>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="recipe-details">
+            <h3 class="text-success">Details Recette</h3>
+            <p><strong>Description:</strong> {{ recipe.description }}</p>
+            <p><strong>Category:</strong> {{ recipe.category }}</p>
+            <p><strong>Preparation Time:</strong> {{ recipe.preparation_time }} minutes</p>
+            <p><strong>Cooking Time:</strong> {{ recipe.cooking_time }} minutes</p>
+            <p><strong>Servings:</strong> {{ recipe.servings }}</p>
+            <p><strong>Difficulty:</strong> {{ recipe.difficulty_level }}</p>
+            <div>
+              <h3 class="text-success">Ingredients</h3>
+              <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center"
+                    *ngFor="let component of recipe.components">
+                  <span>
+                    <strong>{{ component.ingredient.alimentName }}</strong>
+                    ({{ component.ingredient.alimentGroupName }}) -
+                    {{ component.quantity }} {{ component.unit }}
+                  </span>
+                </li>
+              </ul>
             </div>
           </div>
-      
-          <div class="col-md-6">
-            <div class="recipe-details">
-              <h3 class="text-success">Details Recette</h3>
-              <p><strong>Description:</strong> {{ recipe.description }}</p>
-              <p><strong>RecipeType:</strong> {{ recipe.category }}</p>
-              <p><strong>Preparation Time:</strong> {{ recipe.preparation_time }} minutes</p>
-              <p><strong>Cooking Time:</strong> {{ recipe.cooking_time }} minutes</p>
-              <p><strong>Servings:</strong> {{ recipe.servings }}</p>
-              <p><strong>Difficulty:</strong> {{ recipe.difficulty_level }}</p>
-              <div>
-                <h3 class="text-success">Ingredients</h3>
-                <ul class="list-group">
-                  <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let component of recipe.components">
-                    <span>
-                      <strong>{{ component.ingredient.alimentName }}</strong> ({{ component.ingredient.alimentGroupName }}) - 
-                      {{ component.quantity }} {{ component.unit }}
-                    </span>
-                  </li>
-                </ul>
-              </div>
+        </div>
+      </div>
+      <p><strong>Instructions:</strong> {{ recipe.instructions }}</p>
+    </div>
+
+    <div class="row g-3 align-items-center mt-3">
+      <!-- Image upload section -->
+      <div class="col-md-3">
+        <p class="mt-3"><strong>Image Recette</strong></p>
+        <!-- Image Preview -->
+        <img
+          [src]="previewImage"
+          class="img-fluid rounded"
+          style="max-width: 100%; height: auto;"
+        />
+
+        <!-- Image Upload Input -->
+        <label for="photo_url" class="form-label">Photo URL</label>
+        <input
+          (change)="validateImage($event)"
+          required
+          type="file"
+          id="photo_url"
+          class="form-control"
+          name="photo_url"
+          accept="image/jpeg, image/png, image/svg+xml, image/webp"
+        />
+        <div class="text-danger"></div>
+      </div>
+
+      <div class="col-md-9">
+        <div class="row g-3">
+          <div class="mb-3">
+            <label for="rate" class="form-label">Rate</label>
+
+            <div>
+              <span
+                *ngFor="let star of [1,2,3,4,5]"
+                (click)="evaluation.rate = star"
+                style="cursor: pointer; margin-right: 5px;">
+                <i [ngClass]="star <= evaluation.rate
+                    ? 'bi bi-star-fill text-warning'
+                    : 'bi bi-star text-warning'"></i>
+              </span>
             </div>
           </div>
         </div>
 
-        <p><strong>Instructions:</strong> {{ recipe.instructions }}</p>
-
+        <div class=" mb-3">
+          <label for="Commentaire" class="form-label">Commentaire</label>
+          <input
+            type="text"
+            id="Commentaire"
+            class="form-control"
+            name="Commentaire"
+            [(ngModel)]="evaluation.commentaire"
+          />
+        </div>
       </div>
+
+      <button
+        class="btn-success btn"
+        (click)="addEvaluation()"
+      >
+        add Evaluation
+      </button>
+
       <div class="card-footer bg-light text-center">
-        <button class="btn btn-success" (click)="backRecipeList()">Back to Recipes</button>
+        <button class="btn btn-success" (click)="backRecipeList()">
+          Back to Recipes
+        </button>
       </div>
     </div>
+  </div>
 </div>
-  

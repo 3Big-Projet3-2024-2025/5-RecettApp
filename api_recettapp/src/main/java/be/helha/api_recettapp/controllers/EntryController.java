@@ -1,10 +1,13 @@
 package be.helha.api_recettapp.controllers;
 
+import be.helha.api_recettapp.models.Contest;
 import be.helha.api_recettapp.models.Entry;
 import be.helha.api_recettapp.services.EntryService;
+import be.helha.api_recettapp.services.IContestService;
 import be.helha.api_recettapp.services.IEntryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -21,6 +24,7 @@ public class EntryController {
 
     @Autowired
     private IEntryService entryService;
+    private IContestService contestService;
 
 
     /**
@@ -49,7 +53,36 @@ public class EntryController {
      */
     @PostMapping
     public Entry addEntry(@RequestBody Entry entry){
-        return entryService.addEntry(entry);
+        Integer idContest = entry.getContest().getId();
+        Contest contest = entry.getContest();
+        int maxParticipant = entry.getContest().getMax_participants();
+
+        try {
+            List<Entry> entries = entryService.getAllEntriesOfContest(idContest);
+            List<Entry> registeredEntries = entries.stream()
+                    .filter(e -> "registered".equalsIgnoreCase(e.getStatus()))
+                    .toList();
+
+            // if the Contest hasn't reached his maximum contestant then add the entry
+            if(registeredEntries.size() < maxParticipant){
+                return entryService.addEntry(entry);
+            } else{
+                contest.setStatus("full");
+                contestService.updateContest(contest);
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        "This contest : " + entry.getContest().getTitle() + "had reach his maximum contestants"
+                );
+            }
+
+        } catch (Exception exception){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "An error occured while an entry was added."
+            );
+        }
+
+
     }
 
     /**
@@ -107,6 +140,39 @@ public class EntryController {
             @RequestParam int contestId,
             @RequestParam String userMail) {
         return entryService.getEntryByUserMailAndIdContest(contestId, userMail);
+
+    }
+
+    @DeleteMapping(path = "/cancelEntry/{uuid}")
+    public ResponseEntity<Void> deleteUuid(
+            @PathVariable UUID uuid
+    ){
+        if (uuid == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "The UUID provided is null or invalid."
+            );
+        }
+        System.out.println("UUID received: " + uuid);
+        try {
+            Entry entry = entryService.removeUuid((UUID)  uuid);
+            System.out.println("UUID received: " + entry.getUuid());
+            if(entry != null){
+                entryService.deleteEntry(entry.getId());
+                return ResponseEntity.ok().build();
+            } else{
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        "The provided UUID is incorrect or not found for this entry."
+                );
+            }
+        } catch (Exception e){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "An error occured while canceling an entry"
+            );
+        }
+
 
     }
 }
