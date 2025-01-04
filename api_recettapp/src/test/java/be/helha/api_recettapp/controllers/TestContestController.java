@@ -78,7 +78,7 @@ class TestContestController {
         // Mock the contestService
         given(contestService.getContests()).willReturn(contests);
 
-        mockMvc.perform(get("/contests")
+        mockMvc.perform(get("/contests/all")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(2))
