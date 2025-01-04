@@ -34,30 +34,30 @@ public class SpringSecurityConfig {
     public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequests -> {
-                    authorizeRequests.requestMatchers(HttpMethod.GET, "/api/contest-categories").hasRole("USER");
-                    authorizeRequests.requestMatchers("/api/contest-category").hasRole("ADMIN");
-                    authorizeRequests.requestMatchers(HttpMethod.GET, "/contests").hasRole("USER");
-                    authorizeRequests.requestMatchers("/contests").hasRole("ADMIN");
-                    authorizeRequests.requestMatchers(HttpMethod.GET, "/entries").hasRole("USER");
-                    authorizeRequests.requestMatchers(HttpMethod.DELETE, "/entries/cancelEntry").hasRole("USER");
-                    authorizeRequests.requestMatchers("/entries").hasRole("ADMIN");
-                    authorizeRequests.requestMatchers(HttpMethod.POST, "/api/evaluations").hasRole("USER");
-                    authorizeRequests.requestMatchers("/api/evaluations").hasRole("ADMIN");
-                    authorizeRequests.requestMatchers("/image").hasRole("USER");
-                    authorizeRequests.requestMatchers(HttpMethod.GET, "/ingredients").hasRole("USER");
-                    authorizeRequests.requestMatchers("/ingredients").hasRole("ADMIN");
-                    authorizeRequests.requestMatchers("/paypal").hasRole("USER");
-                    authorizeRequests.requestMatchers("/recipe-components").hasRole("USER");
+                    authorizeRequests.requestMatchers(HttpMethod.DELETE,"/api/contest-categories").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.POST,"/api/contest-categories").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.PUT,"/api/contest-categories").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.DELETE,"/contests").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.POST,"/contests").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.PUT,"/contests").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.DELETE,"/entries").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.PUT,"/entries").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.GET,"/api/evaluations").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.PUT,"/api/evaluations").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.DELETE,"/api/evaluations").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.DELETE,"/ingredients").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.PUT,"/ingredients").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.POST,"/ingredients").hasRole("ADMIN");
                     authorizeRequests.requestMatchers(HttpMethod.DELETE,"/recipe").hasRole("ADMIN");
-                    authorizeRequests.requestMatchers("/recipe").hasRole("USER");
-                    authorizeRequests.requestMatchers(HttpMethod.GET, "/api/recipe-types").hasRole("USER");
-                    authorizeRequests.requestMatchers("/api/recipe-types").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.DELETE,"/api/recipe-types").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.POST,"/api/recipe-types").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.PUT,"/api/recipe-types").hasRole("ADMIN");
                     authorizeRequests.requestMatchers(HttpMethod.GET,"/api/users").hasRole("ADMIN");
                     authorizeRequests.requestMatchers(HttpMethod.POST,"/api/users/{email}/unblock").hasRole("ADMIN");
                     authorizeRequests.requestMatchers(HttpMethod.POST,"/api/users/{email}/block").hasRole("ADMIN");
                     authorizeRequests.requestMatchers(HttpMethod.DELETE,"/api/users").hasRole("ADMIN");
-                    authorizeRequests.requestMatchers("/api/users").hasRole("USER");
-                    authorizeRequests.anyRequest().permitAll();
+
+                    authorizeRequests.anyRequest().authenticated();
                 }).oauth2ResourceServer(oauth2 ->
                         oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
                 ).build();
