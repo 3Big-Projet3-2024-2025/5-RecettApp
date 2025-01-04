@@ -29,6 +29,10 @@ export class EntriesService {
     return this.http.delete<void>(`${this.apiUrl}/${idEntry}`);
   }
 
+  deleteEntryUuid(uuid : string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/cancelEntry/${uuid}`);
+  }
+
   getEntry(idEntry: number): Observable<Entry> {
     return this.http.get<Entry>(`${this.apiUrl}/${idEntry}`);
   }

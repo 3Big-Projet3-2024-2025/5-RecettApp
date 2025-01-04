@@ -1,6 +1,8 @@
 package be.helha.api_recettapp.services;
 
+import be.helha.api_recettapp.models.Contest;
 import be.helha.api_recettapp.models.Entry;
+import be.helha.api_recettapp.models.Users;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,12 +34,28 @@ public interface IEntryService {
 
     /**
      * Remove the UUID of a specific entry by his UUID
-     * @param uuid the uuid of the entry
-     * @return @type Entry of contests matching the title
+     * @param uuid the uuid to remove
+     * @return @type Entry of contests matching the UUID
      */
     public Entry removeUuid(UUID uuid);
 
+    /**
+     * Set a UUID on a specific entry
+     * @param entry the entry
+     * @return @type Entry of contests matching the title
+     */
     public Entry setUuid(Entry entry);
+
+    /**
+     * Get all the entries of an User
+     *
+     * @param idUser
+     * @return List A list of entries of the user
+     */
+    public List<Entry> getAllEntriesOfUser(long idUser);
+
+    public Entry findByUserAndContest(Users user, Contest contest);
+    public List<Entry> getAllEntriesOfContest(Integer idContest);
 
     /**
      * Add an entry

@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Recipe } from '../models/recipe';
 import { ActivatedRoute, Data, Router } from '@angular/router';
 import { RecipeService } from '../services/recipe_Service/recipe.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { RecipeComponentService } from '../services/recipe_Service/recipe-component.service';
 import { ImageServiceService } from '../services/image-service.service';
 import { NavBarComponent } from "../nav-bar/nav-bar.component";
@@ -31,8 +31,16 @@ export class RecipeDetailComponent implements OnInit {
   imageError: string | null = null;
   previewImage = "./assets/No_Image.png";
 
-  constructor(private route: ActivatedRoute,private router: Router, private service: RecipeService, private serviceRecipeComponent: RecipeComponentService
-              ,private imaService: ImageServiceService, private evaluationService : EvaluationService, private imService : ImageServiceService
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private service: RecipeService,
+    private serviceRecipeComponent: RecipeComponentService,
+    private imaService: ImageServiceService,
+    private evaluationService : EvaluationService,
+    private imService : ImageServiceService,
+    private location: Location
+
   ) {}
 
   ngOnInit(): void {
@@ -79,7 +87,7 @@ export class RecipeDetailComponent implements OnInit {
   }
 
   backRecipeList(): void {
-    this.router.navigate(['/recipe']);
+    this.location.back();
   }
 
   addImage(evaluation : Evaluation){

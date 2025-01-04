@@ -71,6 +71,7 @@ public class RecipeController {
     @PostMapping
     public Recipe addRecipe(@RequestBody Recipe recipe) {
         recipe.setId(0);
+        recipe.setMasked(false);
         return recipeService.addRecipe(recipe);
     }
 
@@ -97,4 +98,36 @@ public class RecipeController {
         recipeService.deleteRecipe(id);
     }
 
+    /**
+     * Retrieves paginated recipes created by a specific user.
+     *
+     * @param email The email address of the user.
+     * @param page and size The pagination information.
+     * @return A paginated list of recipes.
+     */
+    @GetMapping("/usermail")
+    public Page<Recipe> getRecipesByUserMailWithPagination(@RequestParam String email,@RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        try {
+            return recipeService.getRecipeByUserMail(email, page, size);
+        } catch (Exception e) {
+            throw new NoSuchElementException("This user has no recipes" + e.getMessage());
+        }
+    }
+
+
+    /**
+     * Sets the "masked" field of a recipe to true, effectively anonymizing it.
+     *
+     * @param id The ID of the recipe to anonymize.
+     * @return a boolean
+     */
+    @PutMapping("/anonymize/{id}")
+    public boolean anonymizeRecipe(@PathVariable int id) {
+        try {
+            return recipeService.anonymizeRecipe(id);
+        } catch (Exception e) {
+            throw new RuntimeException(" can't anonymize the recipe :" + e.getMessage());
+        }
+    }
 }
