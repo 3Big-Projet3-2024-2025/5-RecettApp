@@ -38,7 +38,7 @@ public class Evaluation {
     /**
      * The contest entry associated with this evaluation.
      */
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "entry_id", nullable = false)
     private Entry entry;
     /**
@@ -56,8 +56,7 @@ public class Evaluation {
     @OneToMany(mappedBy = "evaluation", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<ImageData> images;
-
-    // Nouveau champ pour la date de l'évaluation
+    
     private LocalDateTime dateEvaluation;
 
 }
