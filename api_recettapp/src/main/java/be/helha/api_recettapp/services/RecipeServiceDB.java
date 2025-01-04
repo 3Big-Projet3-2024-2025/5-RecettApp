@@ -29,12 +29,17 @@ public class RecipeServiceDB implements IRecipeService{
      * Retrieves a paginated list of recipes.
      *
      * @param page the {@link Pageable} object containing pagination information.
+     * @param keyword the term search.
      * @return a {@link Page} of {@link Recipe} objects.
      */
     @Override
-    public Page<Recipe> getRecipes(Pageable page) {
+    public Page<Recipe> getRecipes(String keyword, Pageable page) {
         try {
+            if (keyword == null || keyword.isEmpty()) {
             return recipeRepository.findAll(page);
+        } else {
+            return recipeRepository.findByKeyword(keyword, page);
+        }
         } catch (Exception e) {
             throw new RuntimeException("Error retrieving recipes: " + e.getMessage(), e);
         }

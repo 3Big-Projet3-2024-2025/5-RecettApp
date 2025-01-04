@@ -42,5 +42,15 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer>, Paging
     @Modifying
     @Query("UPDATE Recipe r SET r.masked = :masked WHERE r.id = :id")
     void updateMasked(@Param("id") int id, @Param("masked") boolean masked);
+    /**
+     * Retrieves a paginated list of recipes.
+     *
+     * @param page the {@link Pageable} object containing pagination information.
+     * @param keyword the term search.
+     * @return a {@link Page} of {@link Recipe} objects.
+     */
+    @Query("SELECT r FROM Recipe r WHERE LOWER(r.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(r.description) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+    Page<Recipe> findByKeyword(@Param("keyword") String keyword, Pageable page);
+
 
 }

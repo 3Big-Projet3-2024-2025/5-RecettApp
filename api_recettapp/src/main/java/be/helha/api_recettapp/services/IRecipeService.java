@@ -17,9 +17,10 @@ public interface IRecipeService {
      * Retrieves a paginated list of recipes.
      *
      * @param page the {@link Pageable} object containing pagination information.
+     * @param keyword the term search.
      * @return a {@link Page} of {@link Recipe} objects.
      */
-    public Page<Recipe> getRecipes(Pageable page);
+    public Page<Recipe> getRecipes(String keyword, Pageable page);
 
     /**
      * Retrieves a list of all recipes.
