@@ -12,26 +12,27 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./recipe-type.component.css'],
 })
 export class RecipeTypeComponent implements OnInit {
-  recipeTypes: RecipeType[] = []; // Full list of recipe types
-  filteredRecipeTypes: RecipeType[] = []; // Recipe types displayed on the current page
-  recipeTypeForm: FormGroup; // Form for adding or editing a recipe type
-  currentPage: number = 1; // Current page number
-  pageSize: number = 5; // Number of items per page
+  recipeTypes: RecipeType[] = []; // Complete list of recipe types
+  filteredRecipeTypes: RecipeType[] = []; // Recipe types shown on the current page
+  recipeTypeForm: FormGroup; // Form group for recipe type form
+  currentPage: number = 1; // Current pagination page
+  pageSize: number = 5; // Items per page
   totalRecipeTypes: number = 0; // Total number of recipe types
-  isEditing = false; // Flag for edit mode
+  isEditing = false; // Tracks if the form is in edit mode
   currentId: number | null = null; // ID of the recipe type being edited
+  showForm: boolean = false; // Determines if the form is displayed
 
   constructor(
-    private fb: FormBuilder, // Form builder for managing forms
-    private recipeTypeService: RecipeTypeService // Service to interact with the backend
+    private fb: FormBuilder, // Handles form creation and validation
+    private recipeTypeService: RecipeTypeService // Service for backend interaction
   ) {
-    // Initialize the form with validation rules
+    // Initialize the form with validation
     this.recipeTypeForm = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(255), Validators.minLength(3)]],
     });
   }
 
-  // Load all recipe types when the component is initialized
+  // Load recipe types on component initialization
   ngOnInit(): void {
     this.loadRecipeTypes();
   }
@@ -41,36 +42,34 @@ export class RecipeTypeComponent implements OnInit {
     this.recipeTypeService.getAllRecipeTypes().subscribe(
       (data) => {
         this.recipeTypes = Array.isArray(data) ? data : [];
-        this.totalRecipeTypes = this.recipeTypes.length; // Update total count
-        this.applyPagination(); // Apply pagination logic
+        this.totalRecipeTypes = this.recipeTypes.length;
+        this.applyPagination();
       },
-      (error) => {
-        console.error('Error loading recipe types:', error);
-      }
+      (error) => console.error('Error loading recipe types:', error)
     );
   }
 
-  // Apply pagination to the recipe types
+  // Apply pagination logic
   applyPagination(): void {
-    const startIndex = (this.currentPage - 1) * this.pageSize; // Start index for slicing
-    const endIndex = startIndex + this.pageSize; // End index for slicing
-    this.filteredRecipeTypes = this.recipeTypes.slice(startIndex, endIndex); // Slice the list
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    this.filteredRecipeTypes = this.recipeTypes.slice(startIndex, endIndex);
   }
 
-  // Handle page changes
+  // Handle pagination page change
   onPageChange(page: number): void {
     this.currentPage = page;
     this.applyPagination();
   }
 
-  // Calculate the total number of pages
+  // Calculate total number of pages
   get totalPages(): number {
     return Math.ceil(this.totalRecipeTypes / this.pageSize);
   }
 
   // Save a new recipe type or update an existing one
   saveRecipeType(): void {
-    if (this.recipeTypeForm.invalid) return; // Stop if the form is invalid
+    if (this.recipeTypeForm.invalid) return;
 
     const recipeType = this.recipeTypeForm.value;
 
@@ -84,7 +83,7 @@ export class RecipeTypeComponent implements OnInit {
         (error) => console.error('Error updating recipe type:', error)
       );
     } else {
-      // Create new recipe type
+      // Create a new recipe type
       this.recipeTypeService.createRecipeType(recipeType).subscribe(
         () => {
           this.loadRecipeTypes();
@@ -95,11 +94,12 @@ export class RecipeTypeComponent implements OnInit {
     }
   }
 
-  // Populate the form with the data of the recipe type being edited
+  // Edit an existing recipe type
   editRecipeType(recipeType: RecipeType): void {
     this.recipeTypeForm.patchValue(recipeType);
     this.currentId = recipeType.id!;
     this.isEditing = true;
+    this.showForm = true;
   }
 
   // Delete a recipe type
@@ -107,10 +107,10 @@ export class RecipeTypeComponent implements OnInit {
     if (confirm('Are you sure you want to delete this recipe type?')) {
       this.recipeTypeService.deleteRecipeType(id).subscribe(
         () => {
-          this.recipeTypes = this.recipeTypes.filter((recipeType) => recipeType.id !== id); // Remove the deleted item
-          this.totalRecipeTypes = this.recipeTypes.length; // Update the total count
+          this.recipeTypes = this.recipeTypes.filter((recipeType) => recipeType.id !== id);
+          this.totalRecipeTypes = this.recipeTypes.length;
 
-          // Adjust the current page if the last page becomes empty
+          // Adjust current page if last page becomes empty
           if (this.currentPage > this.totalPages && this.currentPage > 1) {
             this.currentPage--;
           }
@@ -122,10 +122,16 @@ export class RecipeTypeComponent implements OnInit {
     }
   }
 
+  // Toggle the visibility of the form
+  toggleForm(): void {
+    this.showForm = !this.showForm;
+  }
+
   // Reset the form and exit edit mode
   resetForm(): void {
     this.recipeTypeForm.reset();
     this.isEditing = false;
     this.currentId = null;
+    this.showForm = false;
   }
 }
