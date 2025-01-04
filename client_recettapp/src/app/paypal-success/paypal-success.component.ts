@@ -3,6 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { PayPalPayment } from '../models/paypal-payment';
 import { PaypalService } from '../services/paypal.service';
 import { Router } from '@angular/router';
+import {UsersService} from "../services/users.service";
+import {User} from "../models/users";
+import {KeycloakService} from "keycloak-angular";
 
 
 @Component({
@@ -17,14 +20,23 @@ export class PaypalSuccessComponent {
   paymentData!: PayPalPayment;
   paymentStatus!: string;
   countdown: number = 5;
-
+  user: User = {
+    id: 0,
+    firstName: '',
+    lastName: '',
+    email: '',
+    date_registration: '',
+    blocked: false
+  }
 
   constructor(
     private route: ActivatedRoute,
     private paypalService: PaypalService,
-    private router: Router
+    private router: Router,
+    private keycloakService: KeycloakService,
+    private userService: UsersService
   ){}
-  
+
 
   ngOnInit():void{
     const uuid = this.route.snapshot.queryParamMap.get('uuid') || '';
@@ -35,8 +47,9 @@ export class PaypalSuccessComponent {
     this.setPaypalPaymentData(paymentId, token, payerId);
     this.validatePayment(uuid, paymentId,payerId);
     console.log('PayPal Payment Data:', this.paymentData);
+    this.addPaypalPayment();
     this.startCountdown();
-    
+
   }
 
 
@@ -81,10 +94,28 @@ export class PaypalSuccessComponent {
   }
 
   redirectToHome(): void {
-    this.router.navigate(['/home']); 
+    this.router.navigate(['/home']);
   }
 
-
+  addPaypalPayment(): void{
+    let userToken = this.keycloakService.getKeycloakInstance().tokenParsed;
+    if (userToken && userToken['email']) {
+      this.userService.findByEmail(userToken['email']).subscribe(({
+        next: (user) => {
+          this.user = user;
+          let response = `{ 'paymentId': ${this.paymentData.paymentId}, 'token' : ${this.paymentData.token}, 'payerId' : ${this.paymentData.payerId} }`
+          this.paypalService.addPaypalPayment(this.user.id, response).subscribe(({
+            next: ()=> {},
+            error: (error) => {
+              console.error('Error to add payment:', error.error.error);
+            }
+          }));
+        }, error: (error) => {
+          console.error('Error to get user:', error.error.error);
+        }
+      }));
+    }
+  }
 
 
 
