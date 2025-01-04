@@ -47,6 +47,25 @@ public class ContestController {
     }
 
     /**
+     * GET - get a paginated list of available contests
+     *
+     * @param page the {@link Pageable} object containing pagination information.
+     * @return a {@link Page} of {@link Recipe} objects.
+     */
+    @GetMapping("/availableContests")
+    public Page<Contest> getAvailableContests(@PageableDefault(page = 0, size = 10) Pageable page){
+        try {
+
+            return contestService.getAvailableContests(page);
+        } catch (Exception e){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Error retrieving available contests pages"
+            );
+        }
+    }
+
+    /**
      * GET - get all the contests
      * @return @type List of all contests
      */
