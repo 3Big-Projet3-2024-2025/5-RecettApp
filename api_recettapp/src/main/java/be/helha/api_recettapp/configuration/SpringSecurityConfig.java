@@ -1,17 +1,11 @@
 package be.helha.api_recettapp.configuration;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
@@ -30,13 +24,6 @@ import be.helha.api_recettapp.security.KeycloakRoleConverter;
 public class SpringSecurityConfig {
 
     /**
-     * A service that provides user details for authentication.
-     * The annotation {@code @Autowired} is used to automatically injected by Spring's dependency injection framework.
-     */
-    @Autowired
-    UserDetailsService userDetailsService;
-
-    /**
      * Configures the Spring Security filter chain for the application.
      * This method defines the security rules for handling HTTP requests, including enabling or disabling
      * CSRF protection and configuring authorization requirements for different endpoints.
@@ -47,9 +34,29 @@ public class SpringSecurityConfig {
     public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequests -> {
-                    // Permits all requests to all endpoints for the moment, to easily test API
-                    //authorizeRequests.requestMatchers("/api/users").authenticated();
-                    authorizeRequests.requestMatchers("/api/contest-categories").hasRole("USER");
+                    authorizeRequests.requestMatchers(HttpMethod.GET, "/api/contest-categories").hasRole("USER");
+                    authorizeRequests.requestMatchers("/api/contest-category").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.GET, "/contests").hasRole("USER");
+                    authorizeRequests.requestMatchers("/contests").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.GET, "/entries").hasRole("USER");
+                    authorizeRequests.requestMatchers(HttpMethod.DELETE, "/entries/cancelEntry").hasRole("USER");
+                    authorizeRequests.requestMatchers("/entries").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.POST, "/api/evaluations").hasRole("USER");
+                    authorizeRequests.requestMatchers("/api/evaluations").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers("/image").hasRole("USER");
+                    authorizeRequests.requestMatchers(HttpMethod.GET, "/ingredients").hasRole("USER");
+                    authorizeRequests.requestMatchers("/ingredients").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers("/paypal").hasRole("USER");
+                    authorizeRequests.requestMatchers("/recipe-components").hasRole("USER");
+                    authorizeRequests.requestMatchers(HttpMethod.DELETE,"/recipe").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers("/recipe").hasRole("USER");
+                    authorizeRequests.requestMatchers(HttpMethod.GET, "/api/recipe-types").hasRole("USER");
+                    authorizeRequests.requestMatchers("/api/recipe-types").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.GET,"/api/users").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.POST,"/api/users/{email}/unblock").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.POST,"/api/users/{email}/block").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.DELETE,"/api/users").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers("/api/users").hasRole("USER");
                     authorizeRequests.anyRequest().permitAll();
                 }).oauth2ResourceServer(oauth2 ->
                         oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
