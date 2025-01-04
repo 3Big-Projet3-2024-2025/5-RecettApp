@@ -7,6 +7,7 @@ import be.helha.api_recettapp.services.IContestService;
 import be.helha.api_recettapp.services.IEntryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -139,6 +140,39 @@ public class EntryController {
             @RequestParam int contestId,
             @RequestParam String userMail) {
         return entryService.getEntryByUserMailAndIdContest(contestId, userMail);
+
+    }
+
+    @DeleteMapping(path = "/cancelEntry/{uuid}")
+    public ResponseEntity<Void> deleteUuid(
+            @PathVariable UUID uuid
+    ){
+        if (uuid == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "The UUID provided is null or invalid."
+            );
+        }
+        System.out.println("UUID received: " + uuid);
+        try {
+            Entry entry = entryService.removeUuid((UUID)  uuid);
+            System.out.println("UUID received: " + entry.getUuid());
+            if(entry != null){
+                entryService.deleteEntry(entry.getId());
+                return ResponseEntity.ok().build();
+            } else{
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        "The provided UUID is incorrect or not found for this entry."
+                );
+            }
+        } catch (Exception e){
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "An error occured while canceling an entry"
+            );
+        }
+
 
     }
 }

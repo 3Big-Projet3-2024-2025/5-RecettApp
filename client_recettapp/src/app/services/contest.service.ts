@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Contest } from '../models/contest';
-import { PaginatedResponse } from '../models/PaginatedResponse';
+import { PaginatedResponse } from '../models/paginatedResponse';
 
 
 @Injectable({
