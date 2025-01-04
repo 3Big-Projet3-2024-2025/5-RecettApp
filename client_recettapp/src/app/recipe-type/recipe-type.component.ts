@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { RecipeType } from '../models/recipe-type';
 import { RecipeTypeService } from '../services/recipe-type.service';
 import { CommonModule } from '@angular/common';
+import {KeycloakService} from "keycloak-angular";
 
 @Component({
   selector: 'app-recipe-type',
@@ -23,7 +24,8 @@ export class RecipeTypeComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder, // Form builder for managing forms
-    private recipeTypeService: RecipeTypeService // Service to interact with the backend
+    private recipeTypeService: RecipeTypeService, // Service to interact with the backend
+    private keycloakService: KeycloakService
   ) {
     // Initialize the form with validation rules
     this.recipeTypeForm = this.fb.group({
@@ -37,8 +39,9 @@ export class RecipeTypeComponent implements OnInit {
   }
 
   // Fetch recipe types from the backend
-  loadRecipeTypes(): void {
-    this.recipeTypeService.getAllRecipeTypes().subscribe(
+  async loadRecipeTypes(): Promise<void> {
+    const token = await this.keycloakService.getToken();
+    this.recipeTypeService.getAllRecipeTypes(token).subscribe(
       (data) => {
         this.recipeTypes = Array.isArray(data) ? data : [];
         this.totalRecipeTypes = this.recipeTypes.length; // Update total count
@@ -69,14 +72,15 @@ export class RecipeTypeComponent implements OnInit {
   }
 
   // Save a new recipe type or update an existing one
-  saveRecipeType(): void {
+  async saveRecipeType(): Promise<void> {
     if (this.recipeTypeForm.invalid) return; // Stop if the form is invalid
 
     const recipeType = this.recipeTypeForm.value;
 
     if (this.isEditing && this.currentId !== null) {
+      const token = await this.keycloakService.getToken();
       // Update existing recipe type
-      this.recipeTypeService.updateRecipeType(this.currentId, recipeType).subscribe(
+      this.recipeTypeService.updateRecipeType(this.currentId, recipeType, token).subscribe(
         () => {
           this.loadRecipeTypes();
           this.resetForm();
@@ -84,8 +88,9 @@ export class RecipeTypeComponent implements OnInit {
         (error) => console.error('Error updating recipe type:', error)
       );
     } else {
+      const token = await this.keycloakService.getToken();
       // Create new recipe type
-      this.recipeTypeService.createRecipeType(recipeType).subscribe(
+      this.recipeTypeService.createRecipeType(recipeType, token).subscribe(
         () => {
           this.loadRecipeTypes();
           this.resetForm();
@@ -103,9 +108,10 @@ export class RecipeTypeComponent implements OnInit {
   }
 
   // Delete a recipe type
-  deleteRecipeType(id: number): void {
+  async deleteRecipeType(id: number): Promise<void> {
     if (confirm('Are you sure you want to delete this recipe type?')) {
-      this.recipeTypeService.deleteRecipeType(id).subscribe(
+      const token = await this.keycloakService.getToken();
+      this.recipeTypeService.deleteRecipeType(id, token).subscribe(
         () => {
           this.recipeTypes = this.recipeTypes.filter((recipeType) => recipeType.id !== id); // Remove the deleted item
           this.totalRecipeTypes = this.recipeTypes.length; // Update the total count
