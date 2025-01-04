@@ -14,6 +14,10 @@ import { PaypalSuccessComponent } from './paypal-success/paypal-success.componen
 import { PaypalCancelComponent } from './paypal-cancel/paypal-cancel.component';
 import { RecipeContestListComponent } from './recipe-contest-list/recipe-contest-list.component';
 import { UserRecipeListComponent } from './user-recipe-list/user-recipe-list.component';
+import { NotFoundComponent } from './not-found/not-found.component';
+import { UserInfoComponent } from './user-info/user-info.component';
+
+
 
 
 
@@ -33,7 +37,9 @@ export const routes: Routes = [
         { path: 'success', component:PaypalSuccessComponent},
         { path: 'cancel', component:PaypalCancelComponent},
         { path: 'myrecipe', component:UserRecipeListComponent},
-        { path: 'home', component: HomePageComponent}
+        { path: 'home', component: HomePageComponent},
+        { path:'User-info',component:UserInfoComponent},
+        { path: '**', component: NotFoundComponent },
 
 
 ];
