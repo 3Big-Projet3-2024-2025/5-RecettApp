@@ -1,7 +1,9 @@
 package be.helha.api_recettapp.controllers;
 
+import be.helha.api_recettapp.models.Evaluation;
 import be.helha.api_recettapp.models.ImageData;
 import be.helha.api_recettapp.models.Recipe;
+import be.helha.api_recettapp.repositories.jpa.EvaluationRepository;
 import be.helha.api_recettapp.repositories.jpa.ImageDataRepository;
 import be.helha.api_recettapp.repositories.jpa.RecipeRepository;
 import be.helha.api_recettapp.services.ImageDataService;
@@ -30,6 +32,8 @@ public class ImageDataController {
     private ImageDataRepository repository;
     @Autowired
     private RecipeRepository recipeRepository;
+    @Autowired
+    private EvaluationRepository evaluationRepository;
 
 
     /**
@@ -66,5 +70,18 @@ public class ImageDataController {
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.valueOf(image.getType()))
                 .body(imageData);
+    }
+
+    @PostMapping(value = "/{evaluation}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> addImageEvaluation(@RequestParam("image") MultipartFile image, @RequestParam("evaluation") int evaluationId) throws IOException {
+
+        Evaluation evaluation = evaluationRepository.findById((long) evaluationId)
+                .orElseThrow(() -> new IllegalArgumentException("Evaluation not found with ID: " + evaluationId));
+
+        boolean uploadImage = imageDataService.addImageEvaluation(image,evaluation);
+        if (!uploadImage) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

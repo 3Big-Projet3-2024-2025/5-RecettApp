@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MultiplyArray } from 'socket.io/dist/typed-events';
 import { Recipe } from '../models/recipe';
+import { Evaluation } from '../models/evaluation';
 
 @Injectable({
   providedIn: 'root'
@@ -23,11 +24,20 @@ export class ImageServiceService {
     const formData = new FormData();
     formData.append('image', image);
     formData.append('recipe', String(recipeToAdd.id));
-  
+
     return this.http.post<string>(this.Url, formData);
   }
-  
+
   getImage(fileName: string): Observable<Blob> {
     return this.http.get(`${this.Url}/${fileName}`, { responseType: 'blob' });
   }
+
+  addImageEvaluation(image : File, evaluation: Evaluation): Observable<string>{
+    const formData = new FormData();
+    formData.append('image', image);
+    formData.append('evaluation', String(evaluation.id));
+
+    return this.http.post<string>(`${this.Url}/evaluation`, formData);
+  }
+
 }

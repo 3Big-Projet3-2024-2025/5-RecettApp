@@ -1,9 +1,13 @@
 package be.helha.api_recettapp.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Represents an evaluation of a recipe by a user in a contest entry.
@@ -28,6 +32,9 @@ public class Evaluation {
      */
     private int rate;
 
+
+    private String commentaire ;
+
     /**
      * The contest entry associated with this evaluation.
      */
@@ -41,4 +48,16 @@ public class Evaluation {
     @ManyToOne
     @JoinColumn(name = "recipe_id", nullable = false)
     private Recipe recipe;
+
+    /**
+     * List of images associated with the recipe.
+     * Mapped by the "recipe" field in the {@link ImageData} class.
+     */
+    @OneToMany(mappedBy = "evaluation", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<ImageData> images;
+
+    // Nouveau champ pour la date de l'évaluation
+    private LocalDateTime dateEvaluation;
+
 }

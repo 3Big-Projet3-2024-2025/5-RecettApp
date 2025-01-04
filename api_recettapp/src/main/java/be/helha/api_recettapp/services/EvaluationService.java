@@ -8,6 +8,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -29,6 +31,25 @@ public class EvaluationService implements IEvaluationService{
      */
     @Override
     public Evaluation addEvaluation(Evaluation evaluation) {
+        Long userId = evaluation.getEntry().getUsers().getId();
+        Long recipeId = (long) evaluation.getRecipe().getId();
+
+        LocalDate today = LocalDate.now();
+        LocalDateTime startOfDay = today.atStartOfDay();
+        LocalDateTime endOfDay = startOfDay.plusDays(1).minusNanos(1);
+
+        boolean alreadyRatedToday = evaluationRepository.existsByUserAndRecipeAndDateBetween(
+                userId,
+                recipeId,
+                startOfDay,
+                endOfDay
+        );
+
+        if (alreadyRatedToday) {
+            throw new IllegalStateException("You've already evaluated this recipe today !");
+        }
+
+        evaluation.setDateEvaluation(LocalDateTime.now());
         return evaluationRepository.save(evaluation);
     }
 

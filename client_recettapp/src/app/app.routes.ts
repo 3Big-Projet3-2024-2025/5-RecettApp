@@ -8,6 +8,7 @@ import { ContestTableComponent } from './contest-table/contest-table.component';
 import { RecipeTypeComponent } from './recipe-type/recipe-type.component';
 import { UsersComponent } from './users/users.component';
 import { EntriesTableComponent } from './entries-table/entries-table.component';
+import { EvaluationComponent } from './evaluation/evaluation.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { AvailableContestComponent } from './available-contest/available-contest.component';
 import { PaypalSuccessComponent } from './paypal-success/paypal-success.component';
@@ -34,6 +35,8 @@ export const routes: Routes = [
         { path: 'contests', component: ContestTableComponent , canActivate: [KeycloakGuard]},
         { path: 'entries', component: EntriesTableComponent , canActivate: [KeycloakGuard]},
         { path: 'available-contests', component: AvailableContestComponent, canActivate: [KeycloakGuard]},
+        { path: 'home', component: HomePageComponent},
+        {path : 'evaluation' , component: EvaluationComponent},
         { path: 'success', component:PaypalSuccessComponent},
         { path: 'cancel', component:PaypalCancelComponent},
         { path: 'myrecipe', component:UserRecipeListComponent},
