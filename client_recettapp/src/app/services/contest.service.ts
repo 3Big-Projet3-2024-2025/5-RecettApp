@@ -18,6 +18,11 @@ export class ContestService {
     return this.http.get<PaginatedResponse<any>>(this.apiUrl, { params });
 }
 
+  getAllAvailableContests(page: number = 0, size: number = 10): Observable<PaginatedResponse<any>> {
+    const params = { page: page.toString(), size: size.toString() };
+    return this.http.get<PaginatedResponse<any>>(`${this.apiUrl}/availableContests`, { params });
+}
+
   addContest(contest: Contest): Observable<Contest> {
     return this.http.post<Contest>(this.apiUrl, contest);
   }
