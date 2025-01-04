@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { User } from '../models/users';
 import {emit} from "@angular-devkit/build-angular/src/tools/esbuild/angular/compilation/parallel-worker";
+import {KeycloakService} from "keycloak-angular";
 
 
 
@@ -13,10 +14,13 @@ export class UsersService {
 
   private baseUrl = 'http://localhost:8080/api/users';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private keycloakService: KeycloakService) {}
 
-  findAll(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.baseUrl}`);
+  findAll(token: any): Observable<User[]> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    console.log('token', token)
+    return this.http.get<User[]>(`${this.baseUrl}`, {headers});
   }
 
   findById(id: number): Observable<User> {

@@ -3,6 +3,7 @@ import { UsersService } from '../services/users.service';
 import { CommonModule } from '@angular/common';
 import { User } from '../models/users';
 import { FormsModule } from '@angular/forms';
+import {KeycloakService} from "keycloak-angular";
 
 @Component({
   selector: 'app-users',
@@ -23,14 +24,15 @@ export class UsersComponent implements OnInit {
   errMessage: String = "";
   err: boolean = false;
 
-  constructor(private usersService: UsersService) {}
+  constructor(private usersService: UsersService, private keycloakService: KeycloakService) {}
 
   ngOnInit(): void {
     this.loadUsers();
   }
 
-  loadUsers(): void {
-    this.usersService.findAll().subscribe(
+  async loadUsers(): Promise<void> {
+    const token = await this.keycloakService.getToken();
+    this.usersService.findAll(token).subscribe(
       (data: User[]) => {
         console.log(data);
         this.users = data;
