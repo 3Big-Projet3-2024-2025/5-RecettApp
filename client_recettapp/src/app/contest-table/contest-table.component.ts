@@ -20,6 +20,8 @@ export class ContestTableComponent {
   isEditing = false;
   showForm = false;
   categories!: ContestCategory[];
+  totalPages: number = 0;
+  currentPage: number = 0;
 
   constructor(
     private contestService: ContestService,
@@ -28,9 +30,14 @@ export class ContestTableComponent {
   ) { }
 
   ngOnInit(): void {
-    this.getAllContests();
+    this.getAllContests(this.currentPage, 5);
     //this.convertContestDates();
     this.getAllCategory();
+  }
+
+  changePage(page: number): void {
+    this.currentPage = page;
+    this.getAllContests(this.currentPage,5);
   }
 
 
@@ -40,17 +47,19 @@ export class ContestTableComponent {
     return localDate.toISOString().slice(0, 16);
   }
 
-  getAllContests(): void {
-    const sub = this.contestService.getAllContests().subscribe({
+  getAllContests(page: number = 0, size: number): void {
+    const sub = this.contestService.getAllContests(page, size).subscribe({
       next: (data) => {
-        console.log(data);
-        this.contests = data;
+        console.log(data.content); 
+        this.contests = data.content; 
+        this.totalPages = data.totalPages;
         sub.unsubscribe();
-      }, error: (err) => {
-        console.log("ERROR GETALLCONTESTS");
+      },
+      error: (err) => {
+        console.error("ERROR GETALLCONTESTS", err);
         sub.unsubscribe();
       }
-    })
+    });
   }
 
   addContest(): void {
@@ -113,7 +122,13 @@ export class ContestTableComponent {
   deleteContest(idContest: number): void {
     if (confirm('Are you sure you want to delete this contest?')) {
       this.contestService.deleteContest(idContest).subscribe(() => {
-        this.getAllContests();
+        this.getAllContests(this.currentPage, 5);
+        setTimeout(() => {
+          if (this.contests.length === 0 && this.currentPage > 0) {
+            this.currentPage--; 
+            this.getAllContests(this.currentPage, 5);
+          }
+        }, 100);
       });
     }
   }
@@ -135,7 +150,7 @@ export class ContestTableComponent {
         }
         const sub = this.contestService.updateContest(this.currentContest).subscribe({
           next: () => {
-            this.getAllContests();
+            this.getAllContests(this.currentPage, 5);
             this.showForm = false;
             this.currentContest = this.initContest();
           }, error: (err) => {
@@ -153,7 +168,7 @@ export class ContestTableComponent {
         }
         const sub = this.contestService.addContest(this.currentContest).subscribe({
           next: () => {
-            this.getAllContests();
+            this.getAllContests(this.currentPage, 5);
             this.showForm = false;
             this.currentContest = this.initContest();
           }, error: (err) => {
