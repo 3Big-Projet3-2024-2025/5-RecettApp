@@ -56,7 +56,7 @@ public class EntryService implements IEntryService {
 
             // remove uuid
             entry.setUuid(null);
-            repository.save(entry);
+            return repository.save(entry);
         }
 
 
