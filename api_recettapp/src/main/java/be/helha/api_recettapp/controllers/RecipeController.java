@@ -22,11 +22,13 @@ public class RecipeController {
      * Retrieves a paginated list of recipes.
      *
      * @param pageable the pagination information.
+     * @param keyword the term search.
      * @return a {@link Page} of {@link Recipe}.
      */
     @GetMapping
-    public Page<Recipe> getRecipes(Pageable pageable) {
-        return recipeService.getRecipes(pageable);
+    public Page<Recipe> getRecipes( @RequestParam(required = false) String keyword,
+                                    Pageable pageable) {
+        return recipeService.getRecipes(keyword, pageable);
     }
 
     /**
@@ -103,13 +105,14 @@ public class RecipeController {
      *
      * @param email The email address of the user.
      * @param page and size The pagination information.
+     * @param keyword the term search.
      * @return A paginated list of recipes.
      */
     @GetMapping("/usermail")
-    public Page<Recipe> getRecipesByUserMailWithPagination(@RequestParam String email,@RequestParam(defaultValue = "0") int page,
+    public Page<Recipe> getRecipesByUserMailWithPagination(@RequestParam String email,@RequestParam String keyword,@RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         try {
-            return recipeService.getRecipeByUserMail(email, page, size);
+            return recipeService.getRecipeByUserMail(email, keyword,page, size);
         } catch (Exception e) {
             throw new NoSuchElementException("This user has no recipes" + e.getMessage());
         }

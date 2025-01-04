@@ -30,8 +30,9 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer>, Paging
      * @param pageable The pagination information.
      * @return A paginated list of recipes.
      */
-    @Query("SELECT r FROM Recipe r WHERE r.entry.users.email = :userMail")
-    Page<Recipe> findRecipesByUserMail(@Param("userMail") String userMail, Pageable pageable);
+        @Query("SELECT r FROM Recipe r WHERE r.masked = false AND r.entry.users.email = :userMail AND (LOWER(r.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(r.description) LIKE LOWER(CONCAT('%', :keyword, '%')))")
+        Page<Recipe> findRecipesByUserMailAndKeyword( @Param("userMail") String userMail, @Param("keyword") String keyword, Pageable pageable);
+
     /**
      * Updates the "masked" field of a recipe to the specified value.
      *
@@ -41,5 +42,15 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer>, Paging
     @Modifying
     @Query("UPDATE Recipe r SET r.masked = :masked WHERE r.id = :id")
     void updateMasked(@Param("id") int id, @Param("masked") boolean masked);
+    /**
+     * Retrieves a paginated list of recipes.
+     *
+     * @param page the {@link Pageable} object containing pagination information.
+     * @param keyword the term search.
+     * @return a {@link Page} of {@link Recipe} objects.
+     */
+    @Query("SELECT r FROM Recipe r WHERE LOWER(r.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(r.description) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+    Page<Recipe> findByKeyword(@Param("keyword") String keyword, Pageable page);
+
 
 }

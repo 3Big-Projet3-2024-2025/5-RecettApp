@@ -22,7 +22,10 @@ export class RecipeComponent {
   currentPage = 0;
   pageSize = 3;
   totalPages = 0;
+  searchTerm: string = '';
 
+  
+  
   constructor(private service: RecipeService,private router:Router, private imaService: ImageServiceService) {}
 
 
@@ -32,7 +35,7 @@ export class RecipeComponent {
 
   loadRecipes(page: number, size: number): void {
     this.isLoading = false;
-    this.service.getAllRecipesPaginated(page, size).subscribe((data) => {
+    this.service.getRecipesPaginated(this.searchTerm, page, size).subscribe((data) => {
       this.totalPages = data.totalPages;
       this.currentPage = page; 
       const recipes: Recipe[] = data.content;
@@ -99,7 +102,10 @@ export class RecipeComponent {
     if (this.currentPage < this.totalPages - 1) {
       this.goToPage(this.currentPage + 1);
     }
-}
-
+  }
+  onSearch(): void {
+    this.currentPage = 0; 
+    this.loadRecipes(this.currentPage, this.pageSize);
+  }
 }
 

@@ -32,16 +32,21 @@ export class RecipeService {
   getRecipeByIdContest(idContest: number): Observable<Recipe[]> {
     return this.http.get<Recipe[]>(`${this.Url}/contest/${idContest}`); 
   } 
-  
-  getAllRecipesPaginated(page: number, size: number): Observable<any> {
-    const params = { page: page.toString(), size: size.toString() };
+
+  getRecipesPaginated(keyword: string, page: number, size: number): Observable<any> {
+    const params = {
+      keyword: keyword || '', 
+      page: page.toString(),
+      size: size.toString(),
+    };
     return this.http.get<any>(this.Url, { params });
   }
-
-  getRecipesByUserMail(email: string, page: number, size: number): Observable<any> {
+  
+  getRecipesByUserMail(email: string, keyword: string,page: number, size: number): Observable<any> {
     const params = new HttpParams()
       .set('email', email)
       .set('page', page.toString())
+      .set('keyword', keyword)
       .set('size', size.toString());
     return this.http.get<any>(`${this.Url}/usermail`, { params });
   }
