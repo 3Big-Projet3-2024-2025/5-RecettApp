@@ -1,9 +1,9 @@
 package be.helha.api_recettapp.services;
 
 import be.helha.api_recettapp.models.Contest;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Interface with all the methods implemented in ContestService
@@ -20,6 +20,15 @@ public interface IContestService {
      * @return @type List<> of contests matching the title
      */
     public List<Contest> getContestByTitle(String title);
+
+    /**
+     * Get contest matching an id
+     *
+     * @param id of the contest to match
+     * @return @type Contest of contests matching the title
+     */
+    public Optional<Contest> getContestById(int id);
+
     /**
      * Add a contest
      * @param contest the contest to add

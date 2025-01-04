@@ -48,20 +48,6 @@ public class Users {
     private String email;
 
     /**
-     * Password of the user.
-     * This field cannot be null.
-     * For security, passwords should be encrypted.
-     */
-
-    @Column(nullable = false)
-    private String password;
-
-    /**
-     * Status of the user (e.g., active, inactive).
-     */
-    private String status;
-
-    /**
      * Date of registration for the user.
      * This field cannot be null.
      */
@@ -69,9 +55,10 @@ public class Users {
     private LocalDate date_registration;
 
     /**
-     * Phone number of the user.
+     * Attribute to check if the user is blocked or not.
+     * By default, it's set to false.
      */
-    private String phone_number;
+    private boolean isBlocked = false;
 
 
     /**

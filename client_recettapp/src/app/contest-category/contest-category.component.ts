@@ -1,113 +1,132 @@
 import { Component, OnInit } from '@angular/core';
-
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ContestCategory } from '../models/contest-category';
 import { ContestCategoryService } from '../services/contest-category.service';
 import { CommonModule } from '@angular/common';
-import { NavBarComponent } from "../nav-bar/nav-bar.component";
 
 @Component({
   selector: 'app-contest-category',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule, FormsModule],
   templateUrl: './contest-category.component.html',
   styleUrls: ['./contest-category.component.css'],
 })
 export class ContestCategoryComponent implements OnInit {
-  // List of categories
-  categories: ContestCategory[] = [];
-
-  // Form to create or edit a category
-  categoryForm: FormGroup;
-
-  // Check if we are editing a category
-  isEditing = false;
-
-  // ID of the category being edited
-  currentId: number | null = null;
+  categories: ContestCategory[] = []; // All categories
+  filteredCategories: ContestCategory[] = []; // Categories for the current page
+  currentPage: number = 1; // Current page number
+  pageSize: number = 5; // Number of categories per page
+  totalCategories: number = 0; // Total number of categories
+  categoryForm: FormGroup; // Form for adding or editing categories
+  isEditing = false; // Flag to indicate editing mode
+  currentId: number | null = null; // ID of the category being edited
 
   constructor(
-    private fb: FormBuilder, // Helps to build forms
-    private categoryService: ContestCategoryService // Talks to the backend
+    private fb: FormBuilder, // For creating forms
+    private categoryService: ContestCategoryService // To interact with the backend
   ) {
-    // Create the form with validation rules
+    // Initialize the form with validation
     this.categoryForm = this.fb.group({
-      title: ['', [Validators.required, Validators.maxLength(255), Validators.minLength(8)]], // Title is required and must be between 8 and 255 characters
-      description: ['', [Validators.required, Validators.maxLength(255), Validators.minLength(8)]], // Description is required and must be between 8 and 255 characters
+      title: ['', [Validators.required, Validators.maxLength(255), Validators.minLength(8)]],
+      description: ['', [Validators.required, Validators.maxLength(255), Validators.minLength(8)]],
     });
   }
 
-  // This runs when the page opens
+  // Load all categories when the component initializes
   ngOnInit(): void {
-    this.loadCategories(); // Load all categories
+    this.loadCategories();
   }
 
-  // Load all categories from the server
+  // Fetch all categories from the backend
   loadCategories(): void {
     this.categoryService.getAllCategories().subscribe(
       (data) => {
-        // Check if the data is valid
-        this.categories = Array.isArray(data) ? data : [];
+        this.categories = data;
+        this.totalCategories = data.length;
+        this.applyPagination(); // Update pagination
       },
       (error) => {
-        console.error('Error loading categories:', error); // Show error in the console if loading fails
+        console.error('Error loading categories:', error);
       }
     );
   }
 
-  // Save a new category or update an existing one
-  saveCategory(): void {
-    if (this.categoryForm.invalid) return; // Stop if the form is not valid
+  // Apply pagination logic
+  applyPagination(): void {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    this.filteredCategories = this.categories.slice(startIndex, endIndex);
+  }
 
-    const category = this.categoryForm.value; // Get data from the form
+  // Handle page changes
+  onPageChange(page: number): void {
+    this.currentPage = page;
+    this.applyPagination();
+  }
+
+  // Calculate total pages based on total categories
+  get totalPages(): number {
+    return Math.ceil(this.totalCategories / this.pageSize);
+  }
+
+  // Save or update a category
+  saveCategory(): void {
+    if (this.categoryForm.invalid) return;
+
+    const category = this.categoryForm.value;
 
     if (this.isEditing && this.currentId !== null) {
-      // If editing, update the category
+      // Update existing category
       this.categoryService.updateCategory(this.currentId, category).subscribe(
         () => {
-          this.loadCategories(); // Refresh the table
-          this.resetForm(); // Clear the form
+          this.loadCategories();
+          this.resetForm();
         },
-        (error) => console.error('Error updating category:', error) // Show error in the console
+        (error) => console.error('Error updating category:', error)
       );
     } else {
-      // If not editing, create a new category
+      // Create new category
       this.categoryService.createCategory(category).subscribe(
         () => {
-          this.loadCategories(); // Refresh the table
-          this.resetForm(); // Clear the form
+          this.loadCategories();
+          this.resetForm();
         },
-        (error) => console.error('Error creating category:', error) // Show error in the console
+        (error) => console.error('Error creating category:', error)
       );
     }
   }
 
-  // When clicking the "Edit" button
+  // Edit an existing category
   editCategory(category: ContestCategory): void {
-    this.categoryForm.patchValue(category); // Fill the form with the category data
-    this.currentId = category.id!; // Save the ID of the category
-    this.isEditing = true; // Set editing mode to true
+    this.categoryForm.patchValue(category);
+    this.currentId = category.id!;
+    this.isEditing = true;
   }
 
-  // When clicking the "Delete" button
+  // Delete a category
   deleteCategory(id: number): void {
     if (confirm('Are you sure you want to delete this category?')) {
-      // Ask for confirmation
       this.categoryService.deleteCategory(id).subscribe(
         () => {
-          // Remove the deleted category from the list
           this.categories = this.categories.filter((category) => category.id !== id);
+          this.totalCategories = this.categories.length;
+
+          // Adjust the current page if the last page becomes empty
+          if (this.currentPage > this.totalPages && this.currentPage > 1) {
+            this.currentPage--;
+          }
+
+          this.applyPagination();
         },
-        (error) => console.error('Error deleting category:', error) // Show error in the console
+        (error) => console.error('Error deleting category:', error)
       );
     }
   }
 
-  // Clear the form and reset editing mode
+  // Reset the form and exit editing mode
   resetForm(): void {
-    this.categoryForm.reset(); // Clear the form
-    this.isEditing = false; // Turn off editing mode
-    this.currentId = null; // Clear the ID
+    this.categoryForm.reset();
+    this.isEditing = false;
+    this.currentId = null;
   }
 }

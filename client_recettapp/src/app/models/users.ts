@@ -3,10 +3,8 @@ export interface User {
   firstName: string;
   lastName: string;
   email: string;
-  password: string;
-  status: string;
   date_registration: string;
-  phone_number: string;
+  blocked: boolean;
   //registrations?: Entry[];
   //roles?: Role[];
 }

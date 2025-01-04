@@ -1,14 +1,13 @@
-<div class="container mt-5">
-  <h1 class="text-center text-success mb-4">Recipes</h1>
-  <div *ngIf="recipes; else loading">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <button class="btn btn-success" (click)="addRecipe(1)">
-        <i class="icon-plus">&#43;</i> Add Recipe
-      </button>
-    </div>
+
+<div class="container mt-4">
+  <h1 class="text-center text-success mb-4">Recipe List</h1>
+  <div *ngIf="recipes ; else loading">
+      <div class="card-footer bg-light text-center">
+        <button class="btn btn-dark" (click)="addRecipe(1)">Add Recipe</button>
+      </div>
     <div class="row">
-      <div class="col-md-4 mb-4" *ngFor="let recipe of recipes">
-        <div class="card recipe-card shadow-sm" style="width: 18rem;">
+      <div class="col-md-4 mb-3" *ngFor="let recipe of recipes">
+        <div class="card recipe-card shadow-sm">
           <div (click)="detailRecipe(recipe.id)">
             <div class="recipe-image-container">
               <img *ngIf="recipe.photo_url" [src]="recipe.photo_url" [alt]="recipe.title" class="card-img-top recipe-photo" />
