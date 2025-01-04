@@ -63,5 +63,20 @@ public class TestEvaluationController {
 
 
 
+    /**
+     * Test the addEvaluation method in the EvaluationController.
+     * Verifies that a new evaluation is added successfully.
+     */
+    @Test
+    void testAddEvaluation() {
+        when(evaluationService.addEvaluation(evaluation1)).thenReturn(evaluation1);
+
+        ResponseEntity<Evaluation> response = (ResponseEntity<Evaluation>) evaluationController.addEvaluation(evaluation1);
+
+        assertNotNull(response);
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(evaluation1, response.getBody());
+        verify(evaluationService, times(1)).addEvaluation(evaluation1);
+    }
     
 }
