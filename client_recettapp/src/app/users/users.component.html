@@ -1,14 +1,16 @@
-<div class="container mt-5">
+<div class="container users-container mt-5">
+  <!-- Error message -->
+  <div *ngIf="err" class="alert alert-danger" role="alert">
+    {{ errMessage }}
+  </div>
+
+  <!-- Title -->
   <div class="text-center mb-4">
     <h1 class="text-success">Users</h1>
   </div>
 
-  <!-- Message ou Tableau -->
-  <div *ngIf="filteredUsers.length === 0" class="alert alert-info text-center shadow-sm">
-    <i class="bi bi-info-circle"></i> No users found. Add some users to get started!
-  </div>
-
-  <div *ngIf="filteredUsers.length > 0" class="table-responsive shadow-sm">
+  <!-- Table -->
+  <div class="table-responsive shadow-sm">
     <table class="table table-striped table-hover align-middle">
       <thead class="table-dark">
         <tr>
@@ -27,15 +29,20 @@
           <td class="text-center">{{ user.date_registration | date: 'dd/MM/yyyy' }}</td>
           <td class="text-center">
             <button *ngIf="!user.blocked" class="btn btn-warning btn-sm me-2" (click)="toggleBlockStatus(user.email, user.blocked)">
-              <i class="bi bi-shield-x"></i> Block
+              <i class="bi bi-lock"></i> Block
             </button>
             <button *ngIf="user.blocked" class="btn btn-success btn-sm me-2" (click)="toggleBlockStatus(user.email, user.blocked)">
-              <i class="bi bi-shield-check"></i> Unblock
+              <i class="bi bi-unlock"></i> Unblock
             </button>
             <button class="btn btn-danger btn-sm" (click)="onDelete(user.id)">
               <i class="bi bi-trash"></i> Delete
             </button>
           </td>
+        </tr>
+
+        <!-- No data row -->
+        <tr *ngIf="filteredUsers.length === 0">
+          <td colspan="5" class="text-center text-muted">No users found.</td>
         </tr>
       </tbody>
     </table>
@@ -51,8 +58,8 @@
       Previous
     </button>
     <button
-      class="btn btn-outline-primary mx-1"
       *ngFor="let page of [].constructor(totalPages); let i = index"
+      class="btn btn-outline-primary mx-1"
       [class.active]="currentPage === i + 1"
       (click)="onPageChange(i + 1)"
     >
