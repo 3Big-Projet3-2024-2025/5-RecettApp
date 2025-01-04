@@ -96,5 +96,27 @@ export class RecipeDetailComponent implements OnInit {
       }
   }
 
+  addEvaluation(): void {
+    this.evaluationService.addEvaluation(this.evaluation).subscribe(
+      (next: Evaluation) => {
+        console.log("id retourne : ", next.id);
+        this.addImage(next);
+
+        Swal.fire({
+          title: 'Évaluation ajoutée !',
+          text: 'Votre évaluation a été ajoutée avec succès !',
+          icon: 'success',
+          confirmButtonText: 'Fermer'
+        });
+
+        console.log("Added");
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+
+
 
 }
