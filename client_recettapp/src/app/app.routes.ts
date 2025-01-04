@@ -16,7 +16,7 @@ import { RecipeContestListComponent } from './recipe-contest-list/recipe-contest
 import { UserRecipeListComponent } from './user-recipe-list/user-recipe-list.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { UserInfoComponent } from './user-info/user-info.component';
-
+import { NotAuthorizedComponent } from './not-authorized/not-authorized.component';
 
 
 
@@ -39,7 +39,9 @@ export const routes: Routes = [
         { path: 'myrecipe', component:UserRecipeListComponent},
         { path: 'home', component: HomePageComponent},
         { path:'User-info',component:UserInfoComponent},
+        {path:'not-authorized',component:NotAuthorizedComponent},
         { path: '**', component: NotFoundComponent },
+        
 
 
 ];
