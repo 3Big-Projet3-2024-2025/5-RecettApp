@@ -1,4 +1,9 @@
 <div class="container">
+  @if(errMsg){
+    <div class="alert alert-warning mt-3" role="alert">
+      {{errMsg}}
+    </div>
+  }
     <h2 class="my-5 text-success">Registration for {{contest.title}}</h2>
     <div class="card">
         <div class="card-body">
@@ -29,5 +34,7 @@
             Proceed to Payment
           </button>
         </div>
-      </div>
+    </div>
+
+    
 </div>
