@@ -110,7 +110,28 @@ public class TestEntryController {
                 .andExpect(jsonPath("$.status").value("pending"));
     }
 
-    
+
+    /**
+     * Tests the POST endpoint to create a new entry.
+     * Checks if the response contains the correct data of the created entry.
+     *
+     * @throws Exception Exception if an error occurs during the request or response processing.
+     */
+    @Test
+    void testAddEntry() throws Exception {
+        Entry entry = createSampleEntry();
+
+        given(entryService.addEntry(Mockito.any(Entry.class))).willReturn(entry);
+
+        mockMvc.perform(post("/entries")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(entry)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.status").value("pending"));
+    }
+
+
 
 
 }
