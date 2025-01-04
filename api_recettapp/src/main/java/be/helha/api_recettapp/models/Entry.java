@@ -6,35 +6,43 @@ import lombok.Data;
 import java.util.UUID;
 
 /**
- * This class reprents each entry for an user to a contest
+ * Represents an entry for a user in a contest.
+ * Each entry is associated with a specific user, contest, and may include a unique identifier and status.
  */
 @Data
 @Entity
 public class Entry {
+
     /**
-     * Id of entry
+     * Unique identifier for the entry.
+     * Automatically generated using the IDENTITY strategy.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     /**
-     * User link to the entry
+     * The user associated with this entry.
      */
     @ManyToOne
     private Users users;
 
     /**
-     * Contest link to the entry
+     * The contest associated with this entry.
      */
     @ManyToOne
     private Contest contest;
 
+    /**
+     * The status of the entry.
+     * This can represent the current state of the entry in the contest.
+     */
     private String status;
 
+    /**
+     * An optional unique identifier (UUID) for the entry.
+     * This field can be used for external references or tracking purposes.
+     */
     @Nullable
     private UUID uuid;
-
-
-
 }
