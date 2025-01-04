@@ -6,11 +6,12 @@ import { CommonModule } from '@angular/common';
 import { RecipeComponentService } from '../services/recipe_Service/recipe-component.service';
 import { ImageServiceService } from '../services/image-service.service';
 import { NavBarComponent } from "../nav-bar/nav-bar.component";
+import { EvaluationComponent } from "../evaluation/evaluation.component";
 
 @Component({
   selector: 'app-recipe-detail',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, EvaluationComponent],
   templateUrl: './recipe-detail.component.html',
   styleUrl: './recipe-detail.component.css'
 })
@@ -34,14 +35,14 @@ export class RecipeDetailComponent implements OnInit {
         },(err) => {
           console.log(err.error.message)
         }
-        
+
       );}
   }
 
   getImage(imageName: string){
     this.imaService.getImage(imageName).subscribe(
       (next: Blob) => {
-       
+
         this.imageRecipe = URL.createObjectURL(next);
       },
       (err) => {
@@ -58,7 +59,7 @@ export class RecipeDetailComponent implements OnInit {
     }, (err) => {
       console.log(err.error.message)
      }
-    ); 
+    );
   }
 
   backRecipeList(): void {
