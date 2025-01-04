@@ -15,7 +15,7 @@ export interface Recipe {
     difficulty_level: string; 
     instructions: string; 
     photo_url?: string;
-    approved: boolean; 
+    masked: boolean; 
     recipe_type?: RecipeType; 
     entry?: Entry; 
     components: RecipeComponent[];

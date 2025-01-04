@@ -30,6 +30,7 @@ keycloak:
   resource: backend_recettapp
   credentials:
     secret: JrfNDH4MkdNerOeFY6VIOHQCMkSxx9E9
+
   public-client: false
 
 

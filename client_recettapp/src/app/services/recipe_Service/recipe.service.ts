@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Recipe } from '../../models/recipe';
@@ -32,4 +32,21 @@ export class RecipeService {
   getRecipeByIdContest(idContest: number): Observable<Recipe[]> {
     return this.http.get<Recipe[]>(`${this.Url}/contest/${idContest}`); 
   } 
+  
+  getAllRecipesPaginated(page: number, size: number): Observable<any> {
+    const params = { page: page.toString(), size: size.toString() };
+    return this.http.get<any>(this.Url, { params });
+  }
+
+  getRecipesByUserMail(email: string, page: number, size: number): Observable<any> {
+    const params = new HttpParams()
+      .set('email', email)
+      .set('page', page.toString())
+      .set('size', size.toString());
+    return this.http.get<any>(`${this.Url}/usermail`, { params });
+  }
+
+  anonymizeRecipe(id: number): Observable<void> {
+    return this.http.put<void>(`${this.Url}/anonymize/${id}`, null);
+  }
 }
