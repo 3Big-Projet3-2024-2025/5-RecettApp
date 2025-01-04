@@ -43,7 +43,7 @@ export class AvailableContestComponent {
   }
 
   getAllContests(page: number = 0, size: number): void {
-    const sub = this.contestService.getAllContests(page, size).subscribe({
+    const sub = this.contestService.getAllAvailableContests(page, size).subscribe({
       next: (data) => {
         console.log(data.content); 
         this.contests = data.content; 

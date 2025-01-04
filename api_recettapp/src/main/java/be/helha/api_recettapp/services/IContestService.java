@@ -20,6 +20,13 @@ public interface IContestService {
      */
     public Page<Contest> getContests(Pageable page);
 
+    /**
+     * Get a paginated list of available contests
+     *
+     * @param page the object containing pagination information
+     * @return List of Page objects
+     */
+    public Page<Contest> getAvailableContests(Pageable page);
 
     /**
      * Get all the contests

@@ -36,6 +36,15 @@ public class ContestService implements IContestService {
     }
 
     /**
+     * @param page the object containing pagination information
+     * @return
+     */
+    @Override
+    public Page<Contest> getAvailableContests(Pageable page) {
+        return repository.findAvailableContests(page);
+    }
+
+    /**
      * Get all contests
      * @return @type List<>  of contests
      */
