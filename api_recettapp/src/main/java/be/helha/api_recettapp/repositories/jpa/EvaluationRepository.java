@@ -2,7 +2,9 @@ package be.helha.api_recettapp.repositories.jpa;
 
 import be.helha.api_recettapp.models.Evaluation;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -26,4 +28,22 @@ public interface EvaluationRepository extends JpaRepository<Evaluation, Long> {
      * @return A list of evaluations linked to the given recipe ID.
      */
     List<Evaluation> findByRecipeId(Long recipeId);
+
+    /**
+     * Checks whether an evaluation exists for the user (via Entry) and the same recipe
+     * in the time range.
+     */
+    @Query("""
+        SELECT CASE WHEN COUNT(e) > 0 THEN TRUE ELSE FALSE END
+        FROM Evaluation e
+        WHERE e.entry.users.id = :userId
+          AND e.recipe.id = :recipeId
+          AND e.dateEvaluation BETWEEN :start AND :end
+    """)
+    boolean existsByUserAndRecipeAndDateBetween(
+            @org.springframework.data.repository.query.Param("userId") Long userId,
+            @org.springframework.data.repository.query.Param("recipeId") Long recipeId,
+            @org.springframework.data.repository.query.Param("start") LocalDateTime start,
+            @org.springframework.data.repository.query.Param("end") LocalDateTime end
+    );
 }
