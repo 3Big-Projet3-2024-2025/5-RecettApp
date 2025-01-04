@@ -70,7 +70,7 @@
     </div>
   </div>
 
-  <!-- Liste des catégories -->
+  <!-- Liste des concours -->
   <table class="table table-hover table-bordered align-middle">
     <thead class="table-dark">
       <tr>
@@ -104,4 +104,14 @@
       </tr>
     </tbody>
   </table>
+  <div class="row">
+    <div class="col"></div>
+    <div class="col-3">
+        <div *ngIf="totalPages > 1">
+            <button [disabled]="currentPage === 0" (click)="changePage(currentPage - 1)">Previous</button>
+            <span>Page {{ currentPage + 1 }} of {{ totalPages }}</span>
+            <button [disabled]="currentPage === totalPages - 1" (click)="changePage(currentPage + 1)">Next</button>
+        </div>
+    </div>
+</div>
 </div>
