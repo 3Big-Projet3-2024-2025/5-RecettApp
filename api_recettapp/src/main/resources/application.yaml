@@ -17,19 +17,12 @@ spring:
           #URL to validate JWT
           jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
 
-jwt:
-  secret: fjkdfngdbjzebnhubvshubsgdvgbjhn435345fsdnbvxhcbghxcbvxcvxfjkdfngdbjzebnhubvshubsgdvgbjhn435345fsdnbvxhcbghxcbvxcvx
-  expirationTokenMs: 3600000
-  expirationRefreshTokenMs: 604800000
-
-
-
 keycloak:
   auth-server-url: http://localhost:8081/
   realm: recettapp
   resource: backend_recettapp
   credentials:
-    secret: 0aJMR1Fvn0hG9EdZtCJa8lhgZoB161ao
+    secret: VWdTknIOvlOEFDS2KZoSbmW5I0uF8PYG
   public-client: false
 
 
