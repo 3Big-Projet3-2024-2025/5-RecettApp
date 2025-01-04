@@ -1,6 +1,8 @@
 package be.helha.api_recettapp.repositories.jpa;
 
+import be.helha.api_recettapp.models.Contest;
 import be.helha.api_recettapp.models.Entry;
+import be.helha.api_recettapp.models.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -24,7 +26,7 @@ public interface EntryRepository extends JpaRepository<Entry, Integer> {
     Entry findByUuid(UUID uuid);
     List<Entry> findEntriesByContestId(Integer idContest);
     List<Entry> findEntriesByUsersId(long idUsers);
-
+    Entry findByUsersAndContest(Users user, Contest contest);
     @Query("SELECT e FROM Entry e WHERE e.contest.id = :idContest AND e.users.email = :userMail")
     Optional<Entry> findByContestIdAndUserEmail(@Param("idContest") int idContest, @Param("userMail") String userMail);
 
