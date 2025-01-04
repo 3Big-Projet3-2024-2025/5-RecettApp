@@ -1,25 +1,20 @@
-.pagination-box {
-    display: flex;
-    gap: 10px;
-  }
-  
-  .page-box {
-    border: 1px solid #198754;
-    border-radius: 5px;
-    padding: 5px 10px;
-    background-color: white;
-    color: #198754;
-    cursor: pointer;
-    font-weight: bold;
-  }
-  
-  .page-box:hover {
-    background-color: #198754;
-    color: white;
-  }
-  
-  .active-page {
-    background-color: #198754;
-    color: white;
-  }
-  
+.page-box {
+  border: 1px solid #28a745;
+  color: #28a745;
+  background: transparent;
+  padding: 5px 10px;
+  margin: 0 2px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.page-box:hover {
+  background: #28a745;
+  color: white;
+}
+
+.active-page {
+  background: #28a745;
+  color: white;
+  font-weight: bold;
+}
