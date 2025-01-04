@@ -79,4 +79,20 @@ public class TestEvaluationController {
         verify(evaluationService, times(1)).addEvaluation(evaluation1);
     }
 
+
+    /**
+     * Test the deleteEvaluation method when the user is an admin.
+     * Verifies that the evaluation is deleted successfully for an admin.
+     */
+    @Test
+    void testDeleteEvaluationAsAdmin() {
+        doNothing().when(evaluationService).deleteEvaluation(1L, true);
+
+        ResponseEntity<Void> response = evaluationController.deleteEvaluation(1L, true);
+
+        assertNotNull(response);
+        assertEquals(204, response.getStatusCodeValue());
+        verify(evaluationService, times(1)).deleteEvaluation(1L, true);
+    }
+
 }
