@@ -18,6 +18,9 @@ import { UserRecipeListComponent } from './user-recipe-list/user-recipe-list.com
 import { NotFoundComponent } from './not-found/not-found.component';
 import { UserInfoComponent } from './user-info/user-info.component';
 import { NotAuthorizedComponent } from './not-authorized/not-authorized.component';
+import { ApplePieComponent } from './htmls/apple-pie/apple-pie.component';
+import { ChickenBreastComponent } from './htmls/chicken-breast/chicken-breast.component';
+import { VeganRecipeComponent } from './htmls/vegan-recipe/vegan-recipe.component';
 
 
 
@@ -41,6 +44,9 @@ export const routes: Routes = [
         { path: 'cancel', component:PaypalCancelComponent},
         { path: 'myrecipe', component:UserRecipeListComponent},
         { path: 'home', component: HomePageComponent},
+        { path: 'home/apple-pie', component: ApplePieComponent },
+        { path: 'home/chicken-breast', component: ChickenBreastComponent },
+        { path: 'home/vegan-recipe', component: VeganRecipeComponent },
         { path:'User-info',component:UserInfoComponent},
         {path:'not-authorized',component:NotAuthorizedComponent},
         { path: '**', component: NotFoundComponent },
