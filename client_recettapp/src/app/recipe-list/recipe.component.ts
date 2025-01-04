@@ -20,7 +20,7 @@ export class RecipeComponent {
   recipes: Recipe[] = [];
   isLoading = false;
   currentPage = 0;
-  pageSize = 3;
+  pageSize = 10;
   totalPages = 0;
   searchTerm: string = '';
 
