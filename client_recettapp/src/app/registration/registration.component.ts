@@ -57,13 +57,14 @@ export class RegistrationComponent {
     this.cancelRegistration.emit();
   }
 
-  getUserByEmail(email : string):void{
-    const sub = this.userService.findByEmail(email).subscribe({
+  async getUserByEmail(email: string): Promise<void> {
+    const token = await this.keycloakService.getToken();
+    const sub = this.userService.findByEmail(email, token).subscribe({
       next: (user) => {
         this.user = user;
         console.log(this.user);
         sub.unsubscribe();
-      }, error : (err) => {
+      }, error: (err) => {
         console.log('Error getting user informations');
         sub.unsubscribe();
       }
