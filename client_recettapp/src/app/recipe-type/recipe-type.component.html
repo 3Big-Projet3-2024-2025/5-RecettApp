@@ -1,14 +1,19 @@
 <div class="container mt-5">
   <div class="row justify-content-between align-items-center mb-4">
-    <h1 class="col-auto text-primary">Recipe Types</h1>
-    <button class="btn btn-success col-auto" (click)="resetForm()">
+    <h1 class="col-auto text-success">Recipe Types</h1>
+    <button class="btn btn-success col-auto" (click)="toggleForm()">
       <i class="bi bi-plus-circle"></i> Add Recipe Type
     </button>
   </div>
 
+  <!-- Message When No Recipe Types Available -->
+  <div *ngIf="recipeTypes.length === 0" class="alert alert-info text-center shadow-sm">
+    <i class="bi bi-info-circle"></i> No recipe types available. Add one to get started!
+  </div>
+
   <!-- Recipe Type Form -->
-  <form [formGroup]="recipeTypeForm" (ngSubmit)="saveRecipeType()" class="card border-primary mb-4">
-    <div class="card-header bg-primary text-white">
+  <form *ngIf="showForm" [formGroup]="recipeTypeForm" (ngSubmit)="saveRecipeType()" class="card border-success mb-4">
+    <div class="card-header bg-success text-white">
       <h5 class="mb-0">{{ isEditing ? 'Edit Recipe Type' : 'Add New Recipe Type' }}</h5>
     </div>
     <div class="card-body">
@@ -29,7 +34,7 @@
       </div>
     </div>
     <div class="card-footer d-flex justify-content-end">
-      <button type="submit" class="btn btn-primary me-2" [disabled]="recipeTypeForm.invalid">
+      <button type="submit" class="btn btn-success me-2" [disabled]="recipeTypeForm.invalid">
         <i class="bi bi-save"></i> {{ isEditing ? 'Update' : 'Add +' }}
       </button>
       <button type="button" class="btn btn-secondary" (click)="resetForm()">
@@ -37,11 +42,6 @@
       </button>
     </div>
   </form>
-
-  <!-- Empty State Message -->
-  <div *ngIf="recipeTypes.length === 0" class="alert alert-info">
-    <i class="bi bi-info-circle"></i> No recipe types available. Add one to get started!
-  </div>
 
   <!-- Recipe Types Table -->
   <table *ngIf="filteredRecipeTypes.length > 0" class="table table-striped table-hover table-bordered">
@@ -68,19 +68,29 @@
 
   <!-- Pagination Controls -->
   <div *ngIf="totalPages > 1" class="d-flex justify-content-center mt-3">
-    <button class="btn btn-outline-primary me-2" [disabled]="currentPage === 1" (click)="onPageChange(currentPage - 1)">
+    <button
+      class="btn btn-outline-success me-2"
+      [disabled]="currentPage === 1"
+      (click)="onPageChange(currentPage - 1)"
+    >
       Previous
     </button>
+    <div class="pagination-box d-flex align-items-center">
+      <span *ngFor="let page of [].constructor(totalPages); let i = index">
+        <button
+          class="page-box"
+          [ngClass]="{ 'active-page': currentPage === i + 1 }"
+          (click)="onPageChange(i + 1)"
+        >
+          {{ i + 1 }}
+        </button>
+      </span>
+    </div>
     <button
-      *ngFor="let page of [].constructor(totalPages); let i = index"
-      class="btn"
-      [class.btn-primary]="currentPage === i + 1"
-      [class.btn-outline-primary]="currentPage !== i + 1"
-      (click)="onPageChange(i + 1)"
+      class="btn btn-outline-success ms-2"
+      [disabled]="currentPage === totalPages"
+      (click)="onPageChange(currentPage + 1)"
     >
-      {{ i + 1 }}
-    </button>
-    <button class="btn btn-outline-primary ms-2" [disabled]="currentPage === totalPages" (click)="onPageChange(currentPage + 1)">
       Next
     </button>
   </div>
