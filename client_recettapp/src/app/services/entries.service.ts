@@ -40,7 +40,7 @@ export class EntriesService {
         return this.http.get<Entry>(url);
       })
     );
-        
+
   }
   async getUserMail(){
      const token = await this.authService.getToken();
