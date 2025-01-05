@@ -28,7 +28,11 @@ public class RecipeController {
     @GetMapping
     public Page<Recipe> getRecipes( @RequestParam(required = false) String keyword,
                                     Pageable pageable) {
-        return recipeService.getRecipes(keyword, pageable);
+        try {
+            return recipeService.getRecipes(keyword, pageable);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to fetch recipes: " + e.getMessage());
+        }
     }
 
     /**
@@ -38,7 +42,11 @@ public class RecipeController {
      */
     @GetMapping("/all")
     public List<Recipe> getAllRecipes() {
-        return recipeService.getRecipes();
+        try {
+            return recipeService.getRecipes();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to fetch all recipes: " + e.getMessage());
+        }
     }
 
     /**
@@ -50,7 +58,13 @@ public class RecipeController {
      */
     @GetMapping("/{id}")
     public Recipe getRecipeById(@PathVariable int id) {
-        return recipeService.getRecipeById(id);
+        try {
+            return recipeService.getRecipeById(id);
+        } catch (NoSuchElementException e) {
+            throw new NoSuchElementException("Recipe with ID " + id + " not found: " + e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to fetch recipe by ID: " + e.getMessage());
+        }
     }
     /**
      * Retrieves a recipe by its ID.
@@ -61,7 +75,11 @@ public class RecipeController {
      */
     @GetMapping("contest/{idContest}")
     public List<Recipe> getRecipeByIdContest(@PathVariable int idContest) {
-        return recipeService.getRecipeByIdContest(idContest);
+        try {
+            return recipeService.getRecipeByIdContest(idContest);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to fetch recipes for contest ID " + idContest + ": " + e.getMessage());
+        }
     }
 
     /**
@@ -72,9 +90,13 @@ public class RecipeController {
      */
     @PostMapping
     public Recipe addRecipe(@RequestBody Recipe recipe) {
-        recipe.setId(0);
-        recipe.setMasked(false);
-        return recipeService.addRecipe(recipe);
+        try {
+            recipe.setId(0);
+            recipe.setMasked(false);
+            return recipeService.addRecipe(recipe);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to add recipe: " + e.getMessage());
+        }
     }
 
     /**
@@ -86,7 +108,13 @@ public class RecipeController {
      */
     @PutMapping
     public Recipe updateRecipe(@RequestBody Recipe recipe){
-        return recipeService.updateRecipe(recipe);
+        try {
+            return recipeService.updateRecipe(recipe);
+        } catch (NoSuchElementException e) {
+            throw new NoSuchElementException("Recipe with ID " + recipe.getId() + " not found: " + e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to update recipe: " + e.getMessage());
+        }
     }
 
     /**
@@ -97,7 +125,13 @@ public class RecipeController {
      */
     @DeleteMapping("/{id}")
     public void deleteRecipe(@PathVariable int id) {
-        recipeService.deleteRecipe(id);
+        try {
+            recipeService.deleteRecipe(id);
+        } catch (NoSuchElementException e) {
+            throw new NoSuchElementException("Recipe with ID " + id + " not found: " + e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to delete recipe: " + e.getMessage());
+        }
     }
 
     /**
@@ -112,9 +146,11 @@ public class RecipeController {
     public Page<Recipe> getRecipesByUserMailWithPagination(@RequestParam String email,@RequestParam String keyword,@RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         try {
-            return recipeService.getRecipeByUserMail(email, keyword,page, size);
+            return recipeService.getRecipeByUserMail(email, keyword, page, size);
+        } catch (NoSuchElementException e) {
+            throw new NoSuchElementException("User with email " + email + " has no recipes: " + e.getMessage());
         } catch (Exception e) {
-            throw new NoSuchElementException("This user has no recipes" + e.getMessage());
+            throw new RuntimeException("Failed to fetch recipes for user: " + e.getMessage());
         }
     }
 
@@ -129,8 +165,10 @@ public class RecipeController {
     public boolean anonymizeRecipe(@PathVariable int id) {
         try {
             return recipeService.anonymizeRecipe(id);
+        } catch (NoSuchElementException e) {
+            throw new NoSuchElementException("Recipe with ID " + id + " not found for anonymization: " + e.getMessage());
         } catch (Exception e) {
-            throw new RuntimeException(" can't anonymize the recipe :" + e.getMessage());
+            throw new RuntimeException("Failed to anonymize recipe: " + e.getMessage());
         }
     }
 }
