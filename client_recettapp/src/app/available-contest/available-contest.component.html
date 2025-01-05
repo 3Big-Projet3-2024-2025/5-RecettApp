@@ -1,55 +1,59 @@
 <div class="container">
-    <!-- Show contest list  -->
-    @if(!showRegistration) {
-    <h1 class="my-5 text-success">Available Contests</h1>
-    @for(contest of contests; track contest) {
-        @if(contest.status != "full"){
-            <div class="row">
-                <div class="card mb-3 shadow-sm" style="width: 80vw;">
-                    <div class="card-body">
-                        <h5 class="card-title">{{contest.title}}</h5>
-                        <div>
-                            <div class="row">
-                                <div class="col">
-                                    <p class="card-text">{{contest.category?.description}}</p>
-                                </div>
-                            </div>
-                            <div class="row justify-content-end">
-                                <div class="col-8"></div>
-                                <div class="col-3">
-                                    @if(contest.id) {
-                                    <a (click)="getDetailContest(contest.id)" class="btn btn-success">Sign up</a>
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <!-- Show contest list -->
+    <div *ngIf="!showRegistration">
+      <h1 class="my-5 text-success">Available Contests</h1>
+      <div *ngFor="let contest of contests; trackBy: trackByContestId">
+        <div *ngIf="contest.id !== undefined && contestAccess[contest.id] === false"  class="row">
+          <div class="card mb-3 shadow-sm" style="width: 80vw;">
+            <div class="card-body">
+              <h5 class="card-title">{{ contest.title }}</h5>
+              <div>
+                <div class="row">
+                  <div class="col">
+                    <p class="card-text">{{ contest.category?.description }}</p>
+                  </div>
                 </div>
+                <div class="row justify-content-end">
+                  <div class="col-8"></div>
+                  <div class="col-3">
+                    <a
+                    *ngIf="contest.id !== undefined && contestAccess[contest.id] === true"
+                    (click)="getDetailContest(contest.id!)"
+                    class="btn btn-success"
+                    >Go in</a
+                    >
+                    <a
+                    *ngIf="contest.id !== undefined && contestAccess[contest.id] === false"
+                    (click)="getDetailContest(contest.id!)"
+                    class="btn btn-success"
+                    >Sign up</a
+                    >
+
+                  </div>
+                </div>
+              </div>
             </div>
-            
-        }
-    
-    } @empty {
-    <li>No contests</li>
-    }
-    <div class="row">
+          </div>
+        </div>
+      </div>
+      <div class="row">
         <div class="col"></div>
         <div class="col-3">
-            <div *ngIf="totalPages > 1">
-                <button [disabled]="currentPage === 0" (click)="changePage(currentPage - 1)">Previous</button>
-                <span>Page {{ currentPage + 1 }} of {{ totalPages }}</span>
-                <button [disabled]="currentPage === totalPages - 1" (click)="changePage(currentPage + 1)">Next</button>
-            </div>
+          <div *ngIf="totalPages > 1">
+            <button [disabled]="currentPage === 0" (click)="changePage(currentPage - 1)">Previous</button>
+            <span>Page {{ currentPage + 1 }} of {{ totalPages }}</span>
+            <button [disabled]="currentPage === totalPages - 1" (click)="changePage(currentPage + 1)">Next</button>
+          </div>
         </div>
+      </div>
     </div>
-    
-    }
-
-    <!-- Show registration  -->
-    @if(showRegistration && selectedContest) {
-    <app-registration
+  
+    <!-- Show registration -->
+    <div *ngIf="showRegistration && selectedContest">
+      <app-registration
         [contest]="selectedContest"
-        (cancelRegistration)="onCancelRegistration()">
-    </app-registration>
-    }
-</div>
+        (cancelRegistration)="onCancelRegistration()"
+      ></app-registration>
+    </div>
+  </div>
+  
