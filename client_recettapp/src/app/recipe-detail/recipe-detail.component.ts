@@ -86,7 +86,9 @@ export class RecipeDetailComponent implements OnInit {
       
      try {
           if (recipe.entry?.contest?.id) {
-            this.entryService.getEntryByUserMailAndIdContest(recipe.entry?.contest?.id).subscribe(
+            
+            const token = await this.keycloakService.getToken();
+            this.entryService.getEntryByUserMailAndIdContest(recipe.entry?.contest?.id,token).subscribe(
               entry => {
                 if (entry.status == 'waiting') {
                   console.log("you have not completed your registration at the entry");
