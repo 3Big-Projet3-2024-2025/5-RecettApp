@@ -28,11 +28,16 @@ export class RecipeComponent {
 
 
   constructor(private service: RecipeService,private router:Router, private imaService: ImageServiceService,
-              private keycloakService: KeycloakService) {}
+              private keycloakService: KeycloakService,) {}
 
 
    ngOnInit(): void {
-    this.loadRecipes(this.currentPage, this.pageSize);
+    if (this.keycloakService.getUserRoles().includes('admin')) {
+      this.loadRecipes(this.currentPage, this.pageSize);
+    }else{
+      console.log("you are not admin");
+      this.router.navigate(['/not-authorized']);
+    }
   }
 
   async loadRecipes(page: number, size: number): Promise<void> {

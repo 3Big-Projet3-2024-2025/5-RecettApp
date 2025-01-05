@@ -69,8 +69,15 @@ constructor(private service: RecipeService,private router:Router, private route:
           this.router.navigate(['/home']); // Redirection if entry is null
         } else {
           this.entry = entry;
-          this.getRecipe(contestId);
+
+
+          if (entry.status != 'registered') {
+            console.log("you have not completed your registration at the entry");
+            this.router.navigate(['/not-authorized']);
+          }
+          this.getRecipe(contestId); 
           this.isContestFinish(entry);
+
         }
       },
       error: (error) => {

@@ -69,6 +69,37 @@ export class RecipeDetailComponent implements OnInit {
   }
 
 
+
+  async checkAccess(recipe: Recipe) {
+      
+     try {
+          if (recipe.entry?.contest?.id) {
+            
+            const token = await this.keycloakService.getToken();
+            this.entryService.getEntryByUserMailAndIdContest(recipe.entry?.contest?.id,token).subscribe(
+              entry => {
+                if (entry) {
+                  console.log(" entry rertourner : ",entry)
+                  if (entry.status != 'registered') {
+                    console.log("you have not completed your registration at the entry");
+                    this.router.navigate(['/not-authorized']);
+                  }
+                }else {
+                  this.router.navigate(['/not-authorized']);
+                }
+              },
+              err => {
+                console.log(err);
+                this.router.navigate(['/not-authorized']);
+              }
+            )
+          }
+        } catch (error) {
+          console.error("Error decoding the token:", error);
+          this.router.navigate(['/not-authorized']); 
+        }
+    }
+
   async getEntry() {
     if (this.recipe?.entry?.contest?.id) {
       const token = await this.keycloakService.getToken();
@@ -86,6 +117,7 @@ export class RecipeDetailComponent implements OnInit {
             icon: 'error',
             confirmButtonText: 'OK'
           });
+
         }
       );
     }

@@ -22,6 +22,7 @@ import { NotAuthorizedComponent } from './not-authorized/not-authorized.componen
 import { ApplePieComponent } from './htmls/apple-pie/apple-pie.component';
 import { ChickenBreastComponent } from './htmls/chicken-breast/chicken-breast.component';
 import { VeganRecipeComponent } from './htmls/vegan-recipe/vegan-recipe.component';
+import { UserContestComponent } from './user-contest/user-contest.component';
 
 
 
@@ -45,6 +46,7 @@ export const routes: Routes = [
         { path: 'success', component:PaypalSuccessComponent, canActivate: [KeycloakGuard]},
         { path: 'cancel', component:PaypalCancelComponent, canActivate: [KeycloakGuard]},
         { path: 'myrecipe', component:UserRecipeListComponent, canActivate: [KeycloakGuard]},
+        { path: 'mycontests', component: UserContestComponent, canActivate: [KeycloakGuard]},
         { path: 'home', component: HomePageComponent},
         { path: 'home/apple-pie', component: ApplePieComponent },
         { path: 'home/chicken-breast', component: ChickenBreastComponent },

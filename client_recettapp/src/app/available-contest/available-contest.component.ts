@@ -5,57 +5,86 @@ import { KeycloakService } from 'keycloak-angular';
 import { Router } from '@angular/router';
 import { RegistrationComponent } from '../registration/registration.component';
 import { CommonModule } from '@angular/common';
-
+import { EntriesService } from '../services/entries.service';
 
 @Component({
   selector: 'app-available-contest',
   standalone: true,
   imports: [CommonModule, RegistrationComponent],
   templateUrl: './available-contest.component.html',
-  styleUrl: './available-contest.component.css'
+  styleUrls: ['./available-contest.component.css'],
 })
 export class AvailableContestComponent {
-  contests: any[] = [];
-  currentContest: Contest = this.initContest();
+  contests: Contest[] = [];
+  contestAccess: { [id: number]: boolean } = {};
   selectedContest?: Contest;
   showRegistration = false;
   totalPages: number = 0;
   currentPage: number = 0;
 
-  initContest(): Contest {
-    return { title: "", max_participants: 0, start_date: "", end_date: "", status: "" };
-  }
-
   constructor(
     private contestService: ContestService,
-    private keycloakService : KeycloakService,
-    private router : Router
+    private keycloakService: KeycloakService,
+    private entryService: EntriesService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     this.getAllContests(this.currentPage, 5);
-    //console.log(this.keycloakService.getToken());
-  }
-
-  changePage(page: number): void {
-    this.currentPage = page;
-    this.getAllContests(this.currentPage,5);
   }
 
   async getAllContests(page: number = 0, size: number): Promise<void> {
     const token = await this.keycloakService.getToken();
     const sub = this.contestService.getAllAvailableContests(page, size, token).subscribe({
       next: (data) => {
-        console.log(data.content);
         this.contests = data.content;
         this.totalPages = data.totalPages;
+        this.checkAccessForContests();
         sub.unsubscribe();
       },
       error: (err) => {
-        console.error("ERROR GETALLCONTESTS", err);
+        console.error('ERROR GETALLCONTESTS', err);
         sub.unsubscribe();
+      },
+    });
+  }
+
+  async checkAccessForContests(): Promise<void> {
+    const token = await this.keycloakService.getToken();
+    this.contests.forEach((contest) => {
+      this.entryService.getEntryByUserMailAndIdContest(contest.id!, token).subscribe({
+        next: (entry) => {
+          if (entry) {
+              if (contest.id) { 
+              this.contestAccess[contest.id] = entry?.status === 'registered';
+            }
+            else {
+              if (contest.id) { 
+              this.contestAccess[contest.id] = false;
+              }
+            }
+          }
+         
+        },
+        error: (err) => {
+          if (contest.id) { 
+            this.contestAccess[contest.id] = false;
+          }
+          console.error(`Error checking access for contest ${contest.id}`, err);
+        },
+      });
+      if (contest.id) { 
+        this.contestAccess[contest.id] = false;
       }
     });
+  }
+
+  getDetailContest(id: number): void {
+    const contest = this.contests.find((c) => c.id === id);
+    if (contest) {
+      this.selectedContest = contest;
+      this.showRegistration = true;
+    }
   }
 
   onCancelRegistration(): void {
@@ -63,16 +92,33 @@ export class AvailableContestComponent {
     this.selectedContest = undefined;
   }
 
-  getDetailContest(id: number): void{
-    //this.router.navigate(['/available-contests', id]);
-
-    const contest = this.contests.find(c => c.id === id);
-    if(contest){
-      this.selectedContest = contest;
-      this.showRegistration = true;
+  changePage(page: number): void {
+    this.currentPage = page;
+    this.getAllContests(this.currentPage, 5);
+  }
+  trackByContestId(index: number, contest: Contest): number | undefined {
+    return contest.id;
+  }
+  
+  isContestFinish(contest: Contest): boolean {
+    if (!contest.end_date) {
+      console.error("Contest end_date is missing.");
+      return false;
+    }
+  
+    try {
+      const currentDate = new Date();
+      const contestEndDate = new Date(contest.end_date);
+  
+      if (isNaN(contestEndDate.getTime())) {
+        console.error("Invalid end_date format:", contest.end_date);
+        return false;
+      }
+  
+      return currentDate > contestEndDate;
+    } catch (error) {
+      console.error("Error in isContestFinish:", error);
+      return false;
     }
   }
-
 }
-
-
