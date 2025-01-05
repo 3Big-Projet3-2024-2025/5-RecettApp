@@ -26,7 +26,22 @@ displayedRecipes: Recipe[] = [];
 MaxRecipeRate: RecipeRate[] = [];
 searchTerm: string = '';
 contestID: number |undefined;
-entry: Entry = {}
+entry: Entry = {};
+contestIsFinish = false ;
+recipeWin: Recipe = {
+  id: 0,
+  title: '',
+  description: '',
+  category: '',
+  preparation_time: 0,
+  cooking_time: 0,
+  servings: 0,
+  difficulty_level: '',
+  instructions: '',
+  masked: false,
+  components: [],
+  image: []
+}
 
 // Pagination properties
 currentPage: number = 0;
@@ -52,6 +67,7 @@ constructor(private service: RecipeService,private router:Router, private route:
         } else {
           this.entry = entry;
           this.getRecipe(contestId);
+          this.isContestFinish(entry);
         }
       },
       error: (error) => {
@@ -81,27 +97,59 @@ constructor(private service: RecipeService,private router:Router, private route:
         this.totalPages = Math.ceil(this.filteredRecipes.length / this.itemsPerPage);
         this.updateDisplayedRecipes();
         this.calculeRecipewithmaxrate();
+
       });
     });
   }
 
+  isContestFinish(entry: Entry) {
+    if (!entry || !entry.contest || !entry.contest.end_date) {
+        this.contestIsFinish = false;
+        console.error("Entry, contest, or end_date is missing.");
+        return;
+    }
 
-  calculeRecipewithmaxrate() {
-    this.recipes.forEach((recipe) => {
-      let rate = 0;
+    try {
+        const currentDate = new Date();
+        const contestEndDate = new Date(entry.contest.end_date);
 
-      this.evaluationservice.getEvaluationsByRecipe(recipe.id).subscribe((evaluations) => {
-        evaluations.forEach((evaluation) => {
-          rate += evaluation.rate;
-        });
-        this.MaxRecipeRate.push({
-          title: recipe.title,
-          totalRate: rate
-        });
-      });
-    });
-    console.log(this.MaxRecipeRate,"Max Recipe Rate");
-  }
+        if (isNaN(contestEndDate.getTime())) {
+            console.error("Invalid end_date format:", entry.contest.end_date);
+            this.contestIsFinish = false;
+            return;
+        }
+
+        this.contestIsFinish = currentDate > contestEndDate;
+        console.log("Contest is finished:", this.contestIsFinish);
+    } catch (error) {
+        console.error("Error in isContestFinish:", error);
+        this.contestIsFinish = false;
+    }
+}
+
+
+
+
+calculeRecipewithmaxrate() {
+  const ratePromises = this.recipes.map((recipe) => {
+      return this.evaluationservice.getEvaluationsByRecipe(recipe.id).pipe(
+          map((evaluations) => {
+              const totalRate = evaluations.reduce((sum, evaluation) => sum + evaluation.rate, 0);
+              return {
+                  title: recipe.title,
+                  totalRate: totalRate
+              };
+          })
+      );
+  });
+
+  forkJoin(ratePromises).subscribe((rates) => {
+      this.MaxRecipeRate = rates;
+      console.log("Max Recipe Rate:", this.MaxRecipeRate);
+      this.getRecipeWin();
+  });
+}
+
 
 
 
@@ -163,4 +211,33 @@ constructor(private service: RecipeService,private router:Router, private route:
       this.updateDisplayedRecipes();
     }
   }
+
+  getRecipeWin() {
+    if (!this.MaxRecipeRate || this.MaxRecipeRate.length === 0) {
+        return null;
+    }
+    const maxRateRecipe = this.MaxRecipeRate.reduce((max, recipe) =>
+        recipe.totalRate > max.totalRate ? recipe : max
+    );
+    this.findRecipeTitle(maxRateRecipe.title);
+    return maxRateRecipe;
 }
+
+
+
+findRecipeTitle(title: string) {
+  const recipe = this.recipes.find(r => r.title === title);
+  if (!recipe) {
+      console.error("Recipe not found:", title);
+      return null;
+  }
+  this.recipeWin = recipe;
+  console.log("Recipe with highest rate:", recipe);
+  return recipe.title;
+}
+
+
+}
+
+
+
