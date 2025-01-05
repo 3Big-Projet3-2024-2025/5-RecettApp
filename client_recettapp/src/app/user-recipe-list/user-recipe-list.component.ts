@@ -64,8 +64,12 @@ export class UserRecipeListComponent {
     });
   }
 
-  detailRecipe(id: number) : void {
+  
+ 
+  detailRecipe(id: number) {
+
     this.router.navigate(['recipe/detail', id, "backto"]);
+
   }
   goToPage(page: number): void {
     if (page >= 0 && page < this.totalPages) {
