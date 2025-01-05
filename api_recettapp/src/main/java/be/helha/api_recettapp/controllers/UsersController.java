@@ -8,6 +8,7 @@ import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -45,27 +46,31 @@ public class UsersController {
      */
     @GetMapping
     public ResponseEntity<List<Users>> getAllUsers() {
-        // Get all users from the DB
-        List<Users> allUsers = userService.findAll();
+        try {
+            // Get all users from the DB
+            List<Users> allUsers = userService.findAll();
 
-        // Get all users from Keycloak
-        List<UserRepresentation> keycloakUsers = keycloakUserService.listUsers();
+            // Get all users from Keycloak
+            List<UserRepresentation> keycloakUsers = keycloakUserService.listUsers();
 
-        // Filter in the Keycloak user list to get all admins in Keycloak
-        Set<String> adminUserMails = keycloakUsers.stream()
-                .filter(user -> {
+            // Filter in the Keycloak user list to get all admins in Keycloak
+            Set<String> adminUserMails = keycloakUsers.stream()
+                    .filter(user -> {
                         List<String> roles = user.getAttributes().get("roles");
                         return roles != null && roles.contains("admin");
-                }) // Verify if user as the "admin" role
-                .map(UserRepresentation::getEmail) // Get admins mails
-                .collect(Collectors.toSet());
+                    }) // Verify if user as the "admin" role
+                    .map(UserRepresentation::getEmail) // Get admins mails
+                    .collect(Collectors.toSet());
 
-        // Filter users without their with "Anonymized" FirstName and their with admin Keycloak role
-        List<Users> filteredUsers = allUsers.stream()
-                .filter(user -> !user.getFirstName().equals("Anonymized") && !adminUserMails.contains(user.getEmail()))
-                .collect(Collectors.toList());
+            // Filter users without their with "Anonymized" FirstName and their with admin Keycloak role
+            List<Users> filteredUsers = allUsers.stream()
+                    .filter(user -> !user.getFirstName().equals("Anonymized") && !adminUserMails.contains(user.getEmail()))
+                    .collect(Collectors.toList());
 
-        return ResponseEntity.ok(filteredUsers);
+            return ResponseEntity.ok(filteredUsers);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(null);
+        }
     }
 
     /**
@@ -76,11 +81,15 @@ public class UsersController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<Users> getUserById(@PathVariable Long id) {
-        Users user = userService.findById(id);
-        if (user == null) {
-            return ResponseEntity.notFound().build();
+        try {
+            Users user = userService.findById(id);
+            if (user == null) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(null);
         }
-        return ResponseEntity.ok(user);
     }
 
     /**
@@ -91,25 +100,33 @@ public class UsersController {
      */
     @PostMapping
     public ResponseEntity<Users> createUser(@RequestBody Users user) {
-        return ResponseEntity.ok(userService.save(user));
+        try {
+            return ResponseEntity.ok(userService.save(user));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(null);
+        }
     }
 
     /**
      * Updates an existing user.
      *
-     * @param id the ID of the user to update
+     * @param id   the ID of the user to update
      * @param user the updated user data
      * @return a ResponseEntity containing the updated user and an HTTP status of 200 (OK),
-     *         or a 404 (Not Found) status if the user does not exist
+     * or a 404 (Not Found) status if the user does not exist
      */
     @PutMapping("/{id}")
     public ResponseEntity<Users> updateUser(@PathVariable Long id, @RequestBody Users user) {
-        Users existingUser = userService.findById(id);
-        if (existingUser == null) {
-            return ResponseEntity.notFound().build();
+        try {
+            Users existingUser = userService.findById(id);
+            if (existingUser == null) {
+                return ResponseEntity.notFound().build();
+            }
+            user.setId(id);
+            return ResponseEntity.ok(userService.save(user));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(null);
         }
-        user.setId(id);
-        return ResponseEntity.ok(userService.save(user));
     }
 
     /**
@@ -120,10 +137,14 @@ public class UsersController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        Users user = userService.findById(id);
-        keycloakUserService.deleteUser(user.getEmail()); //Suppress in Keycloak first because we need the email
-        anonymizeUserData(user);
-        return ResponseEntity.noContent().build();
+        try {
+            Users user = userService.findById(id);
+            keycloakUserService.deleteUser(user.getEmail()); //Suppress in Keycloak first because we need the email
+            anonymizeUserData(user);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(500).build();
+        }
     }
 
     /**
@@ -134,16 +155,20 @@ public class UsersController {
      */
     @GetMapping("/email/{email}")
     public ResponseEntity<Users> getUserByEmail(@PathVariable String email) {
-        Users user = userService.findByEmail(email);
-        if (user == null) {
-            return ResponseEntity.notFound().build();
+        try {
+            Users user = userService.findByEmail(email);
+            if (user == null) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(null);
         }
-        return ResponseEntity.ok(user);
     }
 
     /**
      * Controller method for blocking a user.
-     *
+     * <p>
      * This method handles a {@code POST} request to the {@code /{email}/block} path. It changes the
      * user's status to "blocked" both in Keycloak and in the database. The user is identified by
      * the {@code email} path variable.
@@ -153,21 +178,25 @@ public class UsersController {
      */
     @PostMapping("/{email}/block")
     public ResponseEntity<String> blockUser(@PathVariable String email) {
-        //Change Keycloak status
-        keycloakUserService.blockUser(email);
+        try {
+            //Change Keycloak status
+            keycloakUserService.blockUser(email);
 
-        //Change DB status
-        Users localUser = getUserByEmail(email).getBody();
-        if (localUser != null) {
-            localUser.setBlocked(true);
-            updateUser(localUser.getId(), localUser);
+            //Change DB status
+            Users localUser = getUserByEmail(email).getBody();
+            if (localUser != null) {
+                localUser.setBlocked(true);
+                updateUser(localUser.getId(), localUser);
+            }
+            return ResponseEntity.ok("User blocked successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("An error occurred while blocking the user.");
         }
-        return ResponseEntity.ok("User blocked successfully");
     }
 
     /**
      * Controller method for unblocking a user.
-     *
+     * <p>
      * This method handles a {@code POST} request to the {@code /{email}/unblock} path. It changes
      * the user's status to "unblocked" both in Keycloak and in the database. The user is identified
      * by the {@code email} path variable.
@@ -177,16 +206,20 @@ public class UsersController {
      */
     @PostMapping("/{email}/unblock")
     public ResponseEntity<String> unblockUser(@PathVariable String email) {
-        //Change Keycloak status
-        keycloakUserService.unblockUser(email);
+        try {
+            //Change Keycloak status
+            keycloakUserService.unblockUser(email);
 
-        //Change DB status
-        Users localUser = getUserByEmail(email).getBody();
-        if (localUser != null) {
-            localUser.setBlocked(false);
-            updateUser(localUser.getId(), localUser);
+            //Change DB status
+            Users localUser = getUserByEmail(email).getBody();
+            if (localUser != null) {
+                localUser.setBlocked(false);
+                updateUser(localUser.getId(), localUser);
+            }
+            return ResponseEntity.ok("User unblocked successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("An error occurred while unblocking the user.");
         }
-        return ResponseEntity.ok("User unblocked successfully");
     }
 
 
@@ -200,12 +233,16 @@ public class UsersController {
      * @param user the {@link Users} object whose data needs to be anonymized.
      */
     public void anonymizeUserData(Users user) {
-        String uuid = UUID.randomUUID().toString();
-        user.setFirstName("Anonymized");
-        user.setEmail("anonymized" + uuid + "@example.com");
-        user.setBlocked(true);
-        user.setRegistrations(null); // it's not necessary to keep the active entries if the user delete his account
-        userService.save(user);
+        try {
+            String uuid = UUID.randomUUID().toString();
+            user.setFirstName("Anonymized");
+            user.setEmail("anonymized" + uuid + "@example.com");
+            user.setBlocked(true);
+            user.setRegistrations(null); // it's not necessary to keep the active entries if the user delete his account
+            userService.save(user);
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred while anonymizing user data: " + e.getMessage(), e);
+        }
     }
 
 
