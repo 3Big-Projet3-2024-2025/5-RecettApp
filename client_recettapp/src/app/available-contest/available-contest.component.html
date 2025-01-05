@@ -3,7 +3,7 @@
     <div *ngIf="!showRegistration">
       <h1 class="my-5 text-success">Available Contests</h1>
       <div *ngFor="let contest of contests; trackBy: trackByContestId">
-        <div *ngIf="contest.id !== undefined && contestAccess[contest.id] === false"  class="row">
+        <div *ngIf="contest.id !== undefined && contestAccess[contest.id] === false && !isContestFinish(contest)"  class="row">
           <div class="card mb-3 shadow-sm" style="width: 80vw;">
             <div class="card-body">
               <h5 class="card-title">{{ contest.title }}</h5>
@@ -17,18 +17,10 @@
                   <div class="col-8"></div>
                   <div class="col-3">
                     <a
-                    *ngIf="contest.id !== undefined && contestAccess[contest.id] === true"
-                    (click)="getDetailContest(contest.id!)"
-                    class="btn btn-success"
-                    >Go in</a
-                    >
-                    <a
-                    *ngIf="contest.id !== undefined && contestAccess[contest.id] === false"
                     (click)="getDetailContest(contest.id!)"
                     class="btn btn-success"
                     >Sign up</a
                     >
-
                   </div>
                 </div>
               </div>

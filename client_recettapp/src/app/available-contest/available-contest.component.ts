@@ -54,7 +54,6 @@ export class AvailableContestComponent {
     this.contests.forEach((contest) => {
       this.entryService.getEntryByUserMailAndIdContest(contest.id!, token).subscribe({
         next: (entry) => {
-          console.log("Entry : ", entry)
           if (entry) {
               if (contest.id) { 
               this.contestAccess[contest.id] = entry?.status === 'registered';
@@ -101,4 +100,25 @@ export class AvailableContestComponent {
     return contest.id;
   }
   
+  isContestFinish(contest: Contest): boolean {
+    if (!contest.end_date) {
+      console.error("Contest end_date is missing.");
+      return false;
+    }
+  
+    try {
+      const currentDate = new Date();
+      const contestEndDate = new Date(contest.end_date);
+  
+      if (isNaN(contestEndDate.getTime())) {
+        console.error("Invalid end_date format:", contest.end_date);
+        return false;
+      }
+  
+      return currentDate > contestEndDate;
+    } catch (error) {
+      console.error("Error in isContestFinish:", error);
+      return false;
+    }
+  }
 }
