@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 
 
 import java.util.Arrays;
@@ -24,6 +26,8 @@ import static org.mockito.Mockito.*;
  * This class tests the service layer methods for managing evaluations,
  * ensuring correct logic and interaction with the repository.
  */
+@SpringBootTest
+@AutoConfigureMockMvc(addFilters = false)
 public class TestCrudEvaluationService {
     @Mock
     private EvaluationRepository evaluationRepository;
