@@ -44,6 +44,7 @@ export class RecipeDetailComponent implements OnInit {
     private location: Location,
     private entriesService : EntriesService,
     private keycloakService: KeycloakService,
+    private entryService : EntriesService
 
   ) {}
 
