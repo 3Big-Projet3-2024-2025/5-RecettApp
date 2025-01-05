@@ -54,7 +54,7 @@ constructor(private service: RecipeService,private router:Router, private route:
         } else {
           this.entry = entry;
 
-          if (entry.status == 'waiting') {
+          if (entry.status != 'registered') {
             console.log("you have not completed your registration at the entry");
             this.router.navigate(['/not-authorized']);
           }

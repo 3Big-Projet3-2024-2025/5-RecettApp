@@ -29,9 +29,11 @@ import { UserContestComponent } from './user-contest/user-contest.component';
 
 export const routes: Routes = [
 
-        
+        { path: '', redirectTo: 'home', pathMatch: 'full' },
+
         { path: 'recipe', component: RecipeComponent , canActivate: [AdminGuard]},
         { path: 'recipe/detail/:id/:backto', component: RecipeDetailComponent , canActivate: [KeycloakGuard]},
+
         { path: 'recipe-contest/:idContest', component: RecipeContestListComponent , canActivate: [KeycloakGuard]},
         { path: 'recipe/add/:idEntry', component: AddRecipeComponent , canActivate: [KeycloakGuard]},
         { path: 'ContestCategory', component: ContestCategoryComponent , canActivate: [AdminGuard]},
@@ -40,19 +42,18 @@ export const routes: Routes = [
         { path: 'contests', component: ContestTableComponent , canActivate: [AdminGuard]},
         { path: 'entries', component: EntriesTableComponent , canActivate: [AdminGuard]},
         { path: 'available-contests', component: AvailableContestComponent, canActivate: [KeycloakGuard]},
-        { path: 'mycontests', component: UserContestComponent, canActivate: [KeycloakGuard]},
-        { path : 'evaluation' , component: EvaluationComponent, canActivate: [AdminGuard]},
+        {path : 'evaluation' , component: EvaluationComponent, canActivate: [AdminGuard]},
         { path: 'success', component:PaypalSuccessComponent, canActivate: [KeycloakGuard]},
         { path: 'cancel', component:PaypalCancelComponent, canActivate: [KeycloakGuard]},
         { path: 'myrecipe', component:UserRecipeListComponent, canActivate: [KeycloakGuard]},
+        { path: 'mycontests', component: UserContestComponent, canActivate: [KeycloakGuard]},
         { path: 'home', component: HomePageComponent},
         { path: 'home/apple-pie', component: ApplePieComponent },
         { path: 'home/chicken-breast', component: ChickenBreastComponent },
         { path: 'home/vegan-recipe', component: VeganRecipeComponent },
         { path:'User-info',component:UserInfoComponent, canActivate: [KeycloakGuard]},
-        { path:'not-authorized',component:NotAuthorizedComponent},
+        {path:'not-authorized',component:NotAuthorizedComponent},
         { path: '**', component: NotFoundComponent },
-        { path: '', redirectTo: 'home', pathMatch: 'full' },
 
 
 

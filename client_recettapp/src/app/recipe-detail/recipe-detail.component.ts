@@ -92,7 +92,7 @@ export class RecipeDetailComponent implements OnInit {
               entry => {
                 if (entry) {
                   console.log(" entry rertourner : ",entry)
-                  if (entry.status == 'waiting') {
+                  if (entry.status != 'registered') {
                     console.log("you have not completed your registration at the entry");
                     this.router.navigate(['/not-authorized']);
                   }
