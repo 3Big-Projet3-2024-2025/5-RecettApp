@@ -86,8 +86,7 @@ constructor(private service: RecipeService,private router:Router, private route:
       });
 
       forkJoin(imageRequests).subscribe((updatedRecipes) => {
-        this.recipes = updatedRecipes;
-        this.filteredRecipes = updatedRecipes;
+        this.recipes = this.shuffleArray(updatedRecipes) ;
         this.filteredRecipes = [...this.recipes];
         this.totalPages = Math.ceil(this.filteredRecipes.length / this.itemsPerPage);
         this.updateDisplayedRecipes();
@@ -167,5 +166,13 @@ constructor(private service: RecipeService,private router:Router, private route:
       this.currentPage++;
       this.updateDisplayedRecipes();
     }
+  }
+
+  private shuffleArray(array: Recipe[]): Recipe[] {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
   }
 }
