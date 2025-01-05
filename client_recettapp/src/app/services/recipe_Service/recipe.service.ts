@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Recipe } from '../../models/recipe';
@@ -7,46 +7,59 @@ import { Recipe } from '../../models/recipe';
   providedIn: 'root'
 })
 export class RecipeService {
-  
+
 
   constructor(private http: HttpClient) { }
   private Url = "http://localhost:8080/recipe";
 
-  getAllRecipe(): Observable<Recipe[]> {
-    return this.http.get<Recipe[]>(this.Url+'/all');
-  } 
-  
-  getRecipeById(id: number): Observable<Recipe> {
-    return this.http.get<Recipe>(`${this.Url}/${id}`);
+  getAllRecipe(token: any): Observable<Recipe[]> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get<Recipe[]>(this.Url+'/all', {headers});
   }
 
-  addRecipe(recipe: Recipe): Observable<Recipe>{
-    return this.http.post<Recipe>(this.Url,recipe);
+  getRecipeById(id: number, token: any): Observable<Recipe> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get<Recipe>(`${this.Url}/${id}`, {headers});
   }
 
-  deleteRecipe(id: number): Observable<Recipe> {
-    return this.http.delete<Recipe>(`${this.Url}/${id}`);
+  addRecipe(recipe: Recipe, token: any): Observable<Recipe>{
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.post<Recipe>(this.Url,recipe, {headers});
   }
 
-  
-  getRecipeByIdContest(idContest: number): Observable<Recipe[]> {
-    return this.http.get<Recipe[]>(`${this.Url}/contest/${idContest}`); 
-  } 
-  
-  getAllRecipesPaginated(page: number, size: number): Observable<any> {
-    const params = { page: page.toString(), size: size.toString() };
-    return this.http.get<any>(this.Url, { params });
+  deleteRecipe(id: number, token: any): Observable<Recipe> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.delete<Recipe>(`${this.Url}/${id}`, {headers});
   }
 
-  getRecipesByUserMail(email: string, page: number, size: number): Observable<any> {
+
+  getRecipeByIdContest(idContest: number, token: any): Observable<Recipe[]> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get<Recipe[]>(`${this.Url}/contest/${idContest}`, {headers});
+  }
+
+  getRecipesPaginated(keyword: string, page: number, size: number, token: any): Observable<any> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    const params = {
+      keyword: keyword || '',
+      page: page.toString(),
+      size: size.toString(),
+    };
+    return this.http.get<any>(this.Url, { params, headers });
+  }
+
+  getRecipesByUserMail(email: string, keyword: string,page: number, size: number, token: any): Observable<any> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     const params = new HttpParams()
       .set('email', email)
       .set('page', page.toString())
+      .set('keyword', keyword)
       .set('size', size.toString());
-    return this.http.get<any>(`${this.Url}/usermail`, { params });
+    return this.http.get<any>(`${this.Url}/usermail`, { params, headers });
   }
 
-  anonymizeRecipe(id: number): Observable<void> {
-    return this.http.put<void>(`${this.Url}/anonymize/${id}`, null);
+  anonymizeRecipe(id: number, token: any): Observable<void> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.put<void>(`${this.Url}/anonymize/${id}`, {headers});
   }
 }

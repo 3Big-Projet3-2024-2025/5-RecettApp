@@ -5,11 +5,13 @@
 
     <!-- Search Bar -->
     <div class="mb-4">
+
     <input
         type="text"
         class="form-control"
         placeholder="Search for a recipe..."
         [(ngModel)]="searchTerm"
+
         (input)="searchRecipes()" />
     </div>
 

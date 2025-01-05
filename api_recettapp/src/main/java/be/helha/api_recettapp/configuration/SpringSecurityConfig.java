@@ -1,16 +1,11 @@
 package be.helha.api_recettapp.configuration;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
@@ -29,13 +24,6 @@ import be.helha.api_recettapp.security.KeycloakRoleConverter;
 public class SpringSecurityConfig {
 
     /**
-     * A service that provides user details for authentication.
-     * The annotation {@code @Autowired} is used to automatically injected by Spring's dependency injection framework.
-     */
-    @Autowired
-    UserDetailsService userDetailsService;
-
-    /**
      * Configures the Spring Security filter chain for the application.
      * This method defines the security rules for handling HTTP requests, including enabling or disabling
      * CSRF protection and configuring authorization requirements for different endpoints.
@@ -46,38 +34,54 @@ public class SpringSecurityConfig {
     public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequests -> {
-                    // Permits all requests to all endpoints for the moment, to easily test API
-                    //authorizeRequests.requestMatchers("/api/users").authenticated();
+                    authorizeRequests.requestMatchers(HttpMethod.DELETE,"/api/contest-categories/*").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.POST,"/api/contest-categories/*").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.GET,"/api/contest-categories/*").hasAnyRole("ADMIN", "USER");
+                    authorizeRequests.requestMatchers(HttpMethod.PUT,"/api/contest-categories/*").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.DELETE,"/api/contest-categories/*").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.DELETE,"/contests/*").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.POST,"/contests/*").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.PUT,"/contests/*").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.GET,"/contests/*").hasAnyRole("ADMIN", "USER");
+                    authorizeRequests.requestMatchers(HttpMethod.DELETE,"/entries/*").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.PUT,"/entries/*").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.POST,"/entries/*").hasAnyRole("ADMIN", "USER");
+                    authorizeRequests.requestMatchers(HttpMethod.POST,"/entries/*").hasAnyRole("ADMIN", "USER");
+                    authorizeRequests.requestMatchers(HttpMethod.GET,"/api/evaluations/*").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.POST,"/api/evaluations/*").hasAnyRole("ADMIN", "USER");
+                    authorizeRequests.requestMatchers(HttpMethod.PUT,"/api/evaluations/*").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.DELETE,"/api/evaluations/*").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.DELETE,"/ingredients/*").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.PUT,"/ingredients/*").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.POST,"/ingredients/*").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.GET,"/ingredients/*").hasAnyRole("ADMIN", "USER");
+                    authorizeRequests.requestMatchers(HttpMethod.DELETE,"/recipe/*").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.POST,"/recipe/*").hasAnyRole("ADMIN", "USER");
+                    authorizeRequests.requestMatchers(HttpMethod.PUT,"/recipe/*").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.GET,"/recipe/*").hasAnyRole("ADMIN", "USER");
+                    authorizeRequests.requestMatchers(HttpMethod.DELETE,"/api/recipe-types/*").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.POST,"/api/recipe-types/*").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.PUT,"/api/recipe-types/*").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.GET,"/api/recipe-types/*").hasAnyRole("ADMIN", "USER");
+                    authorizeRequests.requestMatchers(HttpMethod.GET,"/api/users/*").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.POST,"/api/users/{email}/unblock").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.POST,"/api/users/{email}/block").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.DELETE,"/api/users/*").hasRole("ADMIN");
+                    authorizeRequests.requestMatchers(HttpMethod.PUT,"/api/users/*").hasAnyRole("ADMIN", "USER");
+                    authorizeRequests.requestMatchers(HttpMethod.GET,"/api/users/{id}").hasAnyRole("ADMIN", "USER");
+                    authorizeRequests.requestMatchers(HttpMethod.GET,"/paypal/*").hasAnyRole("ADMIN", "USER");
+                    authorizeRequests.requestMatchers(HttpMethod.POST,"/paypal/*").hasAnyRole("ADMIN", "USER");
+                    authorizeRequests.requestMatchers(HttpMethod.GET,"/image/*").hasAnyRole("ADMIN", "USER");
+                    authorizeRequests.requestMatchers(HttpMethod.POST,"/image/*").hasAnyRole("ADMIN", "USER");
+                    authorizeRequests.requestMatchers(HttpMethod.GET,"/recipe-components/*").hasAnyRole("ADMIN", "USER");
+                    authorizeRequests.requestMatchers(HttpMethod.POST,"/recipe-components/*").hasAnyRole("ADMIN", "USER");
+                    authorizeRequests.requestMatchers(HttpMethod.PUT,"/recipe-components/*").hasAnyRole("ADMIN", "USER");
+                    authorizeRequests.requestMatchers(HttpMethod.DELETE,"/recipe-components/*").hasAnyRole("ADMIN", "USER");
+
                     authorizeRequests.anyRequest().permitAll();
                 }).oauth2ResourceServer(oauth2 ->
                         oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()))
                 ).build();
-    }
-
-    /**
-     * Bean definition for the password encoder used to encode passwords.
-     *
-     * @return A {@link PasswordEncoder} bean (specifically {@link BCryptPasswordEncoder}).
-     */
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-
-    /**
-     * Bean definition for the authentication manager used to authenticate users.
-     *
-     * @param http The {@link HttpSecurity} instance, used to configure HTTP security settings.
-     * @param passwordEncoder The {@link PasswordEncoder} used to validate passwords.
-     * @return An {@link AuthenticationManager} bean, used to authenticate users based on their credentials.
-     * @throws Exception If there is an error while configuring the authentication manager.
-     */
-    @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder) throws Exception {
-        AuthenticationManagerBuilder authenticationManagerBuiler = http.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuiler.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
-        return authenticationManagerBuiler.build();
     }
 
     /**

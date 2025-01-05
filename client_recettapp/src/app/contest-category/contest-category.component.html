@@ -1,10 +1,17 @@
 <div class="container mt-5">
-  <div class="text-center mb-4">
-    <h1 class="text-success">Contest Categories</h1>
+  <div class="row justify-content-between align-items-center mb-4">
+    <h1 class="col-auto text-success">Contest Categories</h1>
+    <button class="btn btn-success col-auto" (click)="toggleForm()">
+      <i class="bi bi-plus-circle"></i> {{ showForm ? 'Close Form' : 'Add Contest Category' }}
+    </button>
+  </div>
+  <!-- Message or Table -->
+  <div *ngIf="categories.length === 0" class="alert alert-info text-center shadow-sm">
+    <i class="bi bi-info-circle"></i> No categories available. Add one to get started!
   </div>
 
   <!-- Form -->
-  <div class="card shadow mb-4">
+  <div *ngIf="showForm" class="card shadow mb-4">
     <div class="card-header bg-success text-white">
       <h3 class="mb-0">{{ isEditing ? 'Edit Category' : 'Add New Category' }}</h3>
     </div>
@@ -56,10 +63,7 @@
     </div>
   </div>
 
-  <!-- Message or Table -->
-  <div *ngIf="categories.length === 0" class="alert alert-info text-center shadow-sm">
-    <i class="bi bi-info-circle"></i> No categories available. Add one to get started!
-  </div>
+  
 
   <div *ngIf="filteredCategories.length > 0" class="table-responsive shadow-sm">
     <table class="table table-striped table-hover align-middle">
@@ -88,24 +92,25 @@
   </div>
 
   <!-- Pagination -->
-  <div class="d-flex justify-content-center mt-3" *ngIf="totalCategories > pageSize">
+  <div class="d-flex justify-content-center mt-3" *ngIf="totalPages > 1">
     <button
-      class="btn btn-outline-primary me-2"
+      class="btn btn-outline-success me-2"
       [disabled]="currentPage === 1"
       (click)="onPageChange(currentPage - 1)"
     >
       Previous
     </button>
     <button
-      class="btn btn-outline-primary mx-1"
+      class="btn btn-outline-success mx-1"
       *ngFor="let page of [].constructor(totalPages); let i = index"
-      [class.active]="currentPage === i + 1"
+      [class.btn-success]="currentPage === i + 1"
+      [class.btn-outline-success]="currentPage !== i + 1"
       (click)="onPageChange(i + 1)"
     >
       {{ i + 1 }}
     </button>
     <button
-      class="btn btn-outline-primary ms-2"
+      class="btn btn-outline-success ms-2"
       [disabled]="currentPage === totalPages"
       (click)="onPageChange(currentPage + 1)"
     >

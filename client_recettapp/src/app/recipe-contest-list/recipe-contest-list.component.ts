@@ -10,6 +10,9 @@ import { RecipeService } from '../services/recipe_Service/recipe.service';
 import { EntriesService } from '../services/entries.service';
 import { EvaluationService } from '../services/evaluation.service';
 import { RecipeRate } from '../models/recipe-rate';
+import { RecipeComponentService } from '../services/recipe_Service/recipe-component.service';
+import {KeycloakService} from "keycloak-angular";
+
 
 @Component({
   selector: 'app-recipe-contest-list',
@@ -48,7 +51,11 @@ currentPage: number = 0;
 itemsPerPage: number = 10;
 totalPages: number = 0;
 
-constructor(private service: RecipeService,private router:Router, private route: ActivatedRoute,private imaService: ImageServiceService,private entryService: EntriesService, private evaluationservice: EvaluationService) {}
+
+constructor(private service: RecipeService,private router:Router, private route: ActivatedRoute,private imaService: ImageServiceService,private entryService: EntriesService, private evaluationservice: EvaluationService
+           , private recipeComponentService: RecipeComponentService, private keycloakService: KeycloakService
+) {}
+
 
 
    ngOnInit(): void {
@@ -59,28 +66,42 @@ constructor(private service: RecipeService,private router:Router, private route:
     }
 
   }
-  checkContestAccess(contestId: number): void {
-    this.entryService.getEntryByUserMailAndIdContest(contestId).subscribe({
+  async checkContestAccess(contestId: number): Promise<void> {
+    const token = await this.keycloakService.getToken();
+    this.entryService.getEntryByUserMailAndIdContest(contestId, token).subscribe({
       next: (entry) => {
         if (!entry) {
-          this.router.navigate(['/home']); // Redirection if entry is null
+          this.router.navigate(['/not-authorized']); // Redirection if entry is null
         } else {
           this.entry = entry;
-          this.getRecipe(contestId);
+
+
+          if (entry.status == 'waiting') {
+            console.log("you have not completed your registration at the entry");
+            this.router.navigate(['/not-authorized']);
+          }
+          this.getRecipe(contestId); 
           this.isContestFinish(entry);
+
+
         }
       },
       error: (error) => {
         console.log(error)
-        this.router.navigate(['/home']);
+
+        this.router.navigate(['/not-authorized']); 
+
+
       },
     });
   }
-  getRecipe(contestId: number){
-    this.service.getRecipeByIdContest(contestId).subscribe(data => {
+
+  async getRecipe(contestId: number) {
+    const token = await this.keycloakService.getToken();
+    this.service.getRecipeByIdContest(contestId, token).subscribe(data => {
       const imageRequests = data.map(recipe => {
         if (recipe.photo_url) {
-          return this.imaService.getImage(recipe.photo_url).pipe(
+          return this.imaService.getImage(recipe.photo_url, token).pipe(
             map((blob: Blob) => {
               recipe.photo_url = URL.createObjectURL(blob);
               return recipe;
@@ -91,11 +112,11 @@ constructor(private service: RecipeService,private router:Router, private route:
       });
 
       forkJoin(imageRequests).subscribe((updatedRecipes) => {
-        this.recipes = updatedRecipes;
-        this.filteredRecipes = updatedRecipes;
+        this.recipes = this.shuffleArray(updatedRecipes) ;
         this.filteredRecipes = [...this.recipes];
         this.totalPages = Math.ceil(this.filteredRecipes.length / this.itemsPerPage);
         this.updateDisplayedRecipes();
+
         this.calculeRecipewithmaxrate();
 
       });
@@ -154,17 +175,40 @@ calculeRecipewithmaxrate() {
 
 
 
+
+        this.getRecipeComponent();
+
+      });
+    });
+  }
+
+  async getRecipeComponent() {
+    const token = await this.keycloakService.getToken();
+    this.recipes.forEach(element => {
+      this.recipeComponentService.getRecipeComponentsByIdRecipe(element.id, token).subscribe(component => {
+        element.components = component;
+      });
+    })
+  }
+
   searchRecipes(): void {
     const term = this.searchTerm.toLowerCase();
     this.filteredRecipes = this.recipes.filter(recipe =>
       recipe.title.toLowerCase().includes(term) ||
       recipe.description.toLowerCase().includes(term) ||
-      recipe.category.toLowerCase().includes(term)
+
+      recipe.category.toLowerCase().includes(term) ||
+      recipe.components.some(component =>
+        component.ingredient.alimentName.toLowerCase().includes(term)
+      )
+
     );
-    this.currentPage = 0; // Reset to the first page after filtering
+
+    this.currentPage = 0;
     this.totalPages = Math.ceil(this.filteredRecipes.length / this.itemsPerPage);
     this.updateDisplayedRecipes();
   }
+
 
   sortRecipesByDifficulty(difficulty: string): void {
     this.filteredRecipes = this.recipes.filter(recipe => recipe.difficulty_level === difficulty);
@@ -182,7 +226,8 @@ calculeRecipewithmaxrate() {
     this.filteredRecipes = [...this.filteredRecipes].sort((a, b) => a.title.localeCompare(b.title));
   }
   detailRecipe(id: number) {
-    this.router.navigate(['/recipe', id]);
+    this.router.navigate(['recipe/detail', id, "backto"]);
+
   }
   addRecipe() {
    this.router.navigate(['/recipe/add/', this.entry.id]);
@@ -212,6 +257,7 @@ calculeRecipewithmaxrate() {
     }
   }
 
+
   getRecipeWin() {
     if (!this.MaxRecipeRate || this.MaxRecipeRate.length === 0) {
         return null;
@@ -234,7 +280,17 @@ findRecipeTitle(title: string) {
   this.recipeWin = recipe;
   console.log("Recipe with highest rate:", recipe);
   return recipe.title;
+
+  
 }
+
+private shuffleArray(array: Recipe[]): Recipe[] {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
 
 
 WinnerContest(recipe : Recipe){

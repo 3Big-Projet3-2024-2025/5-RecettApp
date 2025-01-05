@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Entry } from '../models/entry';
 import { Recipe } from '../models/recipe';
+import {KeycloakService} from "keycloak-angular";
 
 
 
@@ -30,7 +31,8 @@ export class EvaluationComponent implements OnInit {
   constructor(
     private evaluationService: EvaluationService,
     private entryService: EntriesService,
-    private recipeService: RecipeService
+    private recipeService: RecipeService,
+    private keycloakService: KeycloakService
   ) {}
 
   ngOnInit(): void {
@@ -69,46 +71,57 @@ export class EvaluationComponent implements OnInit {
 
 
 
-  loadEvaluations(): void {
-    this.evaluationService.getAllEvaluations().subscribe({
+  async loadEvaluations(): Promise<void> {
+    const token = await this.keycloakService.getToken();
+    this.evaluationService.getAllEvaluations(token).subscribe({
       next: (data) => (this.evaluations = data),
       error: (err) => console.error('Error loading evaluations :', err),
     });
   }
+  toggleForm(): void {
+    this.showForm = !this.showForm;
+  }
+  
 
-  loadEntries(): void {
-    this.entryService.getAllEntries().subscribe({
+  async loadEntries(): Promise<void> {
+    const token = await this.keycloakService.getToken();
+    this.entryService.getAllEntries(token).subscribe({
       next: (data) => (this.entries = data),
       error: (err) => console.error('Error loading inputs :', err),
     });
   }
 
-  loadRecipes(): void {
-    this.recipeService.getAllRecipe().subscribe({
+  async loadRecipes(): Promise<void> {
+    const token = await this.keycloakService.getToken();
+    this.recipeService.getAllRecipe(token).subscribe({
       next: (data) => (this.recipes = data),
       error: (err) => console.error('Error loading recipes :', err),
     });
   }
 
-  deleteEvaluation(evaluation: Evaluation): void {
-    if (confirm('Are you sure you want to do away with this assessment?')) {
-      this.evaluationService.deleteEvaluation(evaluation.id!, this.isAdmin).subscribe({
+
+  async deleteEvaluation(evaluation: Evaluation): Promise<void> {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cette évaluation ?')) {
+      const token = await this.keycloakService.getToken();
+      this.evaluationService.deleteEvaluation(evaluation.id!, this.isAdmin, token).subscribe({
+
         next: () => this.loadEvaluations(),
         error: (err) => console.error('Deletion error :', err),
       });
     }
   }
 
-  saveEvaluation(): void {
+  async saveEvaluation(): Promise<void> {
+    const token = await this.keycloakService.getToken();
     console.log(this.currentEvaluation);
     if (!this.currentEvaluation.id) {
-      if(this.currentEvaluation.entry){
+      if (this.currentEvaluation.entry) {
         this.currentEvaluation.entry.id = this.selectedEntryId
       }
-      if(this.selectedRecipeId && this.currentEvaluation.recipe){
+      if (this.selectedRecipeId && this.currentEvaluation.recipe) {
         this.currentEvaluation.recipe.id = this.selectedRecipeId
       }
-      this.evaluationService.addEvaluation(this.currentEvaluation).subscribe({
+      this.evaluationService.addEvaluation(this.currentEvaluation, token).subscribe({
         next: () => {
           this.loadEvaluations();
           this.resetForm();
@@ -119,7 +132,7 @@ export class EvaluationComponent implements OnInit {
         },
       });
     } else {
-      this.evaluationService.addEvaluation(this.currentEvaluation).subscribe({
+      this.evaluationService.addEvaluation(this.currentEvaluation, token).subscribe({
         next: () => {
           this.loadEvaluations();
           this.resetForm();

@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ContestCategory } from '../models/contest-category';
 import { ContestCategoryService } from '../services/contest-category.service';
+import {KeycloakService} from "keycloak-angular";
 
 @Component({
   selector: 'app-contest-table',
@@ -26,7 +27,8 @@ export class ContestTableComponent {
   constructor(
     private contestService: ContestService,
     private router: Router,
-    private categoryService : ContestCategoryService
+    private categoryService : ContestCategoryService,
+    private keycloakService: KeycloakService
   ) { }
 
   ngOnInit(): void {
@@ -47,11 +49,12 @@ export class ContestTableComponent {
     return localDate.toISOString().slice(0, 16);
   }
 
-  getAllContests(page: number = 0, size: number): void {
-    const sub = this.contestService.getAllContests(page, size).subscribe({
+  async getAllContests(page: number = 0, size: number): Promise<void> {
+    const token = await this.keycloakService.getToken();
+    const sub = this.contestService.getAllContests(page, size, token).subscribe({
       next: (data) => {
-        console.log(data.content); 
-        this.contests = data.content; 
+        console.log(data.content);
+        this.contests = data.content;
         this.totalPages = data.totalPages;
         sub.unsubscribe();
       },
@@ -111,7 +114,7 @@ export class ContestTableComponent {
   }
 
   editContest(contest: Contest): void {
-    this.currentContest = { ...contest }; 
+    this.currentContest = { ...contest };
     this.currentContest.start_date = this.formatDateForInput(this.currentContest.start_date);
     this.currentContest.end_date = this.formatDateForInput(this.currentContest.end_date);
 
@@ -119,13 +122,14 @@ export class ContestTableComponent {
     this.showForm = true;
   }
 
-  deleteContest(idContest: number): void {
+  async deleteContest(idContest: number): Promise<void> {
     if (confirm('Are you sure you want to delete this contest?')) {
-      this.contestService.deleteContest(idContest).subscribe(() => {
+      const token = await this.keycloakService.getToken();
+      this.contestService.deleteContest(idContest, token).subscribe(() => {
         this.getAllContests(this.currentPage, 5);
         setTimeout(() => {
           if (this.contests.length === 0 && this.currentPage > 0) {
-            this.currentPage--; 
+            this.currentPage--;
             this.getAllContests(this.currentPage, 5);
           }
         }, 100);
@@ -136,19 +140,20 @@ export class ContestTableComponent {
   convertDateToBackendFormat(inputDate: string | undefined): string {
     if (!inputDate) return "null";
     const date = new Date(inputDate);
-    return date.toISOString(); 
+    return date.toISOString();
   }
 
-  saveContest(): void {
+  async saveContest(): Promise<void> {
     console.log('Contest to save:', this.currentContest);
     if (this.isEditing) {
       if (this.checkContest(this.currentContest)) {
         this.currentContest.start_date = this.convertDateToBackendFormat(this.currentContest.start_date);
         this.currentContest.end_date = this.convertDateToBackendFormat(this.currentContest.end_date);
-        if(this.currentContest.start_date === "null" || this.currentContest.end_date === "null"){
+        if (this.currentContest.start_date === "null" || this.currentContest.end_date === "null") {
           throw new Error("Error Format Date");
         }
-        const sub = this.contestService.updateContest(this.currentContest).subscribe({
+        const token = await this.keycloakService.getToken();
+        const sub = this.contestService.updateContest(this.currentContest, token).subscribe({
           next: () => {
             this.getAllContests(this.currentPage, 5);
             this.showForm = false;
@@ -163,10 +168,11 @@ export class ContestTableComponent {
       if (this.checkContest(this.currentContest)) {
         this.currentContest.start_date = this.convertDateToBackendFormat(this.currentContest.start_date);
         this.currentContest.end_date = this.convertDateToBackendFormat(this.currentContest.end_date);
-        if(this.currentContest.start_date === "null" || this.currentContest.end_date === "null"){
+        if (this.currentContest.start_date === "null" || this.currentContest.end_date === "null") {
           throw new Error("Error Format Date");
         }
-        const sub = this.contestService.addContest(this.currentContest).subscribe({
+        const token = await this.keycloakService.getToken();
+        const sub = this.contestService.addContest(this.currentContest, token).subscribe({
           next: () => {
             this.getAllContests(this.currentPage, 5);
             this.showForm = false;
@@ -192,8 +198,9 @@ export class ContestTableComponent {
     this.router.navigate(['recipe-contest/', idContest]);
   }
 
-  getAllCategory(){
-    const sub = this.categoryService.getAllCategories().subscribe({
+  async getAllCategory() {
+    const token = await this.keycloakService.getToken();
+    const sub = this.categoryService.getAllCategories(token).subscribe({
       next: (res) => {
         console.log("categories");
         this.categories = res;

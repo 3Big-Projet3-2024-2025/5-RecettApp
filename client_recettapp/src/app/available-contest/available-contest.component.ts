@@ -21,7 +21,7 @@ export class AvailableContestComponent {
   showRegistration = false;
   totalPages: number = 0;
   currentPage: number = 0;
-  
+
   initContest(): Contest {
     return { title: "", max_participants: 0, start_date: "", end_date: "", status: "" };
   }
@@ -42,11 +42,12 @@ export class AvailableContestComponent {
     this.getAllContests(this.currentPage,5);
   }
 
-  getAllContests(page: number = 0, size: number): void {
-    const sub = this.contestService.getAllContests(page, size).subscribe({
+  async getAllContests(page: number = 0, size: number): Promise<void> {
+    const token = await this.keycloakService.getToken();
+    const sub = this.contestService.getAllAvailableContests(page, size, token).subscribe({
       next: (data) => {
-        console.log(data.content); 
-        this.contests = data.content; 
+        console.log(data.content);
+        this.contests = data.content;
         this.totalPages = data.totalPages;
         sub.unsubscribe();
       },
@@ -71,7 +72,7 @@ export class AvailableContestComponent {
       this.showRegistration = true;
     }
   }
-  
+
 }
 
 

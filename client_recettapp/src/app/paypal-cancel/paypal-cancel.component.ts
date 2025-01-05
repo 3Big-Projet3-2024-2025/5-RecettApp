@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EntriesService } from '../services/entries.service';
+import {KeycloakService} from "keycloak-angular";
 
 @Component({
   selector: 'app-paypal-cancel',
@@ -17,18 +18,20 @@ export class PaypalCancelComponent {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private entryService : EntriesService
+    private entryService : EntriesService,
+    private keycloakService: KeycloakService
   ) { }
 
   ngOnInit():void{
     const uuid: string = this.route.snapshot.queryParamMap.get('uuid') || '';
     this.startCountdown();
     this.deleteUuid(uuid);
-    
+
   }
 
-  deleteUuid(uuid: string): void {
-    this.entryService.deleteEntryUuid(uuid).subscribe({
+  async deleteUuid(uuid: string): Promise<void> {
+    const token = await this.keycloakService.getToken();
+    this.entryService.deleteEntryUuid(uuid, token).subscribe({
       next: () => {
         this.msg = "Cancel the registration to the contest";
         this.err = false;
@@ -54,7 +57,7 @@ export class PaypalCancelComponent {
   }
 
   redirectToHome(): void {
-    this.router.navigate(['/home']); 
+    this.router.navigate(['/home']);
   }
 
 

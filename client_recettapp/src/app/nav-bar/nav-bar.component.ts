@@ -16,6 +16,7 @@ export class NavBarComponent {
 
   ngOnInit(){
        this.isAuhtentificated = this.authService.isAuthenticated()
+       this.checkAdmin();
   }
 
   logOut(){
@@ -24,5 +25,16 @@ export class NavBarComponent {
 
   logIn(){
     this.keycloakService.login()
+  }
+
+  checkAdmin():boolean{
+    const userRoles = this.keycloakService.getUserRoles();
+
+    // Check if the user has the 'admin' role
+    if (userRoles.includes('admin')) {
+      return true;
+    } else {
+      return false
+    }
   }
 }
