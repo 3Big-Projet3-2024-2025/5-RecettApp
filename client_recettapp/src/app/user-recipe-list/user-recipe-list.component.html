@@ -1,14 +1,15 @@
+<div class="container" *ngIf="recipes.length != 0">
 
-<div class="container mt-4">
-  <div class="search-bar mb-4">
-  <input
-    type="text"
-    [(ngModel)]="searchTerm"
-    (input)="onSearch()"
-    class="form-control"
-    placeholder="Search recipes by title or description"
-  />
-</div>
+  <div class="container mt-4">
+    <div class="search-bar mb-4">
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      (input)="onSearch()"
+      class="form-control"
+      placeholder="Search recipes by title or description"
+    />
+  </div>
     <h1 class="text-center text-success mb-4">My Recipes</h1>
     <div *ngIf="recipes">
       <div class="">
@@ -37,7 +38,7 @@
         <button (click)="goToNext()" *ngIf="!(currentPage >= totalPages - 1)" class="btn btn-dark pagination-button"
         > Next </button>
 
-       <button *ngIf="totalPages > 1" (click)="goToPage(totalPages - 1)" [class.active]="currentPage === totalPages - 1" class="btn btn-success pagination-button"
+      <button *ngIf="totalPages > 1" (click)="goToPage(totalPages - 1)" [class.active]="currentPage === totalPages - 1" class="btn btn-success pagination-button"
         > {{ totalPages }}</button>
       </div>  
 
@@ -46,4 +47,14 @@
       </ng-template>
     </div>
   </div>
-  
+</div>
+
+<div class="container center-container" *ngIf="recipes.length == 0">
+  <div>
+    <h1>No Recipes? Time to Get Creative!</h1>
+  </div>
+  <div>
+    <button class="btn btn-success" (click)="goToContest()">Join a Contest</button>
+  </div>
+</div>
+

@@ -20,7 +20,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer>, Paging
      *
      * @return A list of recipes associated with the contest.
      * **/
-    @Query("SELECT r FROM Recipe r WHERE r.entry.contest.id = :idContest")
+    @Query("SELECT r FROM Recipe r WHERE r.masked = false AND r.entry.contest.id = :idContest")
     List<Recipe> findRecipesByContestId(@Param("idContest") int idContest);
 
     /**

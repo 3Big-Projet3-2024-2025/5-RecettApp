@@ -89,5 +89,7 @@ export class UserRecipeListComponent {
     this.currentPage = 0;
     this.getRecipesForUser(this.currentPage);
   }
-
+  goToContest(): void{
+    this.router.navigate(['available-contests']);
+  }
 }
