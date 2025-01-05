@@ -78,6 +78,10 @@ export class EvaluationComponent implements OnInit {
       error: (err) => console.error('Erreur lors du chargement des évaluations :', err),
     });
   }
+  toggleForm(): void {
+    this.showForm = !this.showForm;
+  }
+  
 
   async loadEntries(): Promise<void> {
     const token = await this.keycloakService.getToken();

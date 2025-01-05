@@ -1,18 +1,16 @@
-<div class="container">
-  <h2>Gestion des Évaluations</h2>
+<div class="container mt-5">
+  <div class="row justify-content-between align-items-center mb-4">
+    <h1 class="col-auto text-success">Gestion des Évaluations</h1>
+  </div>
 
-  <!-- Button to show/hide the form -->
-  <button class="btn btn-primary mt-3" (click)="showForm = !showForm">
-    {{ showForm ? 'Annuler' : 'Ajouter une Évaluation' }}
-  </button>
-
-  <!-- Form to add a review -->
-  <div *ngIf="showForm" class="mt-4">
-    <h3>{{ currentEvaluation.id ? 'Modifier' : 'Ajouter' }} une Évaluation</h3>
-    <form (ngSubmit)="saveEvaluation()">
-      <!-- Field for note -->
-      <div class="form-group mb-3">
-        <label for="rate">Note :</label>
+  <!-- Form -->
+  <form *ngIf="showForm" class="card border-success mb-4" (ngSubmit)="saveEvaluation()">
+    <div class="card-header bg-success text-white">
+      <h5 class="mb-0">Ajouter une Évaluation</h5>
+    </div>
+    <div class="card-body">
+      <div class="mb-3">
+        <label for="rate" class="form-label fw-bold">Note</label>
         <input
           type="number"
           id="rate"
@@ -24,10 +22,8 @@
           required
         />
       </div>
-
-      <!-- Selecting an entry -->
-      <div class="form-group mb-3">
-        <label for="entry">Entrée :</label>
+      <div class="mb-3">
+        <label for="entry" class="form-label fw-bold">Entrée</label>
         <select
           id="entry"
           class="form-control"
@@ -40,10 +36,8 @@
           </option>
         </select>
       </div>
-
-      <!-- Selecting a recipe -->
-      <div class="form-group mb-3">
-        <label for="recipe">Recette :</label>
+      <div class="mb-3">
+        <label for="recipe" class="form-label fw-bold">Recette</label>
         <select
           id="recipe"
           class="form-control"
@@ -56,22 +50,27 @@
           </option>
         </select>
       </div>
+    </div>
+    <div class="card-footer d-flex justify-content-end">
+      <button type="submit" class="btn btn-success me-2">
+        <i class="bi bi-save"></i> Enregistrer
+      </button>
+      <button type="button" class="btn btn-secondary" (click)="toggleForm()">
+        <i class="bi bi-x-circle"></i> Annuler
+      </button>
+    </div>
+  </form>
 
-      <button type="submit" class="btn btn-success">Enregistrer</button>
-    </form>
-  </div>
-
-  <!-- List of assessments -->
-  <div class="mt-5">
-    <h3>Liste des Évaluations</h3>
-    <table class="table table-bordered mt-3">
-      <thead>
+  <!-- Table -->
+  <div class="table-responsive">
+    <table class="table table-bordered align-middle">
+      <thead class="table-dark">
         <tr>
           <th>ID</th>
           <th>Note</th>
           <th>Entrée</th>
           <th>Recette</th>
-          <th>Actions</th>
+          <th class="text-center">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -80,12 +79,9 @@
           <td>{{ eval.rate }}</td>
           <td>{{ eval.entry?.contest?.title || 'N/A' }}</td>
           <td>{{ eval.recipe?.title || 'N/A' }}</td>
-          <td>
-            <button
-              class="btn btn-danger btn-sm"
-              (click)="deleteEvaluation(eval)"
-            >
-              Supprimer
+          <td class="text-center">
+            <button class="btn btn-danger btn-sm" (click)="deleteEvaluation(eval)">
+              <i class="bi bi-trash"></i> Delete
             </button>
           </td>
         </tr>

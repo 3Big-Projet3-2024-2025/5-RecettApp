@@ -11,7 +11,10 @@ import { Evaluation } from '../models/evaluation';
 import { EvaluationService } from '../services/evaluation.service';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
-import {KeycloakService} from "keycloak-angular";
+import { KeycloakService } from 'keycloak-angular';
+import { jwtDecode } from 'jwt-decode';
+import { EntriesService } from '../services/entries.service';
+
 
 
 @Component({
@@ -31,7 +34,7 @@ export class RecipeDetailComponent implements OnInit {
   imageFile: File | null = null;
   imageError: string | null = null;
   previewImage = "./assets/No_Image.png";
-
+  backTo = "";
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -41,24 +44,36 @@ export class RecipeDetailComponent implements OnInit {
     private evaluationService : EvaluationService,
     private imService : ImageServiceService,
     private location: Location,
-    private keycloakService: KeycloakService
+    private keycloakService: KeycloakService,
+    private authService: KeycloakService,
+    private entryService: EntriesService
+
 
   ) {}
 
   async ngOnInit(): Promise<void> {
     const token = await this.keycloakService.getToken();
     const id = this.route.snapshot.paramMap.get('id');
+    const backTo = this.route.snapshot.paramMap.get('backto');
+    if (backTo) {
+      this.backTo = backTo
+    }
     if (id) {
       this.service.getRecipeById(+id, token).subscribe(
         (data) => {
-          if (data.photo_url) {
-            this.getImage(data.photo_url);
+
+          if (!this.authService.getUserRoles().includes('admin')) {
+            this.checkAccess(data);
           }
-          this.getRecipeComponent(+id);
-          this.recipe = data;
-          this.evaluation.entry = this.recipe.entry;
-          this.evaluation.recipe = this.recipe;
-        }, (err) => {
+        if (data.photo_url) {
+          this.getImage(data.photo_url);
+        }
+        this.getRecipeComponent(+id);
+        this.recipe = data;
+        this.evaluation.entry = this.recipe.entry;
+        this.evaluation.recipe = this.recipe;
+        },(err) => {
+
           console.log(err.error.message)
         }
       );
@@ -66,9 +81,35 @@ export class RecipeDetailComponent implements OnInit {
 
   }
 
-  async getImage(imageName: string) {
+
+  async checkAccess(recipe: Recipe) {
+      
+     try {
+          if (recipe.entry?.contest?.id) {
+            this.entryService.getEntryByUserMailAndIdContest(recipe.entry?.contest?.id).subscribe(
+              entry => {
+                if (entry.status == 'waiting') {
+                  console.log("you have not completed your registration at the entry");
+                  this.router.navigate(['/not-authorized']);
+                }
+              },
+              err => {
+                console.log(err);
+                this.router.navigate(['/not-authorized']);
+              }
+            )
+          }
+        } catch (error) {
+          console.error("Error decoding the token:", error);
+          this.router.navigate(['/not-authorized']); 
+        }
+  }
+  
+
+   async getImage(imageName: string) {
     const token = await this.keycloakService.getToken();
     this.imaService.getImage(imageName, token).subscribe(
+
       (next: Blob) => {
 
         this.imageRecipe = URL.createObjectURL(next);
@@ -92,7 +133,11 @@ export class RecipeDetailComponent implements OnInit {
   }
 
   backRecipeList(): void {
-    this.location.back();
+    if (this.backTo == "contest") {
+      this.router.navigate(['recipe-contest/', this.recipe?.entry?.contest?.id]);
+    }else{
+      this.location.back();
+    }
   }
 
   async addImage(evaluation: Evaluation) {

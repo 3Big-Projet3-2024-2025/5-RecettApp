@@ -50,15 +50,22 @@ constructor(private service: RecipeService,private router:Router, private route:
     this.entryService.getEntryByUserMailAndIdContest(contestId, token).subscribe({
       next: (entry) => {
         if (!entry) {
-          this.router.navigate(['/home']); // Redirection if entry is null
+          this.router.navigate(['/not-authorized']); // Redirection if entry is null
         } else {
           this.entry = entry;
-          this.getRecipe(contestId);
+
+          if (entry.status == 'waiting') {
+            console.log("you have not completed your registration at the entry");
+            this.router.navigate(['/not-authorized']);
+          }
+          this.getRecipe(contestId); 
+
         }
       },
       error: (error) => {
         console.log(error)
-        this.router.navigate(['/home']);
+        this.router.navigate(['/not-authorized']); 
+
       },
     });
   }
@@ -85,7 +92,7 @@ constructor(private service: RecipeService,private router:Router, private route:
         this.totalPages = Math.ceil(this.filteredRecipes.length / this.itemsPerPage);
         this.updateDisplayedRecipes();
         this.getRecipeComponent();
-        console.log("the recipe : ", this.recipes)
+
       });
     });
   }
@@ -131,7 +138,8 @@ constructor(private service: RecipeService,private router:Router, private route:
     this.filteredRecipes = [...this.filteredRecipes].sort((a, b) => a.title.localeCompare(b.title));
   }
   detailRecipe(id: number) {
-    this.router.navigate(['/recipe', id]);
+    this.router.navigate(['recipe/detail', id, "backto"]);
+
   }
   addRecipe() {
    this.router.navigate(['/recipe/add/', this.entry.id]);

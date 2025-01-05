@@ -7,8 +7,8 @@ import {KeycloakService} from "keycloak-angular";
 
 @Component({
   selector: 'app-contest-category',
-  standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, FormsModule],
+  standalone:true,
+  imports:[FormsModule,CommonModule,ReactiveFormsModule],
   templateUrl: './contest-category.component.html',
   styleUrls: ['./contest-category.component.css'],
 })
@@ -21,6 +21,7 @@ export class ContestCategoryComponent implements OnInit {
   categoryForm: FormGroup; // Form for adding or editing categories
   isEditing = false; // Flag to indicate editing mode
   currentId: number | null = null; // ID of the category being edited
+  showForm: boolean = false; // Flag to toggle form visibility
 
   constructor(
     private fb: FormBuilder, // For creating forms
@@ -44,16 +45,15 @@ export class ContestCategoryComponent implements OnInit {
     const token = await this.keycloakService.getToken();
     this.categoryService.getAllCategories(token).subscribe(
       (data) => {
-        this.categories = data;
-        this.totalCategories = data.length;
-        this.applyPagination(); // Update pagination
+        this.categories = Array.isArray(data) ? data : [];
+        this.totalCategories = this.categories.length;
+        this.applyPagination(); 
       },
       (error) => {
         console.error('Error loading categories:', error);
       }
     );
   }
-
   // Apply pagination logic
   applyPagination(): void {
     const startIndex = (this.currentPage - 1) * this.pageSize;
@@ -106,6 +106,7 @@ export class ContestCategoryComponent implements OnInit {
     this.categoryForm.patchValue(category);
     this.currentId = category.id!;
     this.isEditing = true;
+    this.showForm = true;
   }
 
   // Delete a category
@@ -134,5 +135,11 @@ export class ContestCategoryComponent implements OnInit {
     this.categoryForm.reset();
     this.isEditing = false;
     this.currentId = null;
+    this.showForm = false;
+  }
+
+  // Toggle the visibility of the form
+  toggleForm(): void {
+    this.showForm = !this.showForm;
   }
 }
