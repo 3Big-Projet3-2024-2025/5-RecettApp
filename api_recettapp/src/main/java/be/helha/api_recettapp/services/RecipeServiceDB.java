@@ -15,6 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+/**
+ * The methods of the Service : RecipeServiceDB
+ */
 @Service
 public class RecipeServiceDB implements IRecipeService{
 
@@ -154,7 +157,7 @@ public class RecipeServiceDB implements IRecipeService{
      *
      * @param userMail the unique identifier of the user.
      * @param page     and size The pagination information.
-     * @param size
+     * @param size the size of the pagination
      * @return A paginated list of recipes.
      */
     @Override

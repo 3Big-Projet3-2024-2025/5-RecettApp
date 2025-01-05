@@ -71,7 +71,9 @@ public interface IRecipeService {
      * Retrieves paginated recipes created by a specific user.
      *
      * @param userMail the unique identifier of the user.
+     * @param keyword term researched
      * @param page and size The pagination information.
+     * @param size size of the pagination
      * @return A paginated list of recipes.
      */
     public Page<Recipe> getRecipeByUserMail(String userMail,String keyword, int page, int size) ;
@@ -79,6 +81,7 @@ public interface IRecipeService {
      * Sets the "masked" field of a recipe to true, effectively anonymizing it.
      *
      * @param recipeId The ID of the recipe to anonymize.
+     * @return boolean if the recipe is anonymized
      */
     public boolean anonymizeRecipe(int recipeId);
 

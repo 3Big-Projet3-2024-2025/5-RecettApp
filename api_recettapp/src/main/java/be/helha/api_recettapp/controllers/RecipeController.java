@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+/**
+ * REST controller for managing recipes.
+ */
 @RestController
 @RequestMapping(path = "/recipe")
 public class RecipeController {
@@ -140,6 +143,7 @@ public class RecipeController {
      * @param email The email address of the user.
      * @param page and size The pagination information.
      * @param keyword the term search.
+     * @param size the size of the pagination
      * @return A paginated list of recipes.
      */
     @GetMapping("/usermail")

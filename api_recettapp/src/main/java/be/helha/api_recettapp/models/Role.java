@@ -29,6 +29,9 @@ public class Role {
     @Setter
     private String title;
 
+    /**
+     * Users associated with a role
+     */
     @ManyToOne
     @JoinColumn(name="USER_ID")
     private Users users;

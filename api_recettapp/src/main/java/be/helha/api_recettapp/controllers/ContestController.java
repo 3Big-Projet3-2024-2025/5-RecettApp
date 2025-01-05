@@ -67,7 +67,7 @@ public class ContestController {
 
     /**
      * GET - get all the contests
-     * @return @type List of all contests
+     * @return list List of all contests
      */
     @GetMapping("/all")
     public List<Contest> getContests(){
@@ -77,7 +77,7 @@ public class ContestController {
     /**
      * GET - get all the contests by title
      * @param title title to match
-     * @return @type List of contests matching the title
+     * @return list of contests matching the title
      */
     @GetMapping(path="/{title}")
     public List<Contest> getContestByName(@PathVariable String title){

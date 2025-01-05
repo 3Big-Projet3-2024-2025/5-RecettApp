@@ -44,6 +44,7 @@ public class ImageDataController {
      * Uploads a new image to the server.
      *
      * @param image the image file to upload and the {@code Recipe ID} , provided as a {@link MultipartFile}.
+     * @param recipeId the id of the recipe link to the image
      * @return a {@link ResponseEntity} indicating the success or failure of the upload operation.
      * @throws IOException if an error occurs during file processing.
      */
@@ -88,6 +89,14 @@ public class ImageDataController {
         }
     }
 
+    /**
+     *  Add a new image to the server.
+
+     * @param image the image file to add and the {@code Recipe ID} , provided as a {@link MultipartFile}.
+     * @param evaluationId the id of the evaluation link to the image
+     * @return a {@link ResponseEntity} indicating the success or failure of the add operation.
+     * @throws IOException if an error occurs during file processing.
+     */
     @PostMapping(value = "/{evaluation}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> addImageEvaluation(@RequestParam("image") MultipartFile image, @RequestParam("evaluation") int evaluationId) throws IOException {
 

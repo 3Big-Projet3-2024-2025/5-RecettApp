@@ -30,8 +30,15 @@ public interface EvaluationRepository extends JpaRepository<Evaluation, Long> {
     List<Evaluation> findByRecipeId(Long recipeId);
 
     /**
-     * Checks whether an evaluation exists for the user (via Entry) and the same recipe
+     *
+     *  Checks whether an evaluation exists for the user (via Entry) and the same recipe
      * in the time range.
+     *
+     * @param userId the id of the user
+     * @param recipeId the id of the user
+     * @param start the start date of the evaluation
+     * @param end the start date of the evaluation
+     * @return boolean
      */
     @Query("""
         SELECT CASE WHEN COUNT(e) > 0 THEN TRUE ELSE FALSE END

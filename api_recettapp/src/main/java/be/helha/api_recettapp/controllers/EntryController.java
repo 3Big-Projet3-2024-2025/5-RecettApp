@@ -29,7 +29,7 @@ public class EntryController {
 
     /**
      * GET - get all the entries
-     * @return @type List of all entries
+     * @return list the list of all entries
      */
     @GetMapping
     public List<Entry> getEntries(){
@@ -39,7 +39,7 @@ public class EntryController {
     /**
      * GET - get a specific entry
      * @param id identifier of the entry
-     * @return @type Entry the specific entry
+     * @return entry the specific entry
      */
     @GetMapping(path="/{id}")
     public Entry getContestById(@PathVariable int id){
@@ -131,18 +131,24 @@ public class EntryController {
     }
     /**
      * GET - Get an entry by user email and contest ID
-     * @param contestId the ID of the contest
+     * @param entryId the ID of the entry
      * @param userMail the email of the user
      * @return Entry the entry matching the user email and contest ID
      */
     @GetMapping("/entry")
     public Entry getEntryByUserMailAndIdContest(
-            @RequestParam int contestId,
+            @RequestParam int entryId,
             @RequestParam String userMail) {
-        return entryService.getEntryByUserMailAndIdContest(contestId, userMail);
+        return entryService.getEntryByUserMailAndIdContest(entryId, userMail);
 
     }
 
+
+    /**
+     * DELETE - Delete an entry by the UUID of an Entry
+     * @param uuid the uuid of an entry
+     * @return void
+     */
     @DeleteMapping(path = "/cancelEntry/{uuid}")
     public ResponseEntity<Void> deleteUuid(
             @PathVariable UUID uuid

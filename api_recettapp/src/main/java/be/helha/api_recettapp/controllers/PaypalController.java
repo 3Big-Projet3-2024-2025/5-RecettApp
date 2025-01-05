@@ -31,10 +31,14 @@ public class PaypalController {
     private final IContestService contestService;
     private final UserService userService;
 
+
     /**
      * Constructs a new {@code PaypalController}.
      *
      * @param paypalService The {@link PaypalService} instance used to interact with the PayPal API.
+     * @param entryService The {@link EntryService} instance used to interact with the Entry Service.
+     * @param contestService The {@link ContestService} instance used to interact with the Contest Service.
+     * @param userService The {@link UserService} instance used to interact with the Contest Service.
      */
     public PaypalController(PaypalService paypalService, IEntryService entryService, IContestService contestService, UserService userService) {
         this.paypalService = paypalService;
@@ -46,11 +50,12 @@ public class PaypalController {
     /**
      * Initiates a PayPal payment and returns the approval URL.
      * <p>
-     * This endpoint handles GET requests to the {@code /pay} path. It creates a payment
+     * This endpoint handles Post requests to the {@code /pay} path. It creates a payment
      * with the specified total amount in USD and redirects the user to either a success or
      * cancellation URL depending on the payment outcome.
      *
      * @param total The total amount for the payment in USD.
+     * @param entry The entry to registered
      * @return A {@link String} containing the approval URL for the user to complete the payment.
      */
     @PostMapping("/pay")

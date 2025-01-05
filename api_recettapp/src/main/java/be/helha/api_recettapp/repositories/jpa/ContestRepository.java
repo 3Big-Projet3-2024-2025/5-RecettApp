@@ -10,9 +10,25 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Repository interface for Contest.
+ * It provides methods to interact with the database.
+ * Extends JpaRepository to use built-in CRUD operations.
+ */
 @Repository
 public interface ContestRepository extends JpaRepository<Contest, Integer>, PagingAndSortingRepository<Contest, Integer> {
+    /**
+     * Find a contest by his title
+     * @param title title of the contest
+     * @return list a list of contests objects
+     */
     public List<Contest> findByTitle(String title);
+
+    /**
+     * Get a list of available contest
+     * @param pageable a pageable object
+     * @return list a list of contests page
+     */
     @Query("SELECT c FROM Contest c WHERE c.status = 'true'")
     Page<Contest> findAvailableContests(Pageable pageable);
 }

@@ -19,6 +19,9 @@ import java.util.Optional;
 
 import java.io.IOException;
 
+/**
+ * The service methods of ImageData
+ */
 @Service
 public class ImageDataService implements  IImageDataService{
 
@@ -90,7 +93,7 @@ public class ImageDataService implements  IImageDataService{
      * deletes an image by its name.
      *
      * @param nameImage the name of the image to delete
-     * @throws NoSuchElementException
+     * @throws NoSuchElementException if the element is not found
      */
     @Override
     @Transactional
@@ -102,6 +105,13 @@ public class ImageDataService implements  IImageDataService{
         }
     }
 
+    /**
+     * Add an image evaluation
+     * @param file image to add
+     * @param evaluation the evaluation object related to the image
+     * @return boolean if it works
+     * @throws IOException if image is not added
+     */
     public boolean addImageEvaluation(MultipartFile file, Evaluation evaluation) throws IOException {
         if (file.isEmpty()) {
             throw new IllegalArgumentException("File is empty");

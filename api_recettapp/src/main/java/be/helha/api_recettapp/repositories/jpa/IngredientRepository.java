@@ -7,8 +7,17 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Repository interface for managing Ingredient entities in the database.
+ * @author Demba Mohamed Samba
+ */
 @Repository
 public interface IngredientRepository extends JpaRepository<Ingredient, Integer>, PagingAndSortingRepository<Ingredient, Integer> {
 
+    /**
+     * Find an aliment by his name
+     * @param alimentName the aliment name
+     * @return ingredient a ingredient object
+     */
     public Ingredient findByAlimentName(String alimentName);
 }

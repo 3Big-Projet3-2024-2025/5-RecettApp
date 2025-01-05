@@ -20,6 +20,7 @@ public interface IImageDataService {
      * @param file the {@link ImageData} object to add.
      * @param recipe the {@link Recipe} associated with the image
      * @return {@code boolean}
+     * @throws IOException throws IOException
      */
     public boolean  addImageData(MultipartFile file, Recipe recipe) throws IOException;
 
@@ -35,7 +36,7 @@ public interface IImageDataService {
      * deletes an image by its name.
      *
      * @param nameImage the name of the image to delete
-     * @throws NoSuchElementException
+     * @throws NoSuchElementException if there is no image
      */
     public void deleteImageData(String nameImage) throws NoSuchElementException;
 }

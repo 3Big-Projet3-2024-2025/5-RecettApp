@@ -29,6 +29,9 @@ public class SpringSecurityConfig {
      * CSRF protection and configuring authorization requirements for different endpoints.
      *
      * The function use {@code @Bean} annotation to indicate that this method produces a Spring bean, which will be managed by the Spring container.
+     * @param http the http element
+     * @throws Exception if the token is not provided
+     * @return securityFilterChain
      */
     @Bean
     public SecurityFilterChain securityFilterChain(final HttpSecurity http) throws Exception {

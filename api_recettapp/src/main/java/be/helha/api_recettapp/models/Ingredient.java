@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * @author Demba Mohamed Samba
  *
- * @description: Represents an ingredient with its nutritional information.
+ * Represents an ingredient with its nutritional information.
  */
 @Getter
 @Setter
@@ -60,8 +60,10 @@ public class Ingredient {
     @Column(nullable = false)
     private String alimentSpecifyGroupName;
 
+    /**
+     *  List of the Recipe components links with ingredients
+     */
     @OneToMany(mappedBy = "ingredient")
-
     @JsonIgnore
     private List<RecipeComponent> recipeComponent;
 

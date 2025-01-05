@@ -30,13 +30,13 @@ public interface IContestService {
 
     /**
      * Get all the contests
-     * @return @type List<> of contests
+     * @return  list of contests
      */
     public List<Contest> getContests();
     /**
      * Get contests matching a title
      * @param title the title of the contest to match
-     * @return @type List<> of contests matching the title
+     * @return list of contests matching the title
      */
     public List<Contest> getContestByTitle(String title);
 
@@ -44,20 +44,20 @@ public interface IContestService {
      * Get contest matching an id
      *
      * @param id of the contest to match
-     * @return @type Contest of contests matching the title
+     * @return optionnal of contest matching the title
      */
     public Optional<Contest> getContestById(int id);
 
     /**
      * Add a contest
      * @param contest the contest to add
-     * @return @type Contest the contest added
+     * @return contest the contest added
      */
     public Contest addContest(Contest contest);
     /**
      * Update a contest
      * @param contest the contest to update
-     * @return @type Contest the contest update
+     * @return contest the contest updated
      */
     public Contest updateContest(Contest contest);
     /**

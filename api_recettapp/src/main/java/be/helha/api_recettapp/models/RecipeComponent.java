@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  * @author Demba Mohamed Samba
- * @description: Represents a component of a recipe, including its quantity and the associated ingredient.
+ * Represents a component of a recipe, including its quantity and the associated ingredient.
  */
 @Entity
 @Getter
@@ -29,6 +29,9 @@ public class RecipeComponent {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    /**
+     * The recipe link to the RecipeComponent
+     */
     @ManyToOne
     @JoinColumn(name="RECIPE_ID",nullable = false)
     private Recipe recipe;

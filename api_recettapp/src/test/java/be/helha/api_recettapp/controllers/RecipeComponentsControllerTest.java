@@ -20,6 +20,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
+/**
+ * Unit tests for RecipeComponent.
+ */
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
 public class RecipeComponentsControllerTest {

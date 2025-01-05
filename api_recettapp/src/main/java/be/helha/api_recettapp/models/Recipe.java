@@ -11,13 +11,13 @@ import java.util.Collection;
 import java.util.List;
 /**
  * @author Demba Mohamed Samba
- * @description:  Represents a recipe entity in the RecettApp application.
+ * Represents a recipe entity in the RecettApp application.
  * This entity includes details about a recipe, such as its title, description,
  * category, preparation and cooking times, difficulty level, and more.
  *
  *
 
- * @With Lombok annotations that automatically generate getter and setter methods
+ * Lombok annotations that automatically generate getter and setter methods
  * for all fields in the class at compile time.
  */
 @Getter

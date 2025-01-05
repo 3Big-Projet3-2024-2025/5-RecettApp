@@ -28,7 +28,7 @@ public class ContestService implements IContestService {
      * Get a pagination of Contests
      *
      * @param page the object containing pagination information
-     * @return
+     * @return page the page of contests
      */
     @Override
     public Page<Contest> getContests(Pageable page) {
@@ -37,7 +37,7 @@ public class ContestService implements IContestService {
 
     /**
      * @param page the object containing pagination information
-     * @return
+     * @return the page of available contests
      */
     @Override
     public Page<Contest> getAvailableContests(Pageable page) {
@@ -46,7 +46,7 @@ public class ContestService implements IContestService {
 
     /**
      * Get all contests
-     * @return @type List<>  of contests
+     * @return list of contests
      */
     public List<Contest> getContests() {
         return repository.findAll();
@@ -54,8 +54,8 @@ public class ContestService implements IContestService {
 
     /**
      * Find Contest by his title
-     * @param title @type String title of the contest
-     * @return @type List of contests matching with the title
+     * @param title String title of the contest
+     * @return list of contests matching with the title
      */
     @Override
     public List<Contest> getContestByTitle(String title) {
@@ -63,8 +63,10 @@ public class ContestService implements IContestService {
     }
 
     /**
+     * Find a contest by his id
+     *
      * @param id of the contest to match
-     * @return
+     * @return optional an optionnal of a contest
      */
     @Override
     public Optional<Contest> getContestById(int id) {
@@ -74,7 +76,7 @@ public class ContestService implements IContestService {
     /**
      * Add a contest
      * @param contest the contest to add
-     * @return @type Contest contest added
+     * @return contest contest added
      * @throws IllegalArgumentException if the contest has missing attributes
      */
     @Override
@@ -94,7 +96,7 @@ public class ContestService implements IContestService {
     /**
      * Update a contest
      * @param contest the contest to update
-     * @return @type Contest contest updated
+     * @return  contest the contest updated
      * @throws IllegalArgumentException if the contest has missing attributes
      */
     @Override

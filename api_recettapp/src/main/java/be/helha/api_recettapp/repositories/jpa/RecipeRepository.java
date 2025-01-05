@@ -13,11 +13,16 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Repository interface for managing Recipe entities in the database.
+ * @author Demba Mohamed Samba
+ */
 @Repository
 public interface RecipeRepository extends JpaRepository<Recipe, Integer>, PagingAndSortingRepository<Recipe, Integer> {
     /**
      * Retrieves all recipes that belong to a specific contest.
      *
+     * @param idContest the id of the contest
      * @return A list of recipes associated with the contest.
      * **/
     @Query("SELECT r FROM Recipe r WHERE r.masked = false AND r.entry.contest.id = :idContest")
@@ -27,6 +32,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer>, Paging
      * Retrieves paginated recipes created by a specific user.
      *
      * @param userMail The email address of the user.
+     * @param keyword the term searched
      * @param pageable The pagination information.
      * @return A paginated list of recipes.
      */

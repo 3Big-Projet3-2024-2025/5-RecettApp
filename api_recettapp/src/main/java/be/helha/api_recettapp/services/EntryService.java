@@ -25,7 +25,7 @@ public class EntryService implements IEntryService {
 
     /**
      * Get all entries
-     * @return @type List<>  of entries
+     * @return list the list  of entries
      */
     public List<Entry> getEntries() {
         return repository.findAll();
@@ -34,8 +34,8 @@ public class EntryService implements IEntryService {
     /**
      * Find an entry by his id
      *
-     * @param id @type int the identifier of the entry
-     * @return @type Entry the specific entry
+     * @param id int the identifier of the entry
+     * @return entry the specific entry
      * @throws EntityNotFoundException if the entry with the id specified is not found
      */
     @Override
@@ -67,7 +67,7 @@ public class EntryService implements IEntryService {
      * Set a UUID to an Entry
      *
      * @param entry the entry to update
-     * @return @type Entry the entry updated
+     * @return entry  the entry updated
      */
     public Entry setUuid(Entry entry){
         entry.setUuid(UUID.randomUUID());
@@ -124,7 +124,7 @@ public class EntryService implements IEntryService {
     /**
      * Add an entry
      * @param entry the entry to add
-     * @return @type Entry the entry added
+     * @return entry the entry added
      */
     @Override
     public Entry addEntry(Entry entry) {
@@ -134,7 +134,7 @@ public class EntryService implements IEntryService {
     /**
      * Update an entry
      * @param entry the entry to update
-     * @return @type Entry the entry updated
+     * @return entry  the entry updated
      */
     @Override
     public Entry updateEntry(Entry entry) {
@@ -157,7 +157,7 @@ public class EntryService implements IEntryService {
     }
 
     /**
-     * GET - Get an entry by user email and contest ID
+     * Get an entry by user email and contest ID
      *
      * @param idContest the ID of the contest
      * @param userMail  the email of the user

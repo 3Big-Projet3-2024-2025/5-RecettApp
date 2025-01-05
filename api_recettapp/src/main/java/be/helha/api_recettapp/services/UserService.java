@@ -109,6 +109,11 @@ public class UserService implements IUserService, UserDetailsService{
         userRepository.deleteById((long) Math.toIntExact(id));
     }
 
+    /**
+     * Find a user by his emial
+     * @param email the email of the user
+     * @return users one object users
+     */
     public Users findByEmail(String email) {
         return userRepository.findByEmail(email);
     }

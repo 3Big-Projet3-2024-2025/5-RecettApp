@@ -125,6 +125,12 @@ public class RecipeComponentController {
         }
     }
 
+    /**
+     * Find a recipe component by his recipe id
+     *
+     * @param id the id of the recipe
+     * @return list a list of RecipeComponent objects
+     */
     @GetMapping("/recipe/{id}")
     public List<RecipeComponent> findRecipeComponentsByRecipeId(@PathVariable int id) {
         try {
