@@ -81,8 +81,13 @@ export class RecipeDetailComponent implements OnInit {
           if (recipe.entry?.contest?.id) {
             this.entryService.getEntryByUserMailAndIdContest(recipe.entry?.contest?.id).subscribe(
               entry => {
-                if (entry.status == 'waiting') {
-                  console.log("you have not completed your registration at the entry");
+                if (entry) {
+                  console.log(" entry rertourner : ",entry)
+                  if (entry.status == 'waiting') {
+                    console.log("you have not completed your registration at the entry");
+                    this.router.navigate(['/not-authorized']);
+                  }
+                }else {
                   this.router.navigate(['/not-authorized']);
                 }
               },
