@@ -64,7 +64,22 @@ Check that port 5432 is not already in use (by a local postgresql, for example)
 - Create a new realm.
 - Import the configuration file located in the backend's `keycloak_export` folder under `main resources`.
 
-### 8. Check Frontend Keycloak Versions
+### 8. Configure a admin
+
+- Create a user in Keycloak.
+- Setup a no temporary password.
+- Add the admin role in the role window.
+- You can login in the app in admin.
+
+### 9. Configure a new secret for the backend
+
+- Go to clients menu in the left navbar.
+- Click on `backend_recettapp`.
+- Go to credentials window.
+- Generate a new secret.
+- Paste it to `application.yaml` at the `keycloak credentials secret`.
+
+### 10. Check Frontend Keycloak Versions
 
 - Open the `package.json` file in the frontend and verify the following dependencies:
   - **keycloak-js:** Ensure it is version `25.0.6`. If not, run:
