@@ -237,6 +237,11 @@ findRecipeTitle(title: string) {
 }
 
 
+WinnerContest(recipe : Recipe){
+
+}
+
+
 }
 
 
