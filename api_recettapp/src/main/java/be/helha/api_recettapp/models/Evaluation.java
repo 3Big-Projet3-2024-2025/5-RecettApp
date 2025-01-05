@@ -11,13 +11,15 @@ import java.util.List;
 
 /**
  * Represents an evaluation of a recipe by a user in a contest entry.
- * An evaluation includes a rate, the associated user, recipe, and entry details.
+ * An evaluation includes a rate, a comment, the associated user, recipe, and entry details,
+ * as well as any associated images and the date of the evaluation.
  */
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
 public class Evaluation {
+
     /**
      * Unique identifier for the evaluation.
      * Automatically generated using the IDENTITY strategy.
@@ -32,15 +34,19 @@ public class Evaluation {
      */
     private int rate;
 
-
-    private String commentaire ;
+    /**
+     * The comment provided by the user about the recipe.
+     */
+    private String commentaire;
 
     /**
      * The contest entry associated with this evaluation.
+     * This relationship is mandatory and links the evaluation to a specific contest entry.
      */
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "entry_id", nullable = false)
     private Entry entry;
+
     /**
      * The recipe that is being evaluated.
      * This is a mandatory field in the evaluation.
@@ -50,14 +56,16 @@ public class Evaluation {
     private Recipe recipe;
 
     /**
-     * List of images associated with the recipe.
-     * Mapped by the "recipe" field in the {@link ImageData} class.
+     * List of images associated with the evaluation.
+     * The images are mapped by the "evaluation" field in the {@link ImageData} class.
+     * This field is ignored during JSON serialization.
      */
     @OneToMany(mappedBy = "evaluation", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<ImageData> images;
 
-    // Nouveau champ pour la date de l'évaluation
+    /**
+     * The date and time when the evaluation was created or submitted.
+     */
     private LocalDateTime dateEvaluation;
-
 }

@@ -1,26 +1,28 @@
 
 
-<div class="container mt-4">
+<div class="container mt-4" *ngIf="!contestIsFinish">
     <h1 class="text-center text-success mb-4">Contest Recipe </h1>
 
     <!-- Search Bar -->
     <div class="mb-4">
-    <input 
-        type="text" 
-        class="form-control" 
-        placeholder="Search by title, description, category, or ingredients"
-        [(ngModel)]="searchTerm" 
+
+    <input
+        type="text"
+        class="form-control"
+        placeholder="Search for a recipe..."
+        [(ngModel)]="searchTerm"
+
         (input)="searchRecipes()" />
     </div>
 
     <!-- Dropdown for Filters -->
     <div class="mb-4">
         <div class="dropdown">
-        <button 
-            class="btn btn-success dropdown-toggle" 
-            type="button" 
-            id="filterDropdown" 
-            data-bs-toggle="dropdown" 
+        <button
+            class="btn btn-success dropdown-toggle"
+            type="button"
+            id="filterDropdown"
+            data-bs-toggle="dropdown"
             aria-expanded="false">
             Filter & Sort Options
         </button>
@@ -39,7 +41,7 @@
                 <button class="btn btn-dark" (click)="addRecipe()">Add Recipe</button>
             </div>
         <div *ngIf="filteredRecipes.length > 0; else noData">
-            
+
             <div class="row">
                 <div class="col-md-4 mb-3" *ngFor="let recipe of displayedRecipes">
                     <div class="card recipe-card shadow-sm">
@@ -60,19 +62,39 @@
         </div>
         <div class="pagination-buttons card-footer bg-light text-center">
             <button  (click)="goToPage(0)"  [class.active]="currentPage === 0"  class="btn btn-success pagination-button"> 1</button>
-          
+
             <button  (click)="goToPrevious()"  *ngIf="!(currentPage === 0)"  class="btn btn-dark pagination-button"> Previous</button>
-          
+
             <button  (click)="goToNext()"  *ngIf="!(currentPage >= totalPages - 1)"  class="btn btn-dark pagination-button"> Next</button>
-          
+
             <button *ngIf="totalPages > 1"  (click)="goToPage(totalPages - 1)"  [class.active]="currentPage === totalPages - 1"  class="btn btn-success pagination-button"> {{ totalPages }}</button>
           </div>
         <ng-template #noData>
             <p class="text-center text-danger">No recipes available.</p>
           </ng-template>
     </div>
-  
+
     <ng-template #loading>
       <p class="text-center text-primary">Loading recipes...</p>
     </ng-template>
+
 </div>
+
+<div *ngIf="contestIsFinish" class="d-flex flex-column align-items-center justify-content-center text-center my-5">
+  <p class="fs-4 text-primary">This Contest is finished, and the winning recipe is:</p>
+  <div class="card recipe-card shadow-lg my-4" style="max-width: 500px; width: 100%;">
+    <div (click)="detailRecipe(recipeWin.id)">
+      <div class="recipe-image-container">
+        <img *ngIf="recipeWin.photo_url" [src]="recipeWin.photo_url" [alt]="recipeWin.title" class="card-img-top recipe-photo rounded" />
+      </div>
+      <div class="card-body">
+        <h5 class="card-title text-success fs-3">{{ recipeWin.title }}</h5>
+        <p class="card-text"><strong>Preparation Time:</strong> {{ recipeWin.preparation_time }} minutes</p>
+        <p class="card-text"><strong>Servings:</strong> {{ recipeWin.servings }}</p>
+        <p class="card-text"><strong>Difficulty:</strong> {{ recipeWin.difficulty_level }}</p>
+        <p class="card-text"><strong>Winner:</strong> {{ recipeWin.entry?.users?.email }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+

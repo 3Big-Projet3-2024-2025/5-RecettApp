@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service class responsible for managing evaluations.
@@ -47,6 +48,10 @@ public class EvaluationService implements IEvaluationService{
 
         if (alreadyRatedToday) {
             throw new IllegalStateException("You've already evaluated this recipe today !");
+        }
+
+        if(Objects.equals(evaluation.getRecipe().getEntry().getUsers().getId(), userId)){
+            throw new IllegalStateException("You can't evaluate your recipe");
         }
 
         evaluation.setDateEvaluation(LocalDateTime.now());

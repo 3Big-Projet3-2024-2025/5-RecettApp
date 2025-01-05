@@ -21,7 +21,8 @@ import static org.mockito.Mockito.*;
  * Unit tests for the EvaluationController class.
  * This class tests the controller methods for managing evaluations (adding, deleting, and retrieving evaluations).
  */
-public class TestCrudEvaluationController {
+public class TestEvaluationController {
+
     @Mock
     private IEvaluationService evaluationService;
 
@@ -30,10 +31,8 @@ public class TestCrudEvaluationController {
 
     private Evaluation evaluation1;
     private Evaluation evaluation2;
-
     private Entry entry;
     private Recipe recipe;
-
 
     /**
      * Set up the test data before each test.
@@ -62,6 +61,8 @@ public class TestCrudEvaluationController {
         evaluation2.setRecipe(recipe);
     }
 
+
+
     /**
      * Test the addEvaluation method in the EvaluationController.
      * Verifies that a new evaluation is added successfully.
@@ -77,6 +78,7 @@ public class TestCrudEvaluationController {
         assertEquals(evaluation1, response.getBody());
         verify(evaluationService, times(1)).addEvaluation(evaluation1);
     }
+
 
     /**
      * Test the deleteEvaluation method when the user is an admin.
@@ -109,6 +111,9 @@ public class TestCrudEvaluationController {
         assertEquals("Only an administrator can delete a review.", exception.getMessage());
         verify(evaluationService, times(1)).deleteEvaluation(1L, false);
     }
+
+
+
 
     /**
      * Test the getAllEvaluations method in the EvaluationController.
@@ -146,7 +151,6 @@ public class TestCrudEvaluationController {
         verify(evaluationService, times(1)).getEvaluationsByEntry(1L);
     }
 
-
     /**
      * Test the getEvaluationsByRecipe method in the EvaluationController.
      * Verifies that evaluations by recipe ID are returned successfully.
@@ -164,6 +168,7 @@ public class TestCrudEvaluationController {
         assertEquals(evaluations, response.getBody());
         verify(evaluationService, times(1)).getEvaluationsByRecipe(10L);
     }
+
 
 
 }
