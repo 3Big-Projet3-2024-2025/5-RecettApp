@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { ContestCategory } from '../models/contest-category';
 import { ContestCategoryService } from '../services/contest-category.service';
 import { CommonModule } from '@angular/common';
+import {KeycloakService} from "keycloak-angular";
 
 @Component({
   selector: 'app-contest-category',
@@ -24,7 +25,8 @@ export class ContestCategoryComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder, // For creating forms
-    private categoryService: ContestCategoryService // To interact with the backend
+    private categoryService: ContestCategoryService, // To interact with the backend
+    private keycloakService: KeycloakService
   ) {
     // Initialize the form with validation
     this.categoryForm = this.fb.group({
@@ -39,8 +41,9 @@ export class ContestCategoryComponent implements OnInit {
   }
 
   // Fetch all categories from the backend
-  loadCategories(): void {
-    this.categoryService.getAllCategories().subscribe(
+  async loadCategories(): Promise<void> {
+    const token = await this.keycloakService.getToken();
+    this.categoryService.getAllCategories(token).subscribe(
       (data) => {
         this.categories = Array.isArray(data) ? data : [];
         this.totalCategories = this.categories.length;
@@ -70,14 +73,15 @@ export class ContestCategoryComponent implements OnInit {
   }
 
   // Save or update a category
-  saveCategory(): void {
+  async saveCategory(): Promise<void> {
     if (this.categoryForm.invalid) return;
 
     const category = this.categoryForm.value;
 
     if (this.isEditing && this.currentId !== null) {
+      const token = await this.keycloakService.getToken();
       // Update existing category
-      this.categoryService.updateCategory(this.currentId, category).subscribe(
+      this.categoryService.updateCategory(this.currentId, category, token).subscribe(
         () => {
           this.loadCategories();
           this.resetForm();
@@ -85,8 +89,9 @@ export class ContestCategoryComponent implements OnInit {
         (error) => console.error('Error updating category:', error)
       );
     } else {
+      const token = await this.keycloakService.getToken();
       // Create new category
-      this.categoryService.createCategory(category).subscribe(
+      this.categoryService.createCategory(category, token).subscribe(
         () => {
           this.loadCategories();
           this.resetForm();
@@ -105,9 +110,10 @@ export class ContestCategoryComponent implements OnInit {
   }
 
   // Delete a category
-  deleteCategory(id: number): void {
+  async deleteCategory(id: number): Promise<void> {
     if (confirm('Are you sure you want to delete this category?')) {
-      this.categoryService.deleteCategory(id).subscribe(
+      const token = await this.keycloakService.getToken();
+      this.categoryService.deleteCategory(id, token).subscribe(
         () => {
           this.categories = this.categories.filter((category) => category.id !== id);
           this.totalCategories = this.categories.length;

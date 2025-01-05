@@ -14,6 +14,7 @@ import { AvailableContestComponent } from './available-contest/available-contest
 import { PaypalSuccessComponent } from './paypal-success/paypal-success.component';
 import { PaypalCancelComponent } from './paypal-cancel/paypal-cancel.component';
 import { RecipeContestListComponent } from './recipe-contest-list/recipe-contest-list.component';
+import {AdminGuard} from "./guard/admin.guard";
 import { UserRecipeListComponent } from './user-recipe-list/user-recipe-list.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { UserInfoComponent } from './user-info/user-info.component';
@@ -28,29 +29,30 @@ import { VeganRecipeComponent } from './htmls/vegan-recipe/vegan-recipe.componen
 export const routes: Routes = [
 
         { path: '', redirectTo: 'home', pathMatch: 'full' },
-        { path: 'recipe', component: RecipeComponent , canActivate: [KeycloakGuard]},
+
+        { path: 'recipe', component: RecipeComponent , canActivate: [AdminGuard]},
         { path: 'recipe/detail/:id/:backto', component: RecipeDetailComponent , canActivate: [KeycloakGuard]},
+
         { path: 'recipe-contest/:idContest', component: RecipeContestListComponent , canActivate: [KeycloakGuard]},
         { path: 'recipe/add/:idEntry', component: AddRecipeComponent , canActivate: [KeycloakGuard]},
-        { path: 'ContestCategory', component: ContestCategoryComponent , canActivate: [KeycloakGuard]},
-        { path:'RecipeType',component:RecipeTypeComponent , canActivate: [KeycloakGuard]},
-        { path: 'users', component : UsersComponent , canActivate: [KeycloakGuard]},
-        { path: 'contests', component: ContestTableComponent , canActivate: [KeycloakGuard]},
-        { path: 'entries', component: EntriesTableComponent , canActivate: [KeycloakGuard]},
+        { path: 'ContestCategory', component: ContestCategoryComponent , canActivate: [AdminGuard]},
+        { path:'RecipeType',component:RecipeTypeComponent , canActivate: [AdminGuard]},
+        { path: 'users', component : UsersComponent , canActivate: [AdminGuard]},
+        { path: 'contests', component: ContestTableComponent , canActivate: [AdminGuard]},
+        { path: 'entries', component: EntriesTableComponent , canActivate: [AdminGuard]},
         { path: 'available-contests', component: AvailableContestComponent, canActivate: [KeycloakGuard]},
-        { path: 'home', component: HomePageComponent},
-        {path : 'evaluation' , component: EvaluationComponent},
-        { path: 'success', component:PaypalSuccessComponent},
-        { path: 'cancel', component:PaypalCancelComponent},
-        { path: 'myrecipe', component:UserRecipeListComponent},
+        {path : 'evaluation' , component: EvaluationComponent, canActivate: [AdminGuard]},
+        { path: 'success', component:PaypalSuccessComponent, canActivate: [KeycloakGuard]},
+        { path: 'cancel', component:PaypalCancelComponent, canActivate: [KeycloakGuard]},
+        { path: 'myrecipe', component:UserRecipeListComponent, canActivate: [KeycloakGuard]},
         { path: 'home', component: HomePageComponent},
         { path: 'home/apple-pie', component: ApplePieComponent },
         { path: 'home/chicken-breast', component: ChickenBreastComponent },
         { path: 'home/vegan-recipe', component: VeganRecipeComponent },
-        { path:'User-info',component:UserInfoComponent},
+        { path:'User-info',component:UserInfoComponent, canActivate: [KeycloakGuard]},
         {path:'not-authorized',component:NotAuthorizedComponent},
         { path: '**', component: NotFoundComponent },
-        
+
 
 
 ];

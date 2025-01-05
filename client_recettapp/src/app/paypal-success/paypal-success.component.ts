@@ -62,15 +62,16 @@ export class PaypalSuccessComponent {
     };
   }
 
-  validatePayment(uuid : string, paymentId : string,payerId : string){
+  async validatePayment(uuid: string, paymentId: string, payerId: string) {
+    const token = await this.keycloakService.getToken();
     if (paymentId && payerId) {
-      this.paypalService.validatePayment(paymentId, payerId, uuid).subscribe({
+      this.paypalService.validatePayment(paymentId, payerId, uuid, token).subscribe({
         next: (isSuccessful) => {
           this.paymentStatus = isSuccessful ? 'Payment Successful' : 'Payment Failed';
 
-          if(isSuccessful){
+          if (isSuccessful) {
             // check if payment is not already saved then save the payment
-          } else{
+          } else {
             this.paymentStatus = 'This Payment was successful and already happened'
           }
         },
@@ -97,15 +98,17 @@ export class PaypalSuccessComponent {
     this.router.navigate(['/home']);
   }
 
-  addPaypalPayment(): void{
+  async addPaypalPayment(): Promise<void> {
+    const token = await this.keycloakService.getToken();
     let userToken = this.keycloakService.getKeycloakInstance().tokenParsed;
     if (userToken && userToken['email']) {
-      this.userService.findByEmail(userToken['email']).subscribe(({
+      this.userService.findByEmail(userToken['email'], token).subscribe(({
         next: (user) => {
           this.user = user;
           let response = `{ 'paymentId': ${this.paymentData.paymentId}, 'token' : ${this.paymentData.token}, 'payerId' : ${this.paymentData.payerId} }`
-          this.paypalService.addPaypalPayment(this.user.id, response).subscribe(({
-            next: ()=> {},
+          this.paypalService.addPaypalPayment(this.user.id, response, token).subscribe(({
+            next: () => {
+            },
             error: (error) => {
               console.error('Error to add payment:', error.error.error);
             }

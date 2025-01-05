@@ -29,7 +29,7 @@ export class KeycloakGuard extends KeycloakAuthGuard {
 
           console.log('Decoded Token:', decodedToken);
 
-          this.userService.findByEmail(decodedToken.email).subscribe( user => {},
+          this.userService.findByEmail(decodedToken.email, token).subscribe( user => {},
             error => {
               if (error.status === 404) {
                 let date = new Date();
@@ -44,7 +44,7 @@ export class KeycloakGuard extends KeycloakAuthGuard {
                   date_registration: formattedDate,
                   blocked: false
                 };
-                this.userService.save(user).subscribe( user => {},
+                this.userService.save(user, token).subscribe( user => {},
                   error => {
                     console.error('Failed to save user', error);
                   });

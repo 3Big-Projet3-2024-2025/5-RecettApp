@@ -3,6 +3,7 @@ import { Entry } from '../models/entry';
 import { EntriesService } from '../services/entries.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import {KeycloakService} from "keycloak-angular";
 
 @Component({
   selector: 'app-entries-table',
@@ -21,14 +22,15 @@ export class EntriesTableComponent {
     return {};
   }
 
-  constructor(private entriesService: EntriesService) {}
+  constructor(private entriesService: EntriesService, private keycloakService: KeycloakService) {}
 
   ngOnInit():void {
     this.getAllEntries();
   }
 
-  getAllEntries(): void {
-    const sub = this.entriesService.getAllEntries().subscribe({
+  async getAllEntries(): Promise<void> {
+    const token = await this.keycloakService.getToken();
+    const sub = this.entriesService.getAllEntries(token).subscribe({
       next: (data) => {
         console.log(data);
         this.entries = data;
@@ -40,9 +42,10 @@ export class EntriesTableComponent {
     })
   }
 
-  deleteEntry(idEntry: number){
+  async deleteEntry(idEntry: number) {
     if (confirm('Are you sure you want to delete this entry?')) {
-      this.entriesService.deleteEntry(idEntry).subscribe({
+      const token = await this.keycloakService.getToken();
+      this.entriesService.deleteEntry(idEntry, token).subscribe({
         next: () => {
           this.getAllEntries();
         }, error: (err) => {
