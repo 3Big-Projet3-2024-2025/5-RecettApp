@@ -2,6 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { IngredientService } from '../services/ingredient.service';
 import { CommonModule, NgFor } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
+import {KeycloakService} from "keycloak-angular";
 
 @Component({
   selector: 'app-ingredient',
@@ -11,10 +12,10 @@ import { FormsModule, NgForm } from '@angular/forms';
   styleUrl: './ingredient.component.css'
 })
 export class IngredientComponent {
-  
-  searchTerm: string = ''; 
+
+  searchTerm: string = '';
   suggestions: any[] = []; // List of ingredient suggestions
-  selectedIngredient: any = null;  
+  selectedIngredient: any = null;
   currentIngredient: any = {
     ingredient: null,
     quantity: null,
@@ -22,11 +23,12 @@ export class IngredientComponent {
   };
   recipeComponents: any[] = [];
   @Output() recipeComponentsChange = new EventEmitter<any[]>();
-  constructor(private ingredientService: IngredientService) {}
+  constructor(private ingredientService: IngredientService, private keycloakService: KeycloakService) {}
 
-  onSearch() {
+  async onSearch() {
     if (this.searchTerm.length > 2) {
-      this.ingredientService.searchIngredients(this.searchTerm).subscribe({
+      const token = await this.keycloakService.getToken();
+      this.ingredientService.searchIngredients(this.searchTerm, token).subscribe({
         next: (data) => {
           this.suggestions = data;
         },
@@ -55,21 +57,21 @@ export class IngredientComponent {
       } else {
       this.recipeComponents.push({ ...this.currentIngredient });
     }
-    
+
       this.recipeComponentsChange.emit(this.recipeComponents);
-      
+
       this.currentIngredient = { ingredient: null, quantity: null, unit: '' };
-      this.searchTerm = ''; 
-      this.suggestions = []; 
+      this.searchTerm = '';
+      this.suggestions = [];
     } else {
       alert('Please fill in all fields before adding the ingredient.');
     }
   }
 
   fillSearchInput(suggestion: any) {
-    this.searchTerm = suggestion.alimentName; 
-    this.currentIngredient.ingredient = suggestion; 
-    this.suggestions = []; 
+    this.searchTerm = suggestion.alimentName;
+    this.currentIngredient.ingredient = suggestion;
+    this.suggestions = [];
   }
 
   removeIngredient(ingredient: any) {
@@ -78,5 +80,5 @@ export class IngredientComponent {
     this.recipeComponentsChange.emit(this.recipeComponents);
   }
 
-  
+
 }

@@ -3,11 +3,12 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { ContestCategory } from '../models/contest-category';
 import { ContestCategoryService } from '../services/contest-category.service';
 import { CommonModule } from '@angular/common';
+import {KeycloakService} from "keycloak-angular";
 
 @Component({
   selector: 'app-contest-category',
-  standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, FormsModule],
+  standalone:true,
+  imports:[FormsModule,CommonModule,ReactiveFormsModule],
   templateUrl: './contest-category.component.html',
   styleUrls: ['./contest-category.component.css'],
 })
@@ -20,10 +21,12 @@ export class ContestCategoryComponent implements OnInit {
   categoryForm: FormGroup; // Form for adding or editing categories
   isEditing = false; // Flag to indicate editing mode
   currentId: number | null = null; // ID of the category being edited
+  showForm: boolean = false; // Flag to toggle form visibility
 
   constructor(
     private fb: FormBuilder, // For creating forms
-    private categoryService: ContestCategoryService // To interact with the backend
+    private categoryService: ContestCategoryService, // To interact with the backend
+    private keycloakService: KeycloakService
   ) {
     // Initialize the form with validation
     this.categoryForm = this.fb.group({
@@ -38,19 +41,19 @@ export class ContestCategoryComponent implements OnInit {
   }
 
   // Fetch all categories from the backend
-  loadCategories(): void {
-    this.categoryService.getAllCategories().subscribe(
+  async loadCategories(): Promise<void> {
+    const token = await this.keycloakService.getToken();
+    this.categoryService.getAllCategories(token).subscribe(
       (data) => {
-        this.categories = data;
-        this.totalCategories = data.length;
-        this.applyPagination(); // Update pagination
+        this.categories = Array.isArray(data) ? data : [];
+        this.totalCategories = this.categories.length;
+        this.applyPagination(); 
       },
       (error) => {
         console.error('Error loading categories:', error);
       }
     );
   }
-
   // Apply pagination logic
   applyPagination(): void {
     const startIndex = (this.currentPage - 1) * this.pageSize;
@@ -70,14 +73,15 @@ export class ContestCategoryComponent implements OnInit {
   }
 
   // Save or update a category
-  saveCategory(): void {
+  async saveCategory(): Promise<void> {
     if (this.categoryForm.invalid) return;
 
     const category = this.categoryForm.value;
 
     if (this.isEditing && this.currentId !== null) {
+      const token = await this.keycloakService.getToken();
       // Update existing category
-      this.categoryService.updateCategory(this.currentId, category).subscribe(
+      this.categoryService.updateCategory(this.currentId, category, token).subscribe(
         () => {
           this.loadCategories();
           this.resetForm();
@@ -85,8 +89,9 @@ export class ContestCategoryComponent implements OnInit {
         (error) => console.error('Error updating category:', error)
       );
     } else {
+      const token = await this.keycloakService.getToken();
       // Create new category
-      this.categoryService.createCategory(category).subscribe(
+      this.categoryService.createCategory(category, token).subscribe(
         () => {
           this.loadCategories();
           this.resetForm();
@@ -101,12 +106,14 @@ export class ContestCategoryComponent implements OnInit {
     this.categoryForm.patchValue(category);
     this.currentId = category.id!;
     this.isEditing = true;
+    this.showForm = true;
   }
 
   // Delete a category
-  deleteCategory(id: number): void {
+  async deleteCategory(id: number): Promise<void> {
     if (confirm('Are you sure you want to delete this category?')) {
-      this.categoryService.deleteCategory(id).subscribe(
+      const token = await this.keycloakService.getToken();
+      this.categoryService.deleteCategory(id, token).subscribe(
         () => {
           this.categories = this.categories.filter((category) => category.id !== id);
           this.totalCategories = this.categories.length;
@@ -128,5 +135,11 @@ export class ContestCategoryComponent implements OnInit {
     this.categoryForm.reset();
     this.isEditing = false;
     this.currentId = null;
+    this.showForm = false;
+  }
+
+  // Toggle the visibility of the form
+  toggleForm(): void {
+    this.showForm = !this.showForm;
   }
 }

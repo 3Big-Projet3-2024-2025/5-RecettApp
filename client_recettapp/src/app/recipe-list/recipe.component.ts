@@ -6,6 +6,7 @@ import { FormsModule} from '@angular/forms';
 import { CommonModule} from '@angular/common';
 import { Router } from '@angular/router';
 import { ImageServiceService } from '../services/image-service.service';
+import {KeycloakService} from "keycloak-angular";
 
 @Component({
   selector: 'app-recipe',
@@ -20,26 +21,31 @@ export class RecipeComponent {
   recipes: Recipe[] = [];
   isLoading = false;
   currentPage = 0;
-  pageSize = 3;
+  pageSize = 10;
   totalPages = 0;
+  searchTerm: string = '';
 
-  constructor(private service: RecipeService,private router:Router, private imaService: ImageServiceService) {}
+
+
+  constructor(private service: RecipeService,private router:Router, private imaService: ImageServiceService,
+              private keycloakService: KeycloakService) {}
 
 
    ngOnInit(): void {
     this.loadRecipes(this.currentPage, this.pageSize);
   }
 
-  loadRecipes(page: number, size: number): void {
+  async loadRecipes(page: number, size: number): Promise<void> {
     this.isLoading = false;
-    this.service.getAllRecipesPaginated(page, size).subscribe((data) => {
+    const token = await this.keycloakService.getToken();
+    this.service.getRecipesPaginated(this.searchTerm, page, size, token).subscribe((data) => {
       this.totalPages = data.totalPages;
-      this.currentPage = page; 
+      this.currentPage = page;
       const recipes: Recipe[] = data.content;
-  
+
       const imageRequests = recipes.map((recipe) => {
         if (recipe.photo_url) {
-          return this.imaService.getImage(recipe.photo_url).pipe(
+          return this.imaService.getImage(recipe.photo_url, token).pipe(
             map((blob: Blob) => {
               recipe.photo_url = URL.createObjectURL(blob);
               return recipe;
@@ -48,7 +54,7 @@ export class RecipeComponent {
         }
         return of(recipe);
       });
-  
+
       forkJoin(imageRequests).subscribe((updatedRecipes) => {
         this.recipes = updatedRecipes;
         this.isLoading = true;
@@ -57,16 +63,17 @@ export class RecipeComponent {
   }
 
   detailRecipe(id: number) : void {
-    this.router.navigate(['/recipe', id]);
+    this.router.navigate(['recipe/detail', id, "backto"]);
   }
 
   addRecipe(id: number) : void {
     this.router.navigate(['/recipe/add/', id]);
   }
 
-  deleteRecipe(id: number) : void {
-    this.service.deleteRecipe(id).subscribe({
-      next: (value) =>{
+  async deleteRecipe(id: number): Promise<void> {
+    const token = await this.keycloakService.getToken();
+    this.service.deleteRecipe(id, token).subscribe({
+      next: (value) => {
         window.location.reload();
       },
       error: (err) => {
@@ -74,7 +81,7 @@ export class RecipeComponent {
       }
     })
   }
-  
+
   confirmDelete(id: number, title: string): void {
     const confirmed = window.confirm(`Are you sure you want to delete the recipe "${title}"?`);
     if (confirmed) {
@@ -87,19 +94,22 @@ export class RecipeComponent {
       this.loadRecipes(page, this.pageSize);
     }
   }
-  
+
   goToPrevious(): void {
     if (this.currentPage > 0) {
       this.goToPage(this.currentPage - 1);
-    } 
+    }
   }
-  
-  
+
+
   goToNext(): void {
     if (this.currentPage < this.totalPages - 1) {
       this.goToPage(this.currentPage + 1);
     }
-}
-
+  }
+  onSearch(): void {
+    this.currentPage = 0;
+    this.loadRecipes(this.currentPage, this.pageSize);
+  }
 }
 

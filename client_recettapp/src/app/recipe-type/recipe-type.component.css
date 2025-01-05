@@ -1,0 +1,20 @@
+.page-box {
+  border: 1px solid #28a745;
+  color: #28a745;
+  background: transparent;
+  padding: 5px 10px;
+  margin: 0 2px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.page-box:hover {
+  background: #28a745;
+  color: white;
+}
+
+.active-page {
+  background: #28a745;
+  color: white;
+  font-weight: bold;
+}

@@ -1,175 +1,33 @@
 .users-container {
-  padding: 20px;
-}
-
-.title {
-  font-size: 24px;
-  color: #1a73e8;
-  margin-bottom: 20px;
-}
-
-.button-container {
-  text-align: right;
-  margin-bottom: 10px;
-}
-
-.add-user-btn {
-  background-color: #28a745;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.add-user-btn:hover {
-  background-color: #218838;
-}
-
-.users-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-}
-
-.users-table th,
-.users-table td {
-  text-align: left;
-  padding: 10px;
-  border: 1px solid #ddd;
-}
-
-.users-table thead {
-  background-color: #333;
-  color: white;
-}
-
-.users-table tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-.no-data {
-  text-align: center;
-  font-style: italic;
-  color: #777;
-}
-
-.action-btn {
-  padding: 5px 10px;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-  font-size: 12px;
-}
-
-.edit-btn {
-  background-color: #007bff;
-  color: white;
-}
-
-.edit-btn:hover {
-  background-color: #0056b3;
-}
-
-.delete-btn {
-  background-color: #dc3545;
-  color: white;
-}
-
-.delete-btn:hover {
-  background-color: #c82333;
-}
-
-.pagination {
-  display: flex;
-  justify-content: center;
   margin-top: 20px;
 }
 
-.pagination button {
-  padding: 5px 10px;
-  margin: 0 5px;
-  border: none;
-  background-color: #f0f0f0;
-  cursor: pointer;
+.table-responsive {
+  border-radius: 8px;
+  overflow-x: auto;
 }
 
-.pagination button.active {
-  background-color: #007bff;
-  color: white;
+.table th,
+.table td {
+  vertical-align: middle;
 }
 
-.pagination button:hover {
-  background-color: #ddd;
-}
-
-/* Style de la barre de recherche */
-.search-container {
-  margin-bottom: 20px;
+.table thead th {
   text-align: center;
 }
 
-.search-input {
-  width: 50%;
-  padding: 8px 15px;
-  font-size: 16px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  transition: border-color 0.3s;
+.table tbody td {
+  text-align: center;
 }
 
-.search-input:focus {
-  border-color: #1a73e8;
-}
+@media (max-width: 768px) {
+  .btn {
+    font-size: 12px;
+    padding: 5px 10px;
+  }
 
-/* Pagination (si nécessaire) */
-.pagination-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.pagination-btn {
-  background-color: #f1f1f1;
-  color: #333;
-  border: 1px solid #ccc;
-  padding: 8px 16px;
-  margin: 0 5px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.3s, transform 0.3s;
-}
-
-.pagination-btn:hover {
-  background-color: lightgreen;
-  color: white;
-  transform: scale(1.1);
-}
-
-.pagination-btn:disabled {
-  background-color: #ddd;
-  cursor: not-allowed;
-}
-
-.pagination-btn.active {
-  background-color: rgb(25 135 84);
-  color: white;
-  font-weight: bold;
-}
-
-.pagination-btn.prev,
-.pagination-btn.next {
-  font-weight: bold;
-  padding: 8px 20px;
-  background-color: lightgreen;
-  color: white;
-  border-radius: 5px;
-}
-
-.pagination-btn.prev:hover,
-.pagination-btn.next:hover {
-  background-color: #28a745;
+  .table th,
+  .table td {
+    font-size: 14px;
+  }
 }

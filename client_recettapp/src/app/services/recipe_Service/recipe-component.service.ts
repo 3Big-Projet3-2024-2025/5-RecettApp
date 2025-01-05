@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { RecipeComponent } from '../../models/recipe-component';
@@ -12,11 +12,13 @@ export class RecipeComponentService {
   constructor(private http: HttpClient) { }
   private Url = "http://localhost:8080/recipe-components";
 
-  getRecipeComponentsByIdRecipe(idRecipe: number): Observable<RecipeComponent[]> {
-    return this.http.get<RecipeComponent[]>(`${this.Url}/recipe/${idRecipe}`);
+  getRecipeComponentsByIdRecipe(idRecipe: number, token: any): Observable<RecipeComponent[]> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get<RecipeComponent[]>(`${this.Url}/recipe/${idRecipe}`, {headers});
   }
 
-  addRecipeComponents(recipeComponents: RecipeComponent): Observable<RecipeComponent>{
-    return this.http.post<RecipeComponent>(this.Url,recipeComponents);
+  addRecipeComponents(recipeComponents: RecipeComponent, token: any): Observable<RecipeComponent>{
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.post<RecipeComponent>(this.Url,recipeComponents, {headers});
   }
 }

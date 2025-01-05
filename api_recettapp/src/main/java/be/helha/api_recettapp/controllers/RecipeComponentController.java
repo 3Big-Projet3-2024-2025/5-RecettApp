@@ -2,6 +2,7 @@ package be.helha.api_recettapp.controllers;
 
 import be.helha.api_recettapp.models.RecipeComponent;
 import be.helha.api_recettapp.services.IRecipeComponent;
+import be.helha.api_recettapp.services.IRecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +23,9 @@ public class RecipeComponentController {
     @Autowired
     private IRecipeComponent recipeComponentService;
 
+    @Autowired
+    private IRecipeService recipeService;
+
     /**
      * Retrieves a paginated list of recipe components.
      *
@@ -30,7 +34,11 @@ public class RecipeComponentController {
      */
     @GetMapping
     public Page<RecipeComponent> getRecipeComponents(Pageable pageable) {
-        return recipeComponentService.getRecipeComponents(pageable);
+        try {
+            return recipeComponentService.getRecipeComponents(pageable);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to fetch recipe components: " + e.getMessage());
+        }
     }
 
     /**
@@ -40,7 +48,11 @@ public class RecipeComponentController {
      */
     @GetMapping("/all")
     public List<RecipeComponent> getAllRecipeComponents() {
-        return recipeComponentService.getRecipeComponents();
+        try {
+            return recipeComponentService.getRecipeComponents();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to fetch all recipe components: " + e.getMessage());
+        }
     }
 
     /**
@@ -52,7 +64,13 @@ public class RecipeComponentController {
      */
     @GetMapping("/{id}")
     public RecipeComponent getRecipeComponentById(@PathVariable int id) {
-        return recipeComponentService.getRecipeComponentById(id);
+        try {
+            return recipeComponentService.getRecipeComponentById(id);
+        } catch (NoSuchElementException e) {
+            throw new NoSuchElementException("Recipe component with ID " + id + " not found: " + e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to fetch recipe component by ID: " + e.getMessage());
+        }
     }
 
     /**
@@ -63,8 +81,13 @@ public class RecipeComponentController {
      */
     @PostMapping
     public RecipeComponent addRecipeComponent(@RequestBody RecipeComponent recipeComponent) {
-        recipeComponent.setId(0);
-        return recipeComponentService.addRecipeComponent(recipeComponent);
+        try {
+            recipeComponent.setId(0);
+            return recipeComponentService.addRecipeComponent(recipeComponent);
+        } catch (Exception e) {
+            recipeService.deleteRecipe(recipeComponent.getRecipe().getId());
+            throw new RuntimeException("Failed to add recipe component: " + e.getMessage());
+        }
     }
 
     /**
@@ -76,7 +99,13 @@ public class RecipeComponentController {
      */
     @PutMapping
     public RecipeComponent updateRecipeComponent(@RequestBody RecipeComponent recipeComponent) {
-        return recipeComponentService.updateRecipeComponent(recipeComponent);
+        try {
+            return recipeComponentService.updateRecipeComponent(recipeComponent);
+        } catch (NoSuchElementException e) {
+            throw new NoSuchElementException("Recipe component with ID " + recipeComponent.getId() + " not found: " + e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to update recipe component: " + e.getMessage());
+        }
     }
 
     /**
@@ -87,11 +116,21 @@ public class RecipeComponentController {
      */
     @DeleteMapping("/{id}")
     public void deleteRecipeComponent(@PathVariable int id) {
-        recipeComponentService.deleteRecipeComponent(id);
+        try {
+            recipeComponentService.deleteRecipeComponent(id);
+        } catch (NoSuchElementException e) {
+            throw new NoSuchElementException("Recipe component with ID " + id + " not found: " + e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to delete recipe component: " + e.getMessage());
+        }
     }
 
     @GetMapping("/recipe/{id}")
     public List<RecipeComponent> findRecipeComponentsByRecipeId(@PathVariable int id) {
-        return recipeComponentService.findRecipeComponentsByRecipeId(id);
+        try {
+            return recipeComponentService.findRecipeComponentsByRecipeId(id);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to fetch recipe components for recipe ID " + id + ": " + e.getMessage());
+        }
     }
 }

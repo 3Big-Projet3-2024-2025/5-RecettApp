@@ -38,22 +38,35 @@ public class ImageDataService implements  IImageDataService{
      */
     @Override
     public boolean addImageData(MultipartFile file, Recipe recipe) throws IOException {
-        if (file.isEmpty()) {
-            throw new IllegalArgumentException("File is empty");
-        }
-        //Image type valid: png, jpeg, svg, webp
-        List<String> validContentTypes = Arrays.asList("image/jpeg", "image/png", "image/svg", "image/webp");
+        try {
+            if (file.isEmpty()) {
+                recipeRepository.delete(recipe);
+                throw new IllegalArgumentException("File is empty");
+            }
 
-        if (!validContentTypes.contains(file.getContentType())) {
-            throw new IllegalArgumentException("Invalid file type. Supported types: image/jpeg, image/png, image/svg, image/webp");
+            // Image type valid: png, jpeg, svg, webp
+            List<String> validContentTypes = Arrays.asList("image/jpeg", "image/png", "image/svg", "image/webp");
+
+            if (!validContentTypes.contains(file.getContentType())) {
+                recipeRepository.delete(recipe);
+                throw new IllegalArgumentException("Invalid file type. Supported types: image/jpeg, image/png, image/svg, image/webp");
+            }
+
+            ImageData imageData = imageDataRepository.save(ImageData.builder()
+                    .name(file.getOriginalFilename())
+                    .type(file.getContentType())
+                    .imageData(ImageUtils.compressImage(file.getBytes()))
+                    .recipe(recipeRepository.getOne(recipe.getId()))
+                    .build());
+
+            return imageData.getId() != null;
+        } catch (IOException e) {
+            recipeRepository.delete(recipe);
+            throw new IOException("Failed to process image data: " + e.getMessage(), e);
+        } catch (Exception e) {
+            recipeRepository.delete(recipe);
+            throw new RuntimeException("Unexpected error while adding image data: " + e.getMessage(), e);
         }
-        ImageData imageData = imageDataRepository.save(ImageData.builder()
-                .name(file.getOriginalFilename())
-                .type(file.getContentType())
-                .imageData(ImageUtils.compressImage(file.getBytes()))
-                .recipe(recipeRepository.getOne(recipe.getId()))
-                .build());
-        return imageData.getId() != null;
     }
 
 

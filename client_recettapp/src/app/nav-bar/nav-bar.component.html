@@ -7,36 +7,66 @@
     <div class="collapse navbar-collapse" id="navbarContent">
         <ul class="navbar-nav ms-auto h5 m-2">
             <li class="nav-item">
-                <a class="nav-link active text-white" href="#">Home</a>
+                <a class="nav-link active text-white p-2" href="#">Home</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" href="/recipe">Recipes</a>
+            <li *ngIf="checkAdmin()" class="nav-item dropdown">
+                <a
+                  class="nav-link dropdown-toggle text-white p-2"
+                  href="#"
+                  id="adminDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Admin
+                </a>
+                <ul class="dropdown-menu bg-success" aria-labelledby="adminDropdown">
+                    <li class="nav-item">
+                        <a class="nav-link text-white p-3" href="/recipe">Recipes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white p-3" href="/users">Users</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white p-3" href="contests">Contests</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white p-3" href="RecipeType">RecipeType</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white p-3" href="ContestCategory">ContestCategory</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white p-3" href="evaluation">Evaluation</a>
+                      </li>
+                </ul>
             </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" href="/users">Users</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" href="contests">Contests</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" href="available-contests">AvailableContests</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" href="RecipeType">RecipeType</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" href="ContestCategory">ContestCategory</a>
-            </li>
-            <li class="nav-item">
 
-              <a class="nav-link text-white" href="evaluation">Evaluation</a>
+            <li *ngIf="isAuhtentificated" class="nav-item dropdown">
+                <a
+                  class="nav-link dropdown-toggle text-white p-2"
+                  href="#"
+                  id="userDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  User
+                </a>
+                <ul class="dropdown-menu bg-success" aria-labelledby="userDropdown">
+                    <li class="nav-item">
+                        <a class="nav-link text-white p-3" href="available-contests">AvailableContests</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white p-3" href="myrecipe">My recipes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white p-3" href="User-info">My account</a>
+                   </li>
+                </ul>
             </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" href="myrecipe">My recipes</a>
-            </li>
-            <li class="nav-item">
-                 <a class="nav-link text-white" href="User-info">My account</a>
-            </li>
+            
+            
 
             <li class="nav-item">
                 <button *ngIf="!isAuhtentificated" (click)="logIn()" class="btn bg-white">Log in</button>
