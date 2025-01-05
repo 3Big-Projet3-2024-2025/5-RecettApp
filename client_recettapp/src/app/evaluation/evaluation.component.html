@@ -1,0 +1,89 @@
+<div class="container mt-5">
+  <div class="row justify-content-between align-items-center mb-4">
+    <h1 class="col-auto text-success">Gestion des Évaluations</h1>
+  </div>
+
+  <!-- Form -->
+  <form *ngIf="showForm" class="card border-success mb-4" (ngSubmit)="saveEvaluation()">
+    <div class="card-header bg-success text-white">
+      <h5 class="mb-0">Ajouter une Évaluation</h5>
+    </div>
+    <div class="card-body">
+      <div class="mb-3">
+        <label for="rate" class="form-label fw-bold">Note</label>
+        <input
+          type="number"
+          id="rate"
+          class="form-control"
+          [(ngModel)]="currentEvaluation.rate"
+          name="rate"
+          min="0"
+          max="5"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="entry" class="form-label fw-bold">Entrée</label>
+        <select
+          id="entry"
+          class="form-control"
+          [(ngModel)]="selectedEntryId"
+          name="entry"
+          required
+        >
+          <option *ngFor="let entry of entries" [value]="entry.id">
+            {{ entry.contest?.title || 'Aucun titre' }} - {{ entry.status }}
+          </option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="recipe" class="form-label fw-bold">Recette</label>
+        <select
+          id="recipe"
+          class="form-control"
+          [(ngModel)]="selectedRecipeId"
+          name="recipe"
+          required
+        >
+          <option *ngFor="let recipe of recipes" [value]="recipe.id">
+            {{ recipe.title }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="card-footer d-flex justify-content-end">
+      <button type="submit" class="btn btn-success me-2">
+        <i class="bi bi-save"></i> Enregistrer
+      </button>
+      <button type="button" class="btn btn-secondary" (click)="toggleForm()">
+        <i class="bi bi-x-circle"></i> Annuler
+      </button>
+    </div>
+  </form>
+
+  <!-- Table -->
+  <div class="table-responsive">
+    <table class="table table-bordered align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>Note</th>
+          <th>Entrée</th>
+          <th>Recette</th>
+          <th class="text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let eval of evaluations">
+          <td>{{ eval.rate }}</td>
+          <td>{{ eval.entry?.contest?.title || 'N/A' }}</td>
+          <td>{{ eval.recipe?.title || 'N/A' }}</td>
+          <td class="text-center">
+            <button class="btn btn-danger btn-sm" (click)="deleteEvaluation(eval)">
+              <i class="bi bi-trash"></i> Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

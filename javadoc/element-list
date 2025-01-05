@@ -1,0 +1,8 @@
+be.helha.api_recettapp
+be.helha.api_recettapp.configuration
+be.helha.api_recettapp.controllers
+be.helha.api_recettapp.models
+be.helha.api_recettapp.repositories.jpa
+be.helha.api_recettapp.security
+be.helha.api_recettapp.services
+be.helha.api_recettapp.utils

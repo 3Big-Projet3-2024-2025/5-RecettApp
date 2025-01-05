@@ -1,0 +1,40 @@
+<div class="container">
+  @if(errMsg){
+    <div class="alert alert-warning mt-3" role="alert">
+      {{errMsg}}
+    </div>
+  }
+    <h2 class="my-5 text-success">Registration for {{contest.title}}</h2>
+    <div class="card">
+        <div class="card-body">
+            <p><strong>Start Date:</strong> {{contest.start_date}}</p>
+            <p><strong>End Date:</strong> {{contest.end_date}}</p>
+            <p><strong>Maximum Participants:</strong> {{contest.max_participants}}</p>
+            <p><strong>Status:</strong> {{contest.status}}</p>
+        </div>
+    </div>
+    @if(user && userName){
+      <h2 class="my-5 text-success">Your informations for {{user.lastName + " " + user.firstName}}</h2>
+      <div class="card">
+        <div class="card-body">
+            <p><strong>Username:</strong> {{userName}}</p>
+            <p><strong>Email:</strong> {{user.email}}</p>
+        </div>
+      </div>
+    }
+
+    <div class="row mt-3">
+        <div class="col">
+          <button class="btn btn-secondary" (click)="onCancel()">
+            Cancel
+          </button>
+        </div>
+        <div class="col">
+          <button class="btn btn-success" (click)="pay()">
+            Proceed to Payment
+          </button>
+        </div>
+    </div>
+
+    
+</div>

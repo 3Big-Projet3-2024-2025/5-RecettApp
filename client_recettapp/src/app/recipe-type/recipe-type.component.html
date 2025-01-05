@@ -1,0 +1,97 @@
+<div class="container mt-5">
+  <div class="row justify-content-between align-items-center mb-4">
+    <h1 class="col-auto text-success">Recipe Types</h1>
+    <button class="btn btn-success col-auto" (click)="toggleForm()">
+      <i class="bi bi-plus-circle"></i> Add Recipe Type
+    </button>
+  </div>
+
+  <!-- Message When No Recipe Types Available -->
+  <div *ngIf="recipeTypes.length === 0" class="alert alert-info text-center shadow-sm">
+    <i class="bi bi-info-circle"></i> No recipe types available. Add one to get started!
+  </div>
+
+  <!-- Recipe Type Form -->
+  <form *ngIf="showForm" [formGroup]="recipeTypeForm" (ngSubmit)="saveRecipeType()" class="card border-success mb-4">
+    <div class="card-header bg-success text-white">
+      <h5 class="mb-0">{{ isEditing ? 'Edit Recipe Type' : 'Add New Recipe Type' }}</h5>
+    </div>
+    <div class="card-body">
+      <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <input
+          type="text"
+          id="name"
+          formControlName="name"
+          class="form-control"
+          [ngClass]="{
+            'is-invalid': recipeTypeForm.get('name')?.invalid && recipeTypeForm.get('name')?.touched
+          }"
+        />
+        <div *ngIf="recipeTypeForm.get('name')?.invalid && recipeTypeForm.get('name')?.touched" class="text-danger mt-1">
+          Name is required and must be between 3 and 255 characters.
+        </div>
+      </div>
+    </div>
+    <div class="card-footer d-flex justify-content-end">
+      <button type="submit" class="btn btn-success me-2" [disabled]="recipeTypeForm.invalid">
+        <i class="bi bi-save"></i> {{ isEditing ? 'Update' : 'Add +' }}
+      </button>
+      <button type="button" class="btn btn-secondary" (click)="resetForm()">
+        <i class="bi bi-x-circle"></i> Cancel
+      </button>
+    </div>
+  </form>
+
+  <!-- Recipe Types Table -->
+  <table *ngIf="filteredRecipeTypes.length > 0" class="table table-striped table-hover table-bordered">
+    <thead class="table-dark">
+      <tr>
+        <th>Name</th>
+        <th class="text-center">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let recipeType of filteredRecipeTypes">
+        <td>{{ recipeType.name }}</td>
+        <td class="text-center">
+          <button class="btn btn-warning btn-sm me-2" (click)="editRecipeType(recipeType)">
+            <i class="bi bi-pencil-square"></i> Edit
+          </button>
+          <button class="btn btn-danger btn-sm" (click)="deleteRecipeType(recipeType.id!)">
+            <i class="bi bi-trash"></i> Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Pagination Controls -->
+  <div *ngIf="totalPages > 1" class="d-flex justify-content-center mt-3">
+    <button
+      class="btn btn-outline-success me-2"
+      [disabled]="currentPage === 1"
+      (click)="onPageChange(currentPage - 1)"
+    >
+      Previous
+    </button>
+    <div class="pagination-box d-flex align-items-center">
+      <span *ngFor="let page of [].constructor(totalPages); let i = index">
+        <button
+          class="page-box"
+          [ngClass]="{ 'active-page': currentPage === i + 1 }"
+          (click)="onPageChange(i + 1)"
+        >
+          {{ i + 1 }}
+        </button>
+      </span>
+    </div>
+    <button
+      class="btn btn-outline-success ms-2"
+      [disabled]="currentPage === totalPages"
+      (click)="onPageChange(currentPage + 1)"
+    >
+      Next
+    </button>
+  </div>
+</div>

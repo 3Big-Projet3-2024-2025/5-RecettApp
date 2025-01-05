@@ -1,0 +1,80 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-success">
+    <a class="navbar-brand text-white h1 m-2" href="#">Recipe App</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav ms-auto h5 m-2">
+            <li class="nav-item">
+                <a class="nav-link active text-white p-2" href="#">Home</a>
+            </li>
+            <li *ngIf="checkAdmin()" class="nav-item dropdown">
+                <a
+                  class="nav-link dropdown-toggle text-white p-2"
+                  href="#"
+                  id="adminDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  Admin
+                </a>
+                <ul class="dropdown-menu bg-success" aria-labelledby="adminDropdown">
+                    <li class="nav-item">
+                        <a class="nav-link text-white p-3" href="/recipe">Recipes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white p-3" href="/users">Users</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white p-3" href="contests">Contests</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white p-3" href="RecipeType">RecipeType</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white p-3" href="ContestCategory">ContestCategory</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white p-3" href="evaluation">Evaluation</a>
+                      </li>
+                </ul>
+            </li>
+
+            <li *ngIf="isAuhtentificated" class="nav-item dropdown">
+                <a
+                  class="nav-link dropdown-toggle text-white p-2"
+                  href="#"
+                  id="userDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  User
+                </a>
+                <ul class="dropdown-menu bg-success" aria-labelledby="userDropdown">
+                    <li class="nav-item">
+                        <a class="nav-link text-white p-3" href="available-contests">AvailableContests</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white p-3" href="mycontests">My contest</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white p-3" href="myrecipe">My recipes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white p-3" href="User-info">My account</a>
+                   </li>
+                </ul>
+            </li>
+            
+            
+
+            <li class="nav-item">
+                <button *ngIf="!isAuhtentificated" (click)="logIn()" class="btn bg-white">Log in</button>
+                <button *ngIf="isAuhtentificated" (click)="logOut()" class="btn bg-white">Log out</button>
+            </li>
+        </ul>
+    </div>
+</nav>

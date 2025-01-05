@@ -1,0 +1,33 @@
+.users-container {
+  margin-top: 20px;
+}
+
+.table-responsive {
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.table th,
+.table td {
+  vertical-align: middle;
+}
+
+.table thead th {
+  text-align: center;
+}
+
+.table tbody td {
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .btn {
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+
+  .table th,
+  .table td {
+    font-size: 14px;
+  }
+}

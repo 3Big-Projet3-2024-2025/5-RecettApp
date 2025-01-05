@@ -1,0 +1,18 @@
+#hero {
+    height: 70vh;
+  }
+  
+  #recipes .card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+  
+  #recipes .card {
+    border: none;
+    transition: transform 0.3s ease;
+  }
+  
+  #recipes .card:hover {
+    transform: scale(1.05);
+  }
+  

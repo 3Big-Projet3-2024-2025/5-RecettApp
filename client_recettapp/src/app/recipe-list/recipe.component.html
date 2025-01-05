@@ -1,0 +1,60 @@
+
+<div class="container mt-4">
+  <h1 class="text-center text-success mb-4">Recipe List</h1>
+  <div class="search-bar mb-4">
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      (input)="onSearch()"
+      class="form-control"
+      placeholder="Search recipes by title or description"
+    />
+  </div>
+  
+  <div *ngIf="recipes ; else loading">
+      <div class="card-footer bg-light text-center">
+      </div>
+    <div class="row">
+      <div class="col-md-4 mb-3" *ngFor="let recipe of recipes">
+        <div class="card recipe-card shadow-sm">
+          <div (click)="detailRecipe(recipe.id)">
+            <div class="recipe-image-container">
+              <img *ngIf="recipe.photo_url" [src]="recipe.photo_url" [alt]="recipe.title" class="card-img-top recipe-photo" />
+            </div>
+            <div class="card-body">
+              <h5 class="card-title text-success">{{ recipe.title }}</h5>
+              <p class="card-text"><strong>Preparation Time:</strong> {{ recipe.preparation_time }} minutes</p>
+              <p class="card-text"><strong>Servings:</strong> {{ recipe.servings }}</p>
+              <p class="card-text"><strong>Difficulty:</strong> {{ recipe.difficulty_level }}</p>
+          </div>
+          </div>
+          <div class="card-footer text-center">
+            <button class="btn btn-danger btn-sm" (click)="confirmDelete(recipe.id, recipe.title)">Delete Recipe </button>
+          </div>
+        </div>
+      </div>
+      <div class="pagination-buttons card-footer bg-light text-center">
+        <button (click)="goToPage(0)" [class.active]="currentPage === 0" class="btn btn-success pagination-button"
+        > 1</button>
+      
+        <button (click)="goToPrevious()" *ngIf="!(currentPage === 0)" class="btn btn-dark pagination-button"
+        > Previous</button>
+      
+        <button (click)="goToNext()" *ngIf="!(currentPage >= totalPages - 1)" class="btn btn-dark pagination-button"
+        > Next </button>
+
+       <button *ngIf="totalPages > 1" (click)="goToPage(totalPages - 1)" [class.active]="currentPage === totalPages - 1" class="btn btn-success pagination-button"
+        > {{ totalPages }}</button>
+      </div>  
+
+    </div>
+
+    <ng-template #noData>
+      <p class="text-center text-danger">No recipes available.</p>
+    </ng-template>
+  </div>
+
+  <ng-template #loading>
+    <p class="text-center text-primary">Loading recipes...</p>
+  </ng-template>
+</div>
