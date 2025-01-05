@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
  *
  * @author Demba Mohamed Samba
  */
-
 @Entity
 @Data
 @AllArgsConstructor
@@ -28,32 +27,41 @@ public class ImageData {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * The name of the image file.
+     * This field is mandatory.
+     */
     @Column(nullable = false)
     private String name;
 
+    /**
+     * The type of the image file (e.g., JPEG, PNG).
+     */
     private String type;
 
     /**
      * The binary data of the image.
      * Stored as a Large Object (LOB) in the database.
+     * This field can store up to 5 MB of image data.
      */
     @Lob
     @Basic(fetch = FetchType.LAZY)
-    @Column(name = "imagedata",length = 5242880) // Allow up to 5 MB
+    @Column(name = "imagedata", length = 5242880)
     private byte[] imageData;
 
     /**
-     * Represents the recipe associated with this image.
+     * The recipe associated with this image.
+     * This establishes a many-to-one relationship between the image and a recipe.
      */
     @ManyToOne
     @JoinColumn(name = "id_recipe")
     private Recipe recipe;
 
     /**
-     * Represents the evaluation associated with this image.
+     * The evaluation associated with this image.
+     * This establishes a many-to-one relationship between the image and an evaluation.
      */
     @ManyToOne
     @JoinColumn(name = "id_evaluation")
     private Evaluation evaluation;
-
 }

@@ -75,7 +75,7 @@ export class EvaluationComponent implements OnInit {
     const token = await this.keycloakService.getToken();
     this.evaluationService.getAllEvaluations(token).subscribe({
       next: (data) => (this.evaluations = data),
-      error: (err) => console.error('Erreur lors du chargement des évaluations :', err),
+      error: (err) => console.error('Error loading evaluations :', err),
     });
   }
   toggleForm(): void {
@@ -87,7 +87,7 @@ export class EvaluationComponent implements OnInit {
     const token = await this.keycloakService.getToken();
     this.entryService.getAllEntries(token).subscribe({
       next: (data) => (this.entries = data),
-      error: (err) => console.error('Erreur lors du chargement des entrées :', err),
+      error: (err) => console.error('Error loading inputs :', err),
     });
   }
 
@@ -95,16 +95,18 @@ export class EvaluationComponent implements OnInit {
     const token = await this.keycloakService.getToken();
     this.recipeService.getAllRecipe(token).subscribe({
       next: (data) => (this.recipes = data),
-      error: (err) => console.error('Erreur lors du chargement des recettes :', err),
+      error: (err) => console.error('Error loading recipes :', err),
     });
   }
+
 
   async deleteEvaluation(evaluation: Evaluation): Promise<void> {
     if (confirm('Êtes-vous sûr de vouloir supprimer cette évaluation ?')) {
       const token = await this.keycloakService.getToken();
       this.evaluationService.deleteEvaluation(evaluation.id!, this.isAdmin, token).subscribe({
+
         next: () => this.loadEvaluations(),
-        error: (err) => console.error('Erreur lors de la suppression :', err),
+        error: (err) => console.error('Deletion error :', err),
       });
     }
   }
@@ -126,7 +128,7 @@ export class EvaluationComponent implements OnInit {
           this.showForm = false;
         },
         error: (err) => {
-          console.error('Erreur lors de la modification de l\'évaluation :', err);
+          console.error('Error when modifying the evaluation :', err);
         },
       });
     } else {
@@ -137,7 +139,7 @@ export class EvaluationComponent implements OnInit {
           this.showForm = false;
         },
         error: (err) => {
-          console.error('Erreur lors de l\'ajout de l\'évaluation :', err);
+          console.error('Error while adding l\'évaluation :', err);
         },
       });
     }
