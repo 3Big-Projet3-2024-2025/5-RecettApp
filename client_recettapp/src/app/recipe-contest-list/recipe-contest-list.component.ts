@@ -9,6 +9,7 @@ import { ImageServiceService } from '../services/image-service.service';
 import { RecipeService } from '../services/recipe_Service/recipe.service';
 import { EntriesService } from '../services/entries.service';
 import { RecipeComponentService } from '../services/recipe_Service/recipe-component.service';
+import {KeycloakService} from "keycloak-angular";
 
 @Component({
   selector: 'app-recipe-contest-list',
@@ -32,7 +33,7 @@ itemsPerPage: number = 10;
 totalPages: number = 0;
 
 constructor(private service: RecipeService,private router:Router, private route: ActivatedRoute,private imaService: ImageServiceService,private entryService: EntriesService
-           , private recipeComponentService: RecipeComponentService
+           , private recipeComponentService: RecipeComponentService, private keycloakService: KeycloakService
 ) {}
 
 
@@ -44,41 +45,46 @@ constructor(private service: RecipeService,private router:Router, private route:
     }
 
   }
-  checkContestAccess(contestId: number): void {
-    this.entryService.getEntryByUserMailAndIdContest(contestId).subscribe({
+  async checkContestAccess(contestId: number): Promise<void> {
+    const token = await this.keycloakService.getToken();
+    this.entryService.getEntryByUserMailAndIdContest(contestId, token).subscribe({
       next: (entry) => {
         if (!entry) {
           this.router.navigate(['/not-authorized']); // Redirection if entry is null
         } else {
           this.entry = entry;
+
           if (entry.status == 'waiting') {
             console.log("you have not completed your registration at the entry");
             this.router.navigate(['/not-authorized']);
           }
           this.getRecipe(contestId); 
+
         }
       },
       error: (error) => {
         console.log(error)
         this.router.navigate(['/not-authorized']); 
+
       },
     });
   }
 
-  getRecipe(contestId: number){
-    this.service.getRecipeByIdContest(contestId).subscribe(data => {
+  async getRecipe(contestId: number) {
+    const token = await this.keycloakService.getToken();
+    this.service.getRecipeByIdContest(contestId, token).subscribe(data => {
       const imageRequests = data.map(recipe => {
         if (recipe.photo_url) {
-          return this.imaService.getImage(recipe.photo_url).pipe(
+          return this.imaService.getImage(recipe.photo_url, token).pipe(
             map((blob: Blob) => {
               recipe.photo_url = URL.createObjectURL(blob);
-              return recipe;  
+              return recipe;
             })
           );
         }
-        return of(recipe);  
+        return of(recipe);
       });
-      
+
       forkJoin(imageRequests).subscribe((updatedRecipes) => {
         this.recipes = updatedRecipes;
         this.filteredRecipes = updatedRecipes;
@@ -86,20 +92,22 @@ constructor(private service: RecipeService,private router:Router, private route:
         this.totalPages = Math.ceil(this.filteredRecipes.length / this.itemsPerPage);
         this.updateDisplayedRecipes();
         this.getRecipeComponent();
+
       });
     });
   }
 
-  getRecipeComponent() {
+  async getRecipeComponent() {
+    const token = await this.keycloakService.getToken();
     this.recipes.forEach(element => {
-      this.recipeComponentService.getRecipeComponentsByIdRecipe(element.id).subscribe(component => {
+      this.recipeComponentService.getRecipeComponentsByIdRecipe(element.id, token).subscribe(component => {
         element.components = component;
       });
     })
   }
   searchRecipes(): void {
     const term = this.searchTerm.toLowerCase();
-    this.filteredRecipes = this.recipes.filter(recipe => 
+    this.filteredRecipes = this.recipes.filter(recipe =>
       recipe.title.toLowerCase().includes(term) ||
       recipe.description.toLowerCase().includes(term) ||
       recipe.category.toLowerCase().includes(term) ||
@@ -107,12 +115,12 @@ constructor(private service: RecipeService,private router:Router, private route:
         component.ingredient.alimentName.toLowerCase().includes(term)
       )
     );
-  
-    this.currentPage = 0; 
+
+    this.currentPage = 0;
     this.totalPages = Math.ceil(this.filteredRecipes.length / this.itemsPerPage);
     this.updateDisplayedRecipes();
   }
-  
+
 
   sortRecipesByDifficulty(difficulty: string): void {
     this.filteredRecipes = this.recipes.filter(recipe => recipe.difficulty_level === difficulty);
@@ -136,7 +144,7 @@ constructor(private service: RecipeService,private router:Router, private route:
   addRecipe() {
    this.router.navigate(['/recipe/add/', this.entry.id]);
   }
-  
+
   updateDisplayedRecipes(): void {
     const startIndex = this.currentPage * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;

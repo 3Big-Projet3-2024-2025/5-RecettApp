@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { KeycloakService } from 'keycloak-angular';
-import { jwtDecode } from 'jwt-decode'; 
-import { UsersService } from '../services/users.service'; 
-import { User } from '../models/users'; 
+import { jwtDecode } from 'jwt-decode';
+import { UsersService } from '../services/users.service';
+import { User } from '../models/users';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-user-info',
-  standalone: true, 
-  imports: [FormsModule, CommonModule], 
+  standalone: true,
+  imports: [FormsModule, CommonModule],
   templateUrl: './user-info.component.html',
   styleUrls: ['./user-info.component.css']
 })
@@ -41,8 +41,9 @@ export class UserInfoComponent implements OnInit {
   }
 
   // Get user info from the backend
-  getUserByEmail(email: string): void {
-    this.userService.findByEmail(email).subscribe({
+  async getUserByEmail(email: string): Promise<void> {
+    const token = await this.keycloakService.getToken();
+    this.userService.findByEmail(email, token).subscribe({
       next: (user) => {
         this.user = user; // Save the user data
       },

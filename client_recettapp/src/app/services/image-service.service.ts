@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MultiplyArray } from 'socket.io/dist/typed-events';
@@ -20,24 +20,27 @@ export class ImageServiceService {
     * @param recipe the  Recipe associated with the image
     * @return {@code boolean}
     */
-  addImage(image: File, recipeToAdd: Recipe): Observable<string> {
+  addImage(image: File, recipeToAdd: Recipe, token: any): Observable<string> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     const formData = new FormData();
     formData.append('image', image);
     formData.append('recipe', String(recipeToAdd.id));
 
-    return this.http.post<string>(this.Url, formData);
+    return this.http.post<string>(this.Url, formData, {headers});
   }
 
-  getImage(fileName: string): Observable<Blob> {
-    return this.http.get(`${this.Url}/${fileName}`, { responseType: 'blob' });
+  getImage(fileName: string, token: any): Observable<Blob> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.get(`${this.Url}/${fileName}`, { responseType: 'blob', headers });
   }
 
-  addImageEvaluation(image : File, evaluation: Evaluation): Observable<string>{
+  addImageEvaluation(image : File, evaluation: Evaluation, token: any): Observable<string>{
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     const formData = new FormData();
     formData.append('image', image);
     formData.append('evaluation', String(evaluation.id));
 
-    return this.http.post<string>(`${this.Url}/evaluation`, formData);
+    return this.http.post<string>(`${this.Url}/evaluation`, formData, {headers});
   }
 
 }

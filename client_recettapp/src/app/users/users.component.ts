@@ -3,6 +3,7 @@ import { UsersService } from '../services/users.service';
 import { CommonModule } from '@angular/common';
 import { User } from '../models/users';
 import { FormsModule } from '@angular/forms';
+import {KeycloakService} from "keycloak-angular";
 
 @Component({
   selector: 'app-users',
@@ -23,14 +24,15 @@ export class UsersComponent implements OnInit {
   errMessage: String = "";
   err: boolean = false;
 
-  constructor(private usersService: UsersService) {}
+  constructor(private usersService: UsersService, private keycloakService: KeycloakService) {}
 
   ngOnInit(): void {
     this.loadUsers();
   }
 
-  loadUsers(): void {
-    this.usersService.findAll().subscribe(
+  async loadUsers(): Promise<void> {
+    const token = await this.keycloakService.getToken();
+    this.usersService.findAll(token).subscribe(
       (data: User[]) => {
         console.log(data);
         this.users = data;
@@ -71,9 +73,10 @@ export class UsersComponent implements OnInit {
   this.paginateUsers();
 }
 
-onSearchByEmail(): void {
+async onSearchByEmail(): Promise<void> {
   if (this.searchEmail.trim()) {
-    this.usersService.findByEmail(this.searchEmail).subscribe(
+    const token = await this.keycloakService.getToken();
+    this.usersService.findByEmail(this.searchEmail, token).subscribe(
       (user: User) => {
         this.searchedUser = user;
       },
@@ -86,9 +89,10 @@ onSearchByEmail(): void {
 }
 
 
-  onDelete(id: number): void {
+  async onDelete(id: number): Promise<void> {
+    const token = await this.keycloakService.getToken();
     if (confirm('Are you sure you want to delete this user?')) {
-      const sub = this.usersService.delete(id).subscribe(({
+      const sub = this.usersService.delete(id, token).subscribe(({
         next: () => {
           this.err = false;
           this.loadUsers();
@@ -102,24 +106,24 @@ onSearchByEmail(): void {
     }
   }
 
-  toggleBlockStatus(email: string, isBlocked: boolean): void {
+  async toggleBlockStatus(email: string, isBlocked: boolean): Promise<void> {
+    const token = await this.keycloakService.getToken();
     if (isBlocked) {
-      this.usersService.unblockUser(email).subscribe(({
+      this.usersService.unblockUser(email, token).subscribe(({
         next: () => {
-          this.loadUsers();
         }, error: (error) => {
           console.error('Error unblocking user:', error.error.error);
         }
       }));
     } else {
-      this.usersService.blockUser(email).subscribe(({
+      this.usersService.blockUser(email, token).subscribe(({
         next: () => {
-          this.loadUsers();
         }, error: (error) => {
           console.error('Error blocking user:', error.error.error);
         }
       }));
     }
+    window.location.reload();
   }
 
 }

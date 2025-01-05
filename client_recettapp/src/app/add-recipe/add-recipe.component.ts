@@ -31,9 +31,9 @@ export class AddRecipeComponent {
   constructor(private route: ActivatedRoute,private recipeService: RecipeService, private componentService: RecipeComponentService,
               private router: Router, private recipeTypeService: RecipeTypeService,private imService: ImageServiceService,private authService: KeycloakService,private entryService: EntriesService,
               private userService: UsersService){}
-      
+
   //Init image variables
-  imageFile: File | null = null; 
+  imageFile: File | null = null;
   imageError: string | null = null;
 
   // Default preview image when no image is uploaded
@@ -60,12 +60,13 @@ export class AddRecipeComponent {
   recipeComponentError = "";
   recipeTypes: RecipeType[] = [];
 
-            
-  ngOnInit(): void {
+
+  async ngOnInit(): Promise<void> {
     this.loadRecipeTypes();
     const entryId = this.route.snapshot.paramMap.get('idEntry');
     if (entryId != null) {
-      this.entryService.getEntry(+entryId).subscribe({
+      const token = await this.authService.getToken();
+      this.entryService.getEntry(+entryId, token).subscribe({
         next: (entry) => {
           this.recipeToAdd.entry = entry;
           if (entry.users) {
@@ -74,33 +75,35 @@ export class AddRecipeComponent {
               this.router.navigate(['/not-authorized']);
             }
             this.checkUserIdentity(entry.users);
-          }else{
+          } else {
             console.log("User in entry can't be null");
             this.router.navigate(['/not-authorized']);
           }
         },
         error: (error) => {
+
             console.log(error.error.message);
             this.router.navigate(['/not-authorized']);
+
         }
       });
     }
   }
-  loadRecipeTypes(): void {
-    this.recipeTypeService.getAllRecipeTypes().subscribe(
+  async loadRecipeTypes(): Promise<void> {
+    const token = await this.authService.getToken();
+    this.recipeTypeService.getAllRecipeTypes(token).subscribe(
       (data) => {
         this.recipeTypes = data; // Load RecipeType list
       },
-      (error) => console.error('Error fetching recipe types:', error) 
+      (error) => console.error('Error fetching recipe types:', error)
     );
   }
-  
+
 
   async checkUserIdentity(user: User) {
     try {
       const token = await this.authService.getToken();
       const decodedToken: any = jwtDecode(token);
-  
       if (!decodedToken || !decodedToken.email || !decodedToken.given_name || !decodedToken.family_name) {
         console.log("Invalid token structure. Missing necessary user information.");
         return;
@@ -113,32 +116,37 @@ export class AddRecipeComponent {
         user.lastName === decodedToken.family_name;
       if (!isAuthorized) {
         console.log("You do not have access to this contest.");
+
         this.router.navigate(['/not-authorized']); 
+
       }
 
     } catch (error) {
       console.error("Error decoding the token:", error);
+
       this.router.navigate(['/not-authorized']); 
+
     }
   }
-  
-  onSubmit(): void {
+
+  async onSubmit(): Promise<void> {
     if (this.checkValidRecipeToAdd(this.recipeToAdd)) {
-     
+
       if (this.imageFile) {
         this.creatImageData()
       }
-        this.recipeService.addRecipe(this.recipeToAdd).subscribe(
-          {
-            next: (value: Recipe) => {
-              this.addImage(value);
-            },
-            error: (err) => {
-              console.log(err.error.message)
-            },
-          }
-        )//console.log(this.recipeToAdd)
-      } 
+      const token = await this.authService.getToken();
+      this.recipeService.addRecipe(this.recipeToAdd, token).subscribe(
+        {
+          next: (value: Recipe) => {
+            this.addImage(value);
+          },
+          error: (err) => {
+            console.log(err.error.message)
+          },
+        }
+      )//console.log(this.recipeToAdd)
+    }
   }
 
   creatImageData(){
@@ -155,30 +163,35 @@ export class AddRecipeComponent {
     this.recipeToAdd.components = components;
   }
 
-  addImage(recipe: Recipe){
+  async addImage(recipe: Recipe) {
     this.recipeToAdd.id = recipe.id; // Recovery of the recipe updated with its new id
     this.addRecipeComponent();
 
-    if(this.imageFile){ //added image
-      this.imService.addImage(this.imageFile,this.recipeToAdd).subscribe( // add image before the recipe
-        { next: () =>{
-          this.router.navigate(['recipe/detail', recipe.id,"contest"]);
-        },
+
+    if (this.imageFile) { //added image
+      const token = await this.authService.getToken();
+      this.imService.addImage(this.imageFile, this.recipeToAdd, token).subscribe( // add image before the recipe
+        {
+          next: () => {
+            this.router.navigate(['recipe/detail', recipe.id,"contest"]);
+          },
+
           error: (err) => {
             console.log(err)
           }
         })
-      }
+    }
   }
-  addRecipeComponent(){
+  async addRecipeComponent() {
+    const token = await this.authService.getToken();
     this.recipeToAdd.components.forEach(element => {
-      
-     // element.recipe = this.recipeToAdd // Recovery of the recipe updated with its new id
-        this.componentService.addRecipeComponents(this.creatComponent(element)).subscribe({
-          error: (err) => {
-            console.log(err.error.message)
-          }
-        })
+
+      // element.recipe = this.recipeToAdd // Recovery of the recipe updated with its new id
+      this.componentService.addRecipeComponents(this.creatComponent(element), token).subscribe({
+        error: (err) => {
+          console.log(err.error.message)
+        }
+      })
     });
   }
 
@@ -187,7 +200,7 @@ export class AddRecipeComponent {
       id: element.id,
       recipe: this.recipeToAdd,
       quantity: element.quantity,
-      ingredient: element.ingredient, 
+      ingredient: element.ingredient,
       unit: element.unit
     }
 
@@ -208,9 +221,9 @@ export class AddRecipeComponent {
     return true;
   }
 
-  
+
   validateImage(event: Event) {
-    
+
     const input = event.target as HTMLInputElement;
 
     if (input && input.files && input.files.length > 0) {
@@ -220,16 +233,18 @@ export class AddRecipeComponent {
 
       if (!validTypes.includes(file.type)) {
         this.imageError = 'Invalid file type. Please upload an image (JPEG, PNG, SVG, or WEBP).';
-        this.imageFile = null; 
-        input.value = ''; 
+        this.imageFile = null;
+        input.value = '';
       } else if (file.size > maxSize) {
+
         this.imageError = `File size exceeds the limit of 1 MB. Please upload a smaller file.`;
         this.imageFile = null; 
         input.value = ''; 
+
       } else {
         this.imageError = null;
         this.imageFile = file;
-        this.previewImage = URL.createObjectURL(file); 
+        this.previewImage = URL.createObjectURL(file);
       }
     } else {
       this.imageError = 'No file selected. Please upload an image.';
