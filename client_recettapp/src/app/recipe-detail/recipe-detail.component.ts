@@ -11,11 +11,8 @@ import { Evaluation } from '../models/evaluation';
 import { EvaluationService } from '../services/evaluation.service';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
-
-import { KeycloakService } from 'keycloak-angular';
-import { jwtDecode } from 'jwt-decode';
 import { EntriesService } from '../services/entries.service';
-
+import { KeycloakService } from 'keycloak-angular';
 
 
 @Component({
@@ -35,7 +32,7 @@ export class RecipeDetailComponent implements OnInit {
   imageFile: File | null = null;
   imageError: string | null = null;
   previewImage = "./assets/No_Image.png";
-  backTo = "";
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -47,26 +44,15 @@ export class RecipeDetailComponent implements OnInit {
     private location: Location,
     private entriesService : EntriesService,
     private keycloakService: KeycloakService,
-    private authService: KeycloakService,
-    private entryService: EntriesService
-
 
   ) {}
 
   async ngOnInit(): Promise<void> {
     const token = await this.keycloakService.getToken();
     const id = this.route.snapshot.paramMap.get('id');
-    const backTo = this.route.snapshot.paramMap.get('backto');
-    if (backTo) {
-      this.backTo = backTo
-    }
     if (id) {
-      this.service.getRecipeById(+id, token).subscribe(
+      this.service.getRecipeById(+id,token).subscribe(
         (data) => {
-
-          if (!this.authService.getUserRoles().includes('admin')) {
-            this.checkAccess(data);
-          }
         if (data.photo_url) {
           this.getImage(data.photo_url);
         }
@@ -75,81 +61,18 @@ export class RecipeDetailComponent implements OnInit {
         this.getEntry();
         this.evaluation.recipe = this.recipe;
         },(err) => {
-
           console.log(err.error.message)
         }
-      );
-    }
+
+      );}
 
   }
 
 
-  async checkAccess(recipe: Recipe) {
-      
-     try {
-          if (recipe.entry?.contest?.id) {
-            
-            const token = await this.keycloakService.getToken();
-            this.entryService.getEntryByUserMailAndIdContest(recipe.entry?.contest?.id,token).subscribe(
-              entry => {
-                if (entry) {
-                  console.log(" entry rertourner : ",entry)
-                  if (entry.status == 'waiting') {
-                    console.log("you have not completed your registration at the entry");
-                    this.router.navigate(['/not-authorized']);
-                  }
-                }else {
-                  this.router.navigate(['/not-authorized']);
-                }
-              },
-              err => {
-                console.log(err);
-                this.router.navigate(['/not-authorized']);
-              }
-            )
-          }
-        } catch (error) {
-          console.error("Error decoding the token:", error);
-          this.router.navigate(['/not-authorized']); 
-        }
-  }
-  
-
-   async getImage(imageName: string) {
-    const token = await this.keycloakService.getToken();
-    this.imaService.getImage(imageName, token).subscribe(
-
-      (next: Blob) => {
-
-        this.imageRecipe = URL.createObjectURL(next);
-      },
-      (err) => {
-        console.log(err.error.message)
-      }
-    );
-  }
-  async getRecipeComponent(id: number) {
-    const token = await this.keycloakService.getToken();
-    this.serviceRecipeComponent.getRecipeComponentsByIdRecipe(+id, token).subscribe(
-      (data) => {
-        if (this.recipe) {
-          this.recipe.components = data;
-          this.evaluation.recipe = this.recipe;
-        }
-      }, (err) => {
-        console.log(err.error.message)
-
-      }
-    );
-  }
-
-        
-
-  
-
-getEntry() {
+  async getEntry() {
     if (this.recipe?.entry?.contest?.id) {
-      this.entriesService.getEntryByUserMailAndIdContest(this.recipe?.entry?.contest?.id).subscribe(
+      const token = await this.keycloakService.getToken();
+      this.entriesService.getEntryByUserMailAndIdContest(this.recipe?.entry?.contest?.id,token).subscribe(
         (entrie) => {
           console.log("Recovered input : ", entrie);
           this.evaluation.entry = entrie;
@@ -168,35 +91,59 @@ getEntry() {
     }
   }
 
-  
+  async getRecipeComponent(id : number){
 
-  backRecipeList(): void {
-    if (this.backTo == "contest") {
-      this.router.navigate(['recipe-contest/', this.recipe?.entry?.contest?.id]);
-    }else{
-      this.location.back();
-    }
+    const token = await this.keycloakService.getToken();
+    this.serviceRecipeComponent.getRecipeComponentsByIdRecipe(+id,token).subscribe(
+      (data) => {
+      if (this.recipe) {
+        this.recipe.components = data;
+        this.evaluation.recipe = this.recipe;
+
+      }
+    }, (err) => {
+      console.log(err.error.message)
+     }
+    );
   }
 
-  async addImage(evaluation: Evaluation) {
+
+  async getImage(imageName: string){
+    const token = await this.keycloakService.getToken();
+    this.imaService.getImage(imageName,token).subscribe(
+      (next: Blob) => {
+
+        this.imageRecipe = URL.createObjectURL(next);
+      },
+      (err) => {
+       console.log(err.error.message)
+      }
+    );
+  }
 
 
-    if (this.imageFile) {
-      const token = await this.keycloakService.getToken();//added image
-      this.imService.addImageEvaluation(this.imageFile, evaluation, token).subscribe( // add image before the recipe
-        {
-          next: () => {
-            console.log("Image added");
-          },
 
+  backRecipeList(): void {
+    this.location.back();
+  }
+
+  async addImage(evaluation : Evaluation){
+    const token = await this.keycloakService.getToken();
+
+    if(this.imageFile){
+      this.imService.addImageEvaluation(this.imageFile,evaluation,token).subscribe(
+        { next: () =>{
+          console.log("Image added");
+        },
           error: (err) => {
             console.log(err)
           }
         })
-    }
+      }
   }
 
   async addEvaluation(): Promise<void> {
+    const token = await this.keycloakService.getToken();
     if (!this.imageFile) {
       Swal.fire({
         title: 'error',
@@ -218,6 +165,7 @@ getEntry() {
     }
 
     if (!this.evaluation.commentaire || this.evaluation.commentaire.trim() === '') {
+
       Swal.fire({
         title: 'Erreur',
         text: 'Please add a comment.',
@@ -226,11 +174,8 @@ getEntry() {
       });
       return;
     }
-
-
-    const token = await this.keycloakService.getToken();
-    this.evaluationService.addEvaluation(this.evaluation, token).subscribe(
-
+    console.log('User who evaluates :', this.evaluation.entry?.users?.id);
+    this.evaluationService.addEvaluation(this.evaluation,token).subscribe(
       (next: Evaluation) => {
         console.log("id retourne : ", next.id);
         this.addImage(next);
