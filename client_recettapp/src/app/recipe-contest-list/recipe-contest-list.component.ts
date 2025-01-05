@@ -46,7 +46,7 @@ recipeWin: Recipe = {
 
 // Pagination properties
 currentPage: number = 0;
-itemsPerPage: number = 10;
+itemsPerPage: number = 9;
 totalPages: number = 0;
 
 
@@ -194,8 +194,9 @@ constructor(private service: RecipeService,private router:Router, private route:
   sortRecipesByTitle(): void {
     this.filteredRecipes = [...this.filteredRecipes].sort((a, b) => a.title.localeCompare(b.title));
   }
+
   detailRecipe(id: number) {
-    this.router.navigate(['/recipe', id]);
+    this.router.navigate(['recipe/detail', id, "backto"]);
   }
   addRecipe() {
    this.router.navigate(['/recipe/add/', this.entry.id]);

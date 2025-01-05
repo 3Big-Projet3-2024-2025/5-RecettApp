@@ -52,6 +52,8 @@ export class UserRecipeListComponent {
   }
 
   async anonymizeRecipe(recipe: Recipe) {
+    const confirmed = window.confirm(`Are you sure you want to delete the recipe "${recipe.title}"?`);
+    if (confirmed) {
     const token = await this.authService.getToken();
     this.recipeService.anonymizeRecipe(recipe.id, token).subscribe({
       next: () => {
@@ -62,6 +64,7 @@ export class UserRecipeListComponent {
         console.error('Error anonymizing recipe:', err);
       },
     });
+    }
   }
 
   

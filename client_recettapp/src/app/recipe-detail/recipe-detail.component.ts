@@ -32,7 +32,7 @@ export class RecipeDetailComponent implements OnInit {
   imageFile: File | null = null;
   imageError: string | null = null;
   previewImage = "./assets/No_Image.png";
-
+  backTo = "";
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -51,6 +51,10 @@ export class RecipeDetailComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     const token = await this.keycloakService.getToken();
     const id = this.route.snapshot.paramMap.get('id');
+    const backTo = this.route.snapshot.paramMap.get('backto');
+    if (backTo) {
+      this.backTo = backTo
+    }
     if (id) {
       this.service.getRecipeById(+id,token).subscribe(
         (data) => {
@@ -157,7 +161,11 @@ export class RecipeDetailComponent implements OnInit {
 
 
   backRecipeList(): void {
-    this.location.back();
+    if (this.backTo == "contest") {
+      this.router.navigate(['recipe-contest/', this.recipe?.entry?.contest?.id]);
+    }else{
+      this.location.back();
+    }
   }
 
   async addImage(evaluation : Evaluation){

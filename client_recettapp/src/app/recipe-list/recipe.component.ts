@@ -21,7 +21,7 @@ export class RecipeComponent {
   recipes: Recipe[] = [];
   isLoading = false;
   currentPage = 0;
-  pageSize = 10;
+  pageSize = 12;
   totalPages = 0;
   searchTerm: string = '';
 
