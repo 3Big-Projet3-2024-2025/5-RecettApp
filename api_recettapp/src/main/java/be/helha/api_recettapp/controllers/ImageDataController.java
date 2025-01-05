@@ -6,6 +6,7 @@ import be.helha.api_recettapp.models.Recipe;
 import be.helha.api_recettapp.repositories.jpa.EvaluationRepository;
 import be.helha.api_recettapp.repositories.jpa.ImageDataRepository;
 import be.helha.api_recettapp.repositories.jpa.RecipeRepository;
+import be.helha.api_recettapp.services.IRecipeService;
 import be.helha.api_recettapp.services.ImageDataService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.NoSuchElementException;
 
 /**
  * Controller class for managing image data.
@@ -34,6 +36,8 @@ public class ImageDataController {
     private RecipeRepository recipeRepository;
     @Autowired
     private EvaluationRepository evaluationRepository;
+    @Autowired
+    private IRecipeService recipeService;
 
 
     /**
@@ -45,15 +49,20 @@ public class ImageDataController {
      */
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> addImage(@RequestParam("image") MultipartFile image, @RequestParam("recipe") Long recipeId) throws IOException {
+        try {
+            Recipe recipe = recipeRepository.findById(Math.toIntExact(recipeId))
+                    .orElseThrow(() -> new IllegalArgumentException("Recipe not found with ID: " + recipeId));
 
-        Recipe recipe = recipeRepository.findById(Math.toIntExact(recipeId))
-                .orElseThrow(() -> new IllegalArgumentException("Recipe not found with ID: " + recipeId));
+            boolean uploadImage = imageDataService.addImageData(image, recipe);
+            if (!uploadImage) {
+                recipeService.deleteRecipe(recipe.getId());
+                throw new RuntimeException("Image upload failed. The recipe has been deleted.");
+            }
 
-        boolean uploadImage = imageDataService.addImageData(image, recipe);
-        if (!uploadImage) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to upload image: " + e.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     /**
@@ -61,15 +70,22 @@ public class ImageDataController {
      *
      * @param fileName the name of the image to retrieve.
      * @return a {@link ResponseEntity} containing the image data and the appropriate content type.
-     * @throws RuntimeException if the image is not found or the type is invalid.
+     * @throws RuntimeException if the type is invalid.
+     * @throws NoSuchElementException if the image is not found.
      */
     @GetMapping("/{fileName}")
     public ResponseEntity<?> getImage(@PathVariable String fileName) {
-        byte[] imageData = imageDataService.getImageData(fileName);
-        ImageData image = repository.findByName(fileName).get();
-        return ResponseEntity.status(HttpStatus.OK)
-                .contentType(MediaType.valueOf(image.getType()))
-                .body(imageData);
+        try {
+            byte[] imageData = imageDataService.getImageData(fileName);
+            ImageData image = repository.findByName(fileName).orElseThrow(() -> new NoSuchElementException("Image not found: " + fileName));
+            return ResponseEntity.status(HttpStatus.OK)
+                    .contentType(MediaType.valueOf(image.getType()))
+                    .body(imageData);
+        } catch (NoSuchElementException e) {
+            throw new NoSuchElementException("Failed to retrieve image: " + e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to fetch image: " + e.getMessage());
+        }
     }
 
     @PostMapping(value = "/{evaluation}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
